@@ -23,19 +23,33 @@ public class PlayerMovement : MonoBehaviour {
 
 		if(Input.GetButtonDown("Jump")) {
 			if (coll.onGround) {
-				Jump();
+				Jump(jumpForce);
 			}
 		}
+        if(Input.GetButtonDown("Use") && GetComponent<AbilitySlot>().occupied)
+        {
+            switch (GetComponent<AbilitySlot>().element.name)
+            {
+                case "Air":
+                    Jump(jumpForce * 1.5f);
+                    break;
+                case "Fire":
+                    break;
+                case "Earth":
+                    break;
+            }
+            GetComponent<AbilitySlot>().occupied = false;
+        }
 	}
 
 	void Walk(Vector2 dir) {
 		rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
 	}
 
-	void Jump() {
+	void Jump(float force) {
 		//Allow for air controls
 		rb.velocity = new Vector2(rb.velocity.x, 0);
 		//Jump
-		rb.velocity += Vector2.up * jumpForce;
+		rb.velocity += Vector2.up * force;
 	}
 }
