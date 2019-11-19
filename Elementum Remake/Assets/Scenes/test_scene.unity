@@ -133,6 +133,8 @@ GameObject:
   - component: {fileID: 193358243}
   - component: {fileID: 193358244}
   - component: {fileID: 193358245}
+  - component: {fileID: 193358246}
+  - component: {fileID: 193358247}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -238,7 +240,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &193358245
 MonoBehaviour:
@@ -252,8 +254,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62bdb010fc27db041ae35ae7a951ecf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 10
+  jumpForce: 15
   speed: 10
+--- !u!114 &193358246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193358240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db6a2f5a93df5f342bd394938e207409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
+--- !u!114 &193358247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193358240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaeef356a9c106c40a8ab45bcab7abcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  onGround: 0
+  onWall: 0
+  onRightWall: 0
+  onLeftWall: 0
+  wallSide: 0
+  collisionRadius: 0.25
+  bottomOffset: {x: 0, y: -0.5}
+  rightOffset: {x: 0.5, y: 0}
+  leftOffset: {x: -0.5, y: 0}
 --- !u!1 &327231239
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +308,7 @@ GameObject:
   - component: {fileID: 327231243}
   - component: {fileID: 327231245}
   - component: {fileID: 327231244}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1505,8 +1545,8 @@ MonoBehaviour:
   m_RefResolutionY: 144
   m_UpscaleRT: 1
   m_PixelSnapping: 0
-  m_CropFrameX: 1
-  m_CropFrameY: 1
+  m_CropFrameX: 0
+  m_CropFrameY: 0
   m_StretchFill: 0
 --- !u!20 &519420031
 Camera:
