@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (Input.GetButtonDown("Jump")) {
 			if (coll.onGround)
-				Jump(Vector2.up, false);
+				Jump(Vector2.up, false, jumpForce);
 			if (wallGrab)
 				WallJump();
 		}
@@ -61,7 +61,7 @@ public class PlayerMovement : MonoBehaviour {
             switch (GetComponent<AbilitySlot>().element.name)
             {
                 case "Air":
-                    Jump(jumpForce * 1.5f);
+                    Jump(Vector2.up, false, jumpForce * 1.5f);
                     break;
                 case "Fire":
                     break;
@@ -82,18 +82,11 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
-<<<<<<< HEAD
-	void Jump(float force) {
+	void Jump(Vector2 dir, bool wall, float force) {
 		//Allow for air controls
 		rb.velocity = new Vector2(rb.velocity.x, 0);
 		//Jump
-		rb.velocity += Vector2.up * force;
-=======
-	void Jump(Vector2 dir, bool wall) {
-		//Allow for air controls
-		rb.velocity = new Vector2(rb.velocity.x, 0);
-		//Jump
-		rb.velocity += dir * jumpForce;
+		rb.velocity += dir * force;
 	}
 
 	void WallJump() {
@@ -101,15 +94,15 @@ public class PlayerMovement : MonoBehaviour {
 		StartCoroutine(DisableMovement(0.1f));
 
 		Vector2 wallDir = coll.onRightWall ? Vector2.left : Vector2.right;
-		Jump(Vector2.up / 1.5f + wallDir / 1.5f, true);
+		Jump(Vector2.up / 1.5f + wallDir / 1.5f, true, jumpForce);
 		wallJumped = true;
 	}
 
 	IEnumerator DisableMovement(float time) {
+        Debug.Log("Movement Disabled");
 		wallGrab = false;
 		canMove = false;
 		yield return new WaitForSeconds(time);
 		canMove = true;
->>>>>>> ebcd952fc6e3cd43a92718f185bafab9da4de1c2
 	}
 }
