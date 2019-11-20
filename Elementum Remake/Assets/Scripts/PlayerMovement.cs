@@ -36,19 +36,25 @@ public class PlayerMovement : MonoBehaviour {
 			wallGrab = true;
 		}
 
-		if (wallGrab) {
-			canMove = false;
-			rb.velocity = Vector2.zero;
-			rb.gravityScale = 0;
-		} else {
-			rb.gravityScale = initialGravity;
-		}
+		//if (wallGrab) {
+			//canMove = false;
+			//rb.velocity = Vector2.zero;
+			//rb.gravityScale = 0;
+		//} else {
+		//	rb.gravityScale = initialGravity;
+		//}
 
 		if (Input.GetButtonDown("Jump")) {
-			if (coll.onGround)
-				Jump(Vector2.up, false, jumpForce);
+			if (coll.onGround || wallGrab)
+            {
+                Jump(Vector2.up, false, jumpForce);
+            }
+				
 			if (wallGrab)
-				WallJump();
+            {
+                WallJump();
+            }
+				
 		}
 
 		if(coll.onGround && !isDashing) {
@@ -89,18 +95,16 @@ public class PlayerMovement : MonoBehaviour {
 		rb.velocity += dir * force;
 	}
 
-	void WallJump() {
-		StopCoroutine(DisableMovement(0));
-		StartCoroutine(DisableMovement(0.1f));
-
+	void WallJump() {;
 		Vector2 wallDir = coll.onRightWall ? Vector2.left : Vector2.right;
 		Jump(Vector2.up / 1.5f + wallDir / 1.5f, true, jumpForce);
 		wallJumped = true;
-	}
+        wallGrab = false;
+    }
 
 	IEnumerator DisableMovement(float time) {
         Debug.Log("Movement Disabled");
-		wallGrab = false;
+		
 		canMove = false;
 		yield return new WaitForSeconds(time);
 		canMove = true;
