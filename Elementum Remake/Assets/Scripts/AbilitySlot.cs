@@ -16,6 +16,9 @@ public class AbilitySlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(element.name);
+		if(element != null) {
+			Debug.Log(element.name);
+		}
+        
     }
 }
