@@ -14,10 +14,8 @@ public class Collision : MonoBehaviour {
 	public bool onLeftWall;
 	public int wallSide;
 
-	[Space]
 
 	[Header("Collision")]
-
 	public float collisionRadius = 0.25f;
 	public Vector2 bottomOffset, rightOffset, leftOffset;
 	private Color debugCollisionColor = Color.red;

@@ -2,19 +2,21 @@
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
-	public float jumpForce;				//Player's jump force
+	[Header("Stats")]
+	public float jumpForce;             //Player's jump force
 	public float speed = 10f;           //Player's speed
-	public float wallJumpLerp;			//Determines how much movement is restricted during wall jump
+	public float wallJumpLerp;          //Determines how much movement is restricted during wall jump
 
+	[Header("Checks")]
+	public bool canMove = true;
+	public bool wallTouch;
+	public bool wallGrab;
+	public bool wallJumped;
+
+	private Collision coll;             //Player's collision box
 	private Rigidbody2D rb;             //Player's rigidbody
-	private Collision coll;				//Player's collision box
 	private Vector2 move;               //Player's movement
 	private float initialGravity;       //Initial gravity value
-
-	private bool wallJumped;            //
-	private bool isDashing;
-	private bool wallGrab;
-	private bool canMove = true;
 
 	private void Awake() {
 		rb = GetComponent<Rigidbody2D>();
@@ -29,53 +31,52 @@ public class PlayerMovement : MonoBehaviour {
 		//Take movement input from player
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
-		Walk(new Vector2(x, y));
 
-		//Wall grab
-		if (coll.onWall && !coll.onGround) {
+		//Wall grab check
+		if (coll.onWall && !coll.onGround)
 			wallGrab = true;
+		if (!coll.onWall || coll.onGround)
+			wallGrab = false;
+
+		//Simulate the effect of wall grab by making the player's gravity 0 and have them stay still
+		if (wallGrab) {
+			canMove = false;
+			rb.gravityScale = 0;
+		} else {
+			canMove = true;
+			rb.gravityScale = initialGravity;
 		}
 
-		//if (wallGrab) {
-			//canMove = false;
-			//rb.velocity = Vector2.zero;
-			//rb.gravityScale = 0;
-		//} else {
-		//	rb.gravityScale = initialGravity;
-		//}
+		//Reset player's velocity when touching the wall (to avoid having momentum when gravity = 0)
+		if (coll.onWall && !wallTouch && !coll.onGround) {
+			wallTouch = true;
+			rb.velocity -= rb.velocity;
+		}
+		if (!coll.onWall && wallTouch) {
+			wallTouch = false;
+		}
+
+		Walk(new Vector2(x, y));
 
 		if (Input.GetButtonDown("Jump")) {
 			if (coll.onGround || wallGrab)
-            {
-                Jump(Vector2.up, false, jumpForce);
-            }
-				
+				Jump(Vector2.up, false, jumpForce);
 			if (wallGrab)
-            {
-                WallJump();
-            }
-				
+				WallJump();
 		}
 
-		if(coll.onGround && !isDashing) {
-			wallJumped = false;
-			GetComponent<BetterJump>().enabled = true;
+		if (Input.GetButtonDown("Use") && GetComponent<AbilitySlot>().occupied) {
+			switch (GetComponent<AbilitySlot>().element.name) {
+				case "Air":
+					Jump(Vector2.up, false, jumpForce * 1.5f);
+					break;
+				case "Fire":
+					break;
+				case "Earth":
+					break;
+			}
+			GetComponent<AbilitySlot>().occupied = false;
 		}
-		
-        if(Input.GetButtonDown("Use") && GetComponent<AbilitySlot>().occupied)
-        {
-            switch (GetComponent<AbilitySlot>().element.name)
-            {
-                case "Air":
-                    Jump(Vector2.up, false, jumpForce * 1.5f);
-                    break;
-                case "Fire":
-                    break;
-                case "Earth":
-                    break;
-            }
-            GetComponent<AbilitySlot>().occupied = false;
-        }
 	}
 
 	void Walk(Vector2 dir) {
@@ -83,28 +84,25 @@ public class PlayerMovement : MonoBehaviour {
 			return;
 		if (!wallJumped) {
 			rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
-		} else {
-			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), wallJumpLerp * Time.deltaTime);
+		} else {			
+			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), wallJumpLerp * Time.deltaTime); //Lerping the input will act as a damp so that the player won't regain control immediately and cancel the jump accidentally
 		}
 	}
 
 	void Jump(Vector2 dir, bool wall, float force) {
-		//Allow for air controls
-		rb.velocity = new Vector2(rb.velocity.x, 0);
-		//Jump
+		rb.velocity = new Vector2(rb.velocity.x, 0);	//Setting only y component to 0 allows for air controls
 		rb.velocity += dir * force;
 	}
 
-	void WallJump() {;
-		Vector2 wallDir = coll.onRightWall ? Vector2.left : Vector2.right;
+	void WallJump() {
+		wallGrab = false;		
+		Vector2 wallDir = coll.onRightWall ? Vector2.left : Vector2.right;	//Work out which direction to jump to
 		Jump(Vector2.up / 1.5f + wallDir / 1.5f, true, jumpForce);
 		wallJumped = true;
-        wallGrab = false;
-    }
+	}
 
+	//This will be useful for dash later
 	IEnumerator DisableMovement(float time) {
-        Debug.Log("Movement Disabled");
-		
 		canMove = false;
 		yield return new WaitForSeconds(time);
 		canMove = true;
