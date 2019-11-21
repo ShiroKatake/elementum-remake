@@ -257,7 +257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpForce: 20
   speed: 10
-  wallJumpLerp: 8.7
+  wallJumpLerp: 4
 --- !u!114 &193358246
 MonoBehaviour:
   m_ObjectHideFlags: 0
