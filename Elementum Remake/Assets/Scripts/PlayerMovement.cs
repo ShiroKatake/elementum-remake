@@ -52,8 +52,6 @@ public class PlayerMovement : MonoBehaviour {
         //Brian: I've adjusted this to remove the sticky feeling. I'd like the player so slide slowly downwards when they land on the wall, but also not be stopped if they hit a wall while they are on a certain angle (or while they are travelling upwards). With the wall grab, you often get stuck in corners or tight spaces because its sticky and then it forces you into the wall jump which you cant control as much. so yea.
 		if (wallGrab) {
 			canMove = false;
-<<<<<<< HEAD
-            Debug.Log(rb.velocity.y);
             if (rb.velocity.y <= 0)
             {
                 rb.velocity *= new Vector2(1, 0.3f);
@@ -62,14 +60,10 @@ public class PlayerMovement : MonoBehaviour {
             {
                 //rb.velocity *= new Vector2(1, 0.8f);
             }
-=======
-			rb.velocity *= new Vector2(1, 0.2f); //Newest change: Reduces y velocity to 20% when contacting the wall. This still allows the player to slide over the corner of a platform, however the area of the corner that they can jump over is very small, which might be what we want 
->>>>>>> db727d8f845710e1bd134e9f97bac055f1543ed2
 		} else {
 			canMove = true;
 		}
 
-<<<<<<< HEAD
 		//Reset player's velocity when touching the wall (to avoid having momentum when gravity = 0)
 		if (coll.onWall && !wallTouch && !coll.onGround) {
 			wallTouch = true;
@@ -77,16 +71,6 @@ public class PlayerMovement : MonoBehaviour {
 		if (!coll.onWall && wallTouch) {
 			wallTouch = false;
 		}
-=======
-		////Reset player's velocity when touching the wall (to avoid having momentum when gravity = 0)
-		//if (coll.onWall && !wallTouch && !coll.onGround) {
-		//	wallTouch = true;
-		//	rb.velocity -= rb.velocity;
-		//}
-		//if (!coll.onWall && wallTouch) {
-		//	wallTouch = false;
-		//}
->>>>>>> db727d8f845710e1bd134e9f97bac055f1543ed2
 
 		Walk(new Vector2(x, y));
 
