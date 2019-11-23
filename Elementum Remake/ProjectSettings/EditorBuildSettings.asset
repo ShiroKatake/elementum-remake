@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Master Scenes/Stage 1-2.unity
     guid: 2a0818ecaea44dc49b8d23dd1aa8cdba
   - enabled: 1
-    path: Assets/Scenes/Master Scenes/Scene 2-1.unity
+    path: Assets/Scenes/Master Scenes/Stage 2-1.unity
     guid: eefa83ebddadcf247afe9dad553b7c43
+  - enabled: 1
+    path: Assets/Scenes/Master Scenes/Stage 2-2.unity
+    guid: f438caf28f32d3e46814fe7fddbeac50
   m_configObjects: {}
