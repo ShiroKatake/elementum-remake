@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 	[Header("Stats")]
-	public float jumpForce;             //Player's jump force
-	public float speed = 10f;           //Player's speed
-	public float wallJumpLerp;          //Determines how much movement is restricted during wall jump
+	public float jumpForce;             //How high the player jumps
+	public float speed = 10f;           //How fast the player moves
+	public float wallJumpLerp;          //How much movement is restricted during wall jump
+	public float dashForce;				//How powerful the dash pushes the player
+	public float dashTime;				//How long the player hangs in the air
 
 	[Header("Checks")]
 	public bool canMove = true;
-	public bool wallTouch;
-	public bool wallGrab;
+	public bool wallSlide;
 	public bool wallJumped;
 
 	private Collision coll;             //Player's collision box
 	private Rigidbody2D rb;             //Player's rigidbody
-	private Vector2 move;               //Player's movement
-	private float initialGravity;       //Initial gravity value
+	private float initialGravity;       //Initial gravity value on player's rigidbody
 
 	private void Awake() {
 		rb = GetComponent<Rigidbody2D>();
@@ -27,77 +27,54 @@ public class PlayerMovement : MonoBehaviour {
 		initialGravity = rb.gravityScale;
 	}
 
-    private void Update() {
-        //Take movement input from player
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
+	private void Update() {
+		//Take movement input from player
+		float x = Input.GetAxis("Horizontal");
+		float y = Input.GetAxis("Vertical");
+		Walk(new Vector2(x, y));
 
-        //Wall grab check
-        if (coll.onWall && !coll.onGround)
-        {
-            Debug.Log("Grabbing");
-            wallGrab = true;
-        }
+		//Wall slide check
+		if (coll.onWall && !coll.onGround) {
+			wallSlide = true;
+		}
+		if (!coll.onWall || coll.onGround) {
+			wallSlide = false;
+		}
+		if (coll.onGround) {
+			wallJumped = false;
+		}
 
-        if (!coll.onWall || coll.onGround)
-        {
-            wallGrab = false;
-        }
-        if (coll.onGround)
-        {
-            wallJumped = false;
-        }
-
-		//Simulate the effect of wall grab by making the player's gravity 0 and have them stay still
-        //Brian: I've adjusted this to remove the sticky feeling. I'd like the player so slide slowly downwards when they land on the wall, but also not be stopped if they hit a wall while they are on a certain angle (or while they are travelling upwards). With the wall grab, you often get stuck in corners or tight spaces because its sticky and then it forces you into the wall jump which you cant control as much. so yea.
-		if (wallGrab) {
+		//When colliding with a wall, reduce player's y velocity to simulate the wall slide effect
+		if (wallSlide) {
 			canMove = false;
-            if (rb.velocity.y <= 0)
-            {
-                rb.velocity *= new Vector2(1, 0.3f);
-            }
-            else
-            {
-                //rb.velocity *= new Vector2(1, 0.8f);
-            }
+			if (rb.velocity.y <= 0) {
+				rb.velocity *= new Vector2(1, 0.3f);
+			}
 		} else {
 			canMove = true;
 		}
-
-		//Reset player's velocity when touching the wall (to avoid having momentum when gravity = 0)
-		if (coll.onWall && !wallTouch && !coll.onGround) {
-			wallTouch = true;
-		}
-		if (!coll.onWall && wallTouch) {
-			wallTouch = false;
-		}
-
-		Walk(new Vector2(x, y));
-
+		
 		if (Input.GetButtonDown("Jump")) {
-			if (coll.onGround || wallGrab)
+			if (coll.onGround)
 				Jump(Vector2.up, jumpForce);
-			if (wallGrab)
+			if (wallSlide)
 				WallJump();
 		}
 
-		if (Input.GetButtonDown("Use") && GetComponent<AbilitySlot>().occupied && !wallGrab) {
+		//Player's elemental abilities. Each element gives the player a different ability in terms of movement
+		if (Input.GetButtonDown("Use") && GetComponent<AbilitySlot>().occupied && !wallSlide) {
 			switch (GetComponent<AbilitySlot>().element.name) {
-				case "Air":
+				case "Air": //High jump
 					Jump(Vector2.up, jumpForce * 1.3f);
 					break;
-				case "Fire":
-                    if (x > 0)
-                    {
-                        Dash(Vector2.right, jumpForce);
-                    }
-                    else
-                    {
-                        Dash(Vector2.left, jumpForce);
-                    }
-                    
+				case "Fire": //Dash
+					if (x > 0) { //Note when the game is further developed: change direction check to where the character is facing
+						Dash(Vector2.right, dashForce);
+					} else {
+						Dash(Vector2.left, dashForce);
+					}
 					break;
-				case "Earth":
+				case "Earth": //Spawn a platform tile adjacent to player
 					break;
 			}
 			GetComponent<AbilitySlot>().occupied = false;
@@ -109,34 +86,41 @@ public class PlayerMovement : MonoBehaviour {
 			return;
 		if (!wallJumped) {
 			rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
-		} else {			
-			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), wallJumpLerp * Time.deltaTime); //Lerping the input will act as a damp so that the player won't regain control immediately and cancel the jump accidentally
+		} else {
+			//If wall jumping, lerping the input will act as a damp so the player won't regain control immediately and accidentally cancel the wall jump
+			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), wallJumpLerp * Time.deltaTime);
 		}
 	}
 
 	void Jump(Vector2 dir, float force) {
-        rb.velocity = new Vector2(rb.velocity.x, 0);    //Setting only y component to 0 allows for air controls
-        rb.velocity += dir * force;
-    }
+		rb.velocity = new Vector2(rb.velocity.x, 0);	//Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
+		rb.velocity += dir * force;
+	}
 
 	void WallJump() {
-		wallGrab = false;		
-		Vector2 wallDir = coll.onRightWall ? Vector2.left : Vector2.right;	//Work out which direction to jump to
-		Jump(Vector2.up + wallDir, jumpForce);
+		wallSlide = false;
+		Vector2 wallDir = coll.onRightWall ? Vector2.left : Vector2.right;	//Work out which direction to wall jump to
+		Jump(Vector2.up + wallDir, jumpForce * 0.7f);
 		wallJumped = true;
 	}
 
-    void Dash(Vector2 dir, float force)
-    {
-        //I tried lmao
-        rb.velocity = new Vector2(0, rb.velocity.y);
-        rb.velocity += dir * force;
-    }
+	void Dash(Vector2 dir, float dashForce) {
+		StartCoroutine(DisableMovement());
+		wallJumped = false;								//Cancel the momentum from wall jump if the player is wall jumping
+		rb.velocity -= rb.velocity;						//Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better
+		rb.velocity += dir * dashForce;
+	}
 
-	//This will be useful for dash later
-	IEnumerator DisableMovement(float time) {
+	//Disabling input and change gravity to 0 before applying the new velocity will set the player up to move horizontally across
+	IEnumerator DisableMovement() {
 		canMove = false;
-		yield return new WaitForSeconds(time);
+		rb.gravityScale = 0;							//Also disabling BetterJump because the script deals with gravity
+		GetComponent<BetterJump>().enabled = false;
+
+		yield return new WaitForSeconds(dashTime);
+
 		canMove = true;
+		rb.gravityScale = initialGravity;
+		GetComponent<BetterJump>().enabled = true;
 	}
 }
