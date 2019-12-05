@@ -1,6 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+public enum CollisionSide
+{
+    Left,
+    Right,
+    None
+}
+
 public class PlayerMovement : MonoBehaviour {
 	[Header("Stats")]
 	public float jumpForce;             //How high the player jumps
@@ -13,10 +20,12 @@ public class PlayerMovement : MonoBehaviour {
 	public bool canMove = true;
 	public bool wallSlide;
 	public bool wallJumped;
+    public bool airJump;                //Flag triggered when the jump method is called from the air ability
 
 	private Collision coll;             //Player's collision box
 	private Rigidbody2D rb;             //Player's rigidbody
 	private float initialGravity;       //Initial gravity value on player's rigidbody
+    private CollisionSide wallSide;     //Tracks side that colliding wall is relation to the player
 
 	private void Awake() {
 		rb = GetComponent<Rigidbody2D>();
@@ -27,6 +36,25 @@ public class PlayerMovement : MonoBehaviour {
 		initialGravity = rb.gravityScale;
 	}
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Collider2D collider = collision.collider;
+
+        Vector3 contactPoint = collision.contacts[0].point;
+        if (contactPoint.x > rb.transform.position.x + rb.GetComponent<SpriteRenderer>().sprite.rect.width / 2)
+        {
+            wallSide = CollisionSide.Right;
+        }
+        else if (contactPoint.x < rb.transform.position.x + rb.GetComponent<SpriteRenderer>().sprite.rect.width / 2)
+        {
+            wallSide = CollisionSide.Left;
+        }
+        else
+        {
+            wallSide = CollisionSide.None;
+        }
+    }
+
 	private void Update() {
 		//Take movement input from player
 		float x = Input.GetAxis("Horizontal");
@@ -34,6 +62,10 @@ public class PlayerMovement : MonoBehaviour {
 		Walk(new Vector2(x, y));
 
 		//Wall slide check
+        if (coll.onWall || coll.onGround)
+        {
+            airJump = false;
+        }
 		if (coll.onWall && !coll.onGround) {
 			wallSlide = true;
 		}
@@ -44,9 +76,14 @@ public class PlayerMovement : MonoBehaviour {
 			wallJumped = false;
 		}
 
-		//When colliding with a wall, reduce player's y velocity to simulate the wall slide effect
-		if (wallSlide) {
-			canMove = false;
+        //When colliding with a wall, reduce player's y velocity to simulate the wall slide effect
+        if (wallSlide) {
+            canMove = false;
+            if ((wallSide == CollisionSide.Right && Input.GetButtonDown("Horizontal")) || (wallSide == CollisionSide.Left && !Input.GetButtonDown("Horizontal")))
+            {
+                Debug.Log("Leaving wall");
+                canMove = true;
+            }
 			if (rb.velocity.y <= 0) {
 				rb.velocity *= new Vector2(1, 0.3f);
 			}
@@ -65,6 +102,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (Input.GetButtonDown("Use") && GetComponent<AbilitySlot>().occupied && !wallSlide) {
 			switch (GetComponent<AbilitySlot>().element.name) {
 				case "Air": //High jump
+                    airJump = true;
 					Jump(Vector2.up, jumpForce * 1.3f);
 					break;
 				case "Fire": //Dash
