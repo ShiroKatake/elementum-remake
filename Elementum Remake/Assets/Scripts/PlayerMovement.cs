@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour {
 	public bool wallJumped;
     public bool airJump;                //Flag triggered when the jump method is called from the air ability
 
+    public GameObject earthCube;
+
 	private Collision coll;             //Player's collision box
 	private Rigidbody2D rb;             //Player's rigidbody
 	private float initialGravity;       //Initial gravity value on player's rigidbody
@@ -99,20 +101,32 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 		//Player's elemental abilities. Each element gives the player a different ability in terms of movement
-		if (Input.GetButtonDown("Use") && GetComponent<AbilitySlot>().occupied && !wallSlide) {
+		if ((Input.GetButtonDown("Use") || Input.GetButtonDown("Use2")) && GetComponent<AbilitySlot>().occupied && !wallSlide) {
 			switch (GetComponent<AbilitySlot>().element.name) {
 				case "Air": //High jump
                     airJump = true;
 					Jump(Vector2.up, jumpForce * 1.3f);
 					break;
 				case "Fire": //Dash
-					if (x > 0) { //Note when the game is further developed: change direction check to where the character is facing
+					if (Input.GetButtonDown("Use2")) { //Note when the game is further developed: change direction check to where the character is facing
 						Dash(Vector2.right, dashForce);
 					} else {
 						Dash(Vector2.left, dashForce);
 					}
 					break;
 				case "Earth": //Spawn a platform tile adjacent to player
+                    float offset;
+                    if (Input.GetButtonDown("Use2"))
+                    {
+                        offset = rb.GetComponent<SpriteRenderer>().sprite.rect.width / 8;
+                    }
+                    else
+                    {
+                        offset = -1 * rb.GetComponent<SpriteRenderer>().sprite.rect.width / 8;
+                    }
+                    Vector2 newPos = new Vector2(rb.position.x + offset, rb.position.y);
+                    earthCube.GetComponent<Rigidbody2D>().transform.SetPositionAndRotation(newPos, new Quaternion());
+                    //earth cube should have velocity set to the same as the players so that it will path with them if they are in the air.
 					break;
 			}
 			GetComponent<AbilitySlot>().occupied = false;
