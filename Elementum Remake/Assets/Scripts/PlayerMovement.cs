@@ -8,9 +8,10 @@ public enum CollisionSide
     None
 }
 
-public enum PlayerPosition
+public enum Position
 {
-	Wall,
+	WallLeft,
+	WallRight,
 	Ground,
 	Air
 }
@@ -28,14 +29,15 @@ public class PlayerMovement : MonoBehaviour
 	public bool wallSlide;
 	public bool wallJumped;
     public bool airJump;                //Flag triggered when the jump method is called from the air ability
+	public Position playerPosition;
 
-    public GameObject earthCube;
+
+	public GameObject earthCube;
 	public AbilitySlot slot;
 
 	private Collision coll;             //Player's collision box
 	public Rigidbody2D rb;             //Player's rigidbody
 	public float initialGravity;       //Initial gravity value on player's rigidbody
-    private CollisionSide wallSide;     //Tracks side that colliding wall is relation to the player
 
 	private void Awake() 
 	{
@@ -48,25 +50,6 @@ public class PlayerMovement : MonoBehaviour
 		initialGravity = rb.gravityScale;
 	}
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        Collider2D collider = collision.collider;
-
-        Vector3 contactPoint = collision.contacts[0].point;
-        if (contactPoint.x > rb.transform.position.x + rb.GetComponent<SpriteRenderer>().sprite.rect.width / 2)
-        {
-            wallSide = CollisionSide.Right;
-        }
-        else if (contactPoint.x < rb.transform.position.x + rb.GetComponent<SpriteRenderer>().sprite.rect.width / 2)
-        {
-            wallSide = CollisionSide.Left;
-        }
-        else
-        {
-            wallSide = CollisionSide.None;
-        }
-    }
-
 	private void Update() 
 	{
 		//Take movement input from player
@@ -74,20 +57,22 @@ public class PlayerMovement : MonoBehaviour
 		float y = Input.GetAxis("Vertical");
 		Walk(new Vector2(x, y));
 
+		SetPosition();
+
 		//Wall slide check
-        if (coll.onWall || coll.onGround)
+        if (playerPosition != Position.Air)
         {
-            airJump = false;
-        }
-		if (coll.onWall && !coll.onGround) 
+			airJump = false;
+		}
+		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight) 
 		{
 			wallSlide = true;
 		}
-		if (!coll.onWall || coll.onGround) 
+		else
 		{
 			wallSlide = false;
 		}
-		if (coll.onGround) 
+		if (playerPosition == Position.Ground) 
 		{
 			wallJumped = false;
 		}
@@ -96,9 +81,9 @@ public class PlayerMovement : MonoBehaviour
         if (wallSlide) 
 		{
             canMove = false;
-            if ((wallSide == CollisionSide.Right && Input.GetButtonDown("Horizontal")) || (wallSide == CollisionSide.Left && !Input.GetButtonDown("Horizontal")))
+            if ((playerPosition == Position.WallRight && Input.GetButtonDown("Horizontal")) || (playerPosition == Position.WallLeft && !Input.GetButtonDown("Horizontal")))
             {
-                canMove = true;
+				StartCoroutine(LeaveWall());
             }
 			if (rb.velocity.y <= 0) {
 				rb.velocity *= new Vector2(1, 0.3f);
@@ -112,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (Input.GetButtonDown("Jump")) 
 		{
-			if (coll.onGround)
+			if (playerPosition == Position.Ground)
 			{
 				Jump(Vector2.up, jumpForce);
 			}
@@ -138,7 +123,6 @@ public class PlayerMovement : MonoBehaviour
 			rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
 		} else {
 			//If wall jumping, lerping the input will act as a damp so the player won't regain control immediately and accidentally cancel the wall jump
-			Debug.Log("lerping");
 			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), wallJumpLerp * Time.deltaTime);
 		}
 	}
@@ -151,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void WallJump() {
 		wallSlide = false;
-		Vector2 wallDir = coll.onRightWall ? Vector2.left : Vector2.right;	//Work out which direction to wall jump to
+		Vector2 wallDir = (playerPosition == Position.WallRight) ? Vector2.left : Vector2.right;	//Work out which direction to wall jump to
 		Jump(Vector2.up + wallDir, jumpForce * 0.7f);
 		wallJumped = true;
 	}
@@ -171,5 +155,32 @@ public class PlayerMovement : MonoBehaviour
 		Immobilized = false;
 		rb.gravityScale = initialGravity;
 		GetComponent<BetterJump>().enabled = true;
+	}
+
+	IEnumerator LeaveWall()
+	{
+		yield return new WaitForSeconds(0.2f);
+		canMove = true;
+	}
+
+	public void SetPosition()
+	{
+		if (coll.onLeftWall && !coll.onGround)
+		{
+			playerPosition = Position.WallLeft;
+		}
+		if (coll.onRightWall && !coll.onGround)
+		{
+			playerPosition = Position.WallRight;
+		}
+		if (coll.onGround)
+		{
+			playerPosition = Position.Ground;
+		}
+		if (!coll.onGround && !coll.onWall)
+		{
+			playerPosition = Position.Air;
+		}
+
 	}
 }

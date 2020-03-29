@@ -15,6 +15,7 @@ public class Fire : Element
     }
     public override void Activate(PlayerMovement player)
     {
+        // Determine the direction of the dash
         Vector2 dir;
         if (Input.GetButtonDown("Use2"))
         {
@@ -25,14 +26,14 @@ public class Fire : Element
             dir = Vector2.left;
             
         }
+
+        //Stop player from moving and execute dash
         StartCoroutine(player.DisableMovement(dashTime));
         StartCoroutine(Dash(dir, dashForce, player));
     }
 
     private IEnumerator Dash(Vector2 dir, float dashForce, PlayerMovement player)
     {
-        Debug.Log("dashing");
-        
         player.wallJumped = false;                          //Cancel the momentum from wall jump if the player is wall jumping
         player.rb.velocity -= player.rb.velocity;           //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better
         player.rb.velocity = dir * dashForce;
