@@ -27,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
 	public bool canMove = true;
 	public bool Immobilized;
 	public bool wallSlide;
-	public bool wallJumped;
     public bool airJump;                //Flag triggered when the jump method is called from the air ability
 	public Position playerPosition;
 
@@ -66,30 +65,17 @@ public class PlayerMovement : MonoBehaviour
 		}
 		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight) 
 		{
-			wallSlide = true;
-		}
-		else
-		{
-			wallSlide = false;
-		}
-		if (playerPosition == Position.Ground) 
-		{
-			wallJumped = false;
-		}
-
-        //When colliding with a wall, reduce player's y velocity to simulate the wall slide effect
-        if (wallSlide) 
-		{
-            canMove = false;
-            if ((playerPosition == Position.WallRight && Input.GetButtonDown("Horizontal")) || (playerPosition == Position.WallLeft && !Input.GetButtonDown("Horizontal")))
-            {
+			canMove = false;
+			if ((playerPosition == Position.WallRight && Input.GetButtonDown("Horizontal")) || (playerPosition == Position.WallLeft && !Input.GetButtonDown("Horizontal")))
+			{
 				StartCoroutine(LeaveWall());
-            }
-			if (rb.velocity.y <= 0) {
+			}
+			if (rb.velocity.y <= 0)
+			{
 				rb.velocity *= new Vector2(1, 0.3f);
 			}
-		} 
-		else 
+		}
+		else
 		{
 			canMove = true;
 		}
@@ -101,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
 			{
 				Jump(Vector2.up, jumpForce);
 			}
-			if (wallSlide)
+			if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
 			{
 				WallJump();
 			}
@@ -119,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (!canMove || Immobilized)
 			return;
-		if (!wallJumped) {
+		if (playerPosition == Position.Ground) {
 			rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
 		} else {
 			//If wall jumping, lerping the input will act as a damp so the player won't regain control immediately and accidentally cancel the wall jump
@@ -137,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
 		wallSlide = false;
 		Vector2 wallDir = (playerPosition == Position.WallRight) ? Vector2.left : Vector2.right;	//Work out which direction to wall jump to
 		Jump(Vector2.up + wallDir, jumpForce * 0.7f);
-		wallJumped = true;
+		
 	}
 
 	
@@ -157,6 +143,7 @@ public class PlayerMovement : MonoBehaviour
 		GetComponent<BetterJump>().enabled = true;
 	}
 
+	//Players tend to move away as they jump off a wall to maximise distance. This little pause give the player some time to jump after they press the direction key.
 	IEnumerator LeaveWall()
 	{
 		yield return new WaitForSeconds(0.2f);

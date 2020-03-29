@@ -34,7 +34,6 @@ public class Fire : Element
 
     private IEnumerator Dash(Vector2 dir, float dashForce, PlayerMovement player)
     {
-        player.wallJumped = false;                          //Cancel the momentum from wall jump if the player is wall jumping
         player.rb.velocity -= player.rb.velocity;           //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better
         player.rb.velocity = dir * dashForce;
 

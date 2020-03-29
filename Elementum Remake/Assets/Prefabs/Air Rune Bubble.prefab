@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   airColor: {r: 0.64705884, g: 0.6901961, b: 0.8078432, a: 1}
-  forceMultiplier: 1.3
+  forceMultiplier: 1.6
 --- !u!1 &8456616693835909736
 GameObject:
   m_ObjectHideFlags: 0
