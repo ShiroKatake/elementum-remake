@@ -30,8 +30,6 @@ public class PlayerMovement : MonoBehaviour
     public bool airJump;                //Flag triggered when the jump method is called from the air ability
 	public Position playerPosition;
 
-
-	public GameObject earthCube;
 	public AbilitySlot slot;
 
 	private Collision coll;             //Player's collision box

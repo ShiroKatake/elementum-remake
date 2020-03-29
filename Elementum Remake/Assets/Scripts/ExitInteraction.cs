@@ -36,7 +36,9 @@ public class ExitInteraction : MonoBehaviour {
 		anim.SetTrigger("FadeOut");
 		yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length + timePadding);
 		isTransitioning = false;
-		SceneManager.LoadScene(SceneManager.GetSceneByName(destinationScene).buildIndex);
+		Debug.Log(destinationScene);
+		Debug.Log(SceneManager.GetActiveScene().name);
+		SceneManager.LoadScene(destinationScene);
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
