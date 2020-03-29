@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ExitInteraction : MonoBehaviour {
 	bool playerInBounds;
 	bool isTransitioning;	//Check if the scene is transitioning to stop function from repeating
-	Animator anim;			//Animator component of the LevelTransition child
+	Animator anim;          //Animator component of the LevelTransition child
+	public string destinationScene;
 
 	private void Awake() {
 		anim = GetComponentInChildren<Animator>();
@@ -12,24 +14,18 @@ public class ExitInteraction : MonoBehaviour {
 	}
 
 	void Start() {
-		Color tmp = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color;
-		tmp.a = 0f;
-		transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = tmp;
+		DisplayIcon(0);
 	}
 
 	void Update() {
 		if (playerInBounds) {
-			Color tmp = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color;
-			tmp.a = 1f;
-			transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = tmp;
+			DisplayIcon(1);
 			if (Input.GetButtonDown("Interact") && !isTransitioning) {
 				isTransitioning = true;
 				StartCoroutine(TransitionToNextScene());
 			}
 		} else {
-			Color tmp = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color;
-			tmp.a = 0f;
-			transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = tmp;
+			DisplayIcon(0);
 		}
 	}
 
@@ -40,7 +36,7 @@ public class ExitInteraction : MonoBehaviour {
 		anim.SetTrigger("FadeOut");
 		yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length + timePadding);
 		isTransitioning = false;
-		LevelManager.instance.LoadNextScene();
+		SceneManager.LoadScene(SceneManager.GetSceneByName(destinationScene).buildIndex);
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
@@ -49,5 +45,12 @@ public class ExitInteraction : MonoBehaviour {
 
 	void OnTriggerExit2D(Collider2D other) {
 		playerInBounds = false;
+	}
+
+	private void DisplayIcon(float alpha)
+	{
+		Color tmp = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color;
+		tmp.a = alpha;
+		transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = tmp;
 	}
 }
