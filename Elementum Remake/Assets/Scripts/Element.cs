@@ -2,8 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Element : MonoBehaviour
+public abstract class Element : MonoBehaviour
 {
+    protected Color color;
+
+    public Color Color
+    {
+        get
+        {
+            return color;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -16,4 +25,6 @@ public class Element : MonoBehaviour
     {
         
     }
+
+    public abstract void Activate(PlayerMovement player);
 }

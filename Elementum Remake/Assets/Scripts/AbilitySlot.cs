@@ -2,26 +2,29 @@
 
 public class AbilitySlot : MonoBehaviour {
 	public bool occupied;
-	public Element element;
-	public Color airColor;
-	public Color fireColor;
-	public Color earthColor;
+	public GameObject element;
+	public Color color;
+
+	public Element Element
+	{
+		get
+		{
+			return element.GetComponent<Air>();
+		}
+	}
 
 	void Update() {
 		if (!occupied) {
-			transform.GetComponent<SpriteRenderer>().color = Color.white;
+			color = Color.white;
 		} else {
-			switch (element.name) {
-				case "Air":
-					transform.GetComponent<SpriteRenderer>().color = airColor;
-					break;
-				case "Fire":
-					transform.GetComponent<SpriteRenderer>().color = fireColor;
-					break;
-				case "Earth":
-					transform.GetComponent<SpriteRenderer>().color = earthColor;
-					break;
-			}
+			color = Element.Color;
 		}
+		transform.GetComponent<SpriteRenderer>().color = color;
+	}
+
+	public void Activate(PlayerMovement player)
+	{
+		Element.Activate(player);
+		element = null;
 	}
 }

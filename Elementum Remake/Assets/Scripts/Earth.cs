@@ -15,4 +15,9 @@ public class Earth : Element
     {
         
     }
+
+    public override void Activate(PlayerMovement player) 
+    {
+        throw new System.NotImplementedException();
+    }
 }
