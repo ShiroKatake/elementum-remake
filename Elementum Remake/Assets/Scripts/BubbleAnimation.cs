@@ -29,7 +29,6 @@ public class BubbleAnimation : MonoBehaviour
 
     public void Reset()
     {
-        Debug.Log("Bubble resetting");
         for (int i = 0; i < frames; i++)
         {
             transform.localScale /= 1.1f;

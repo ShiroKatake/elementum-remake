@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Air : Element
 {
-    public Color airColor;
+    public Color airColor;              //Color the player will change to
+    public float forceMultiplier;       //Alter the force of the players standard jump
 
     // Start is called before the first frame update
     void Start()
@@ -12,14 +13,8 @@ public class Air : Element
         color = airColor;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public override void Activate(PlayerMovement player)
     {
-        player.Jump(Vector2.up, player.jumpForce * 1.3f);
+        player.Jump(Vector2.up, player.jumpForce * forceMultiplier);
     }
 }

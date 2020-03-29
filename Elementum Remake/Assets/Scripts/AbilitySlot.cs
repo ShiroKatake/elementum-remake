@@ -9,7 +9,7 @@ public class AbilitySlot : MonoBehaviour {
 	{
 		get
 		{
-			return element.GetComponent<Air>();
+			return element.GetComponent<Element>();
 		}
 	}
 
@@ -24,7 +24,10 @@ public class AbilitySlot : MonoBehaviour {
 
 	public void Activate(PlayerMovement player)
 	{
-		Element.Activate(player);
-		element = null;
+		if (occupied)
+		{
+			Element.Activate(player);
+			element = null;
+		}
 	}
 }

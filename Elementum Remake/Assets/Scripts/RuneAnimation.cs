@@ -33,7 +33,6 @@ public class RuneAnimation : MonoBehaviour
 
     public void Reset()
     {
-        Debug.Log("Rune Resetting");
         Color tmp = transform.GetComponent<SpriteRenderer>().color;
         tmp.a = 0f;
         transform.GetComponent<SpriteRenderer>().color = tmp;
