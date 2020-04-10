@@ -6,6 +6,7 @@ public class Earth : Element
 {
     public Color earthColor;             //Color the player will change to
     public GameObject earthCube;
+    public GameObject instance;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +26,13 @@ public class Earth : Element
             offset = -1 * player.rb.GetComponent<SpriteRenderer>().sprite.rect.width / 8;
         }
         Vector2 newPos = new Vector2(player.rb.position.x + offset, player.rb.position.y);
-        earthCube.GetComponent<Rigidbody2D>().transform.SetPositionAndRotation(newPos, new Quaternion());
+        if (instance != null)
+        {
+            Destroy(instance);
+        }
+        instance = Instantiate(earthCube);
+        instance.GetComponent<Rigidbody2D>().transform.SetPositionAndRotation(newPos, new Quaternion());
+        instance.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity;
         //earth cube should have velocity set to the same as the players so that it will path with them if they are in the air.
     }
 }
