@@ -5,6 +5,14 @@ public class AbilitySlot : MonoBehaviour {
 	public GameObject element;
 	public Color color;
 
+	public Sprite Sprite
+	{
+		get
+		{
+			return Element.sprite;
+		}
+	}
+
 	public Element Element
 	{
 		get
@@ -28,6 +36,13 @@ public class AbilitySlot : MonoBehaviour {
 		{
 			Element.Activate(player);
 			element = null;
+			occupied = false;
 		}
+	}
+
+	public void SetElement(GameObject e)
+	{
+		element = e;
+		occupied = true;
 	}
 }

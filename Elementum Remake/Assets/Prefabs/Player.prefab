@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4007054639415675520}
   - component: {fileID: 4007054639415675523}
   - component: {fileID: 4007054639415675522}
-  - component: {fileID: 4007054639415675533}
+  - component: {fileID: 7494934959259687912}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
   wallSlide: 0
   airJump: 0
   playerPosition: 3
-  slot: {fileID: 4007054639415675533}
+  queue: {fileID: 7494934959259687912}
   rb: {fileID: 4007054639415675521}
   initialGravity: 0
 --- !u!114 &4007054639415675523
@@ -185,7 +185,7 @@ MonoBehaviour:
   bottomOffset: {x: 0, y: -0.5}
   rightOffset: {x: 0.5, y: 0}
   leftOffset: {x: -0.5, y: 0}
---- !u!114 &4007054639415675533
+--- !u!114 &7494934959259687912
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -194,9 +194,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4007054639415675525}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ba494430e20ee4dbf13527fb8fb000, type: 3}
+  m_Script: {fileID: 11500000, guid: ae574d4fcefb53342863f8b0f7eaede7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupied: 0
-  element: {fileID: 0}
-  color: {r: 0, g: 0, b: 0, a: 0}
+  queue:
+  - {fileID: 0}
+  - {fileID: 0}

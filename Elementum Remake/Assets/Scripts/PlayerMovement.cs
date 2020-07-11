@@ -30,8 +30,10 @@ public class PlayerMovement : MonoBehaviour
     public bool airJump;                //Flag triggered when the jump method is called from the air ability
 	public Position playerPosition;
 
-	public AbilitySlot slot;
+	[Header("Abilities")]
+	public AbilityQueue queue;
 
+	[Header("Physics")]
 	private Collision coll;             //Player's collision box
 	public Rigidbody2D rb;             //Player's rigidbody
 	public float initialGravity;       //Initial gravity value on player's rigidbody
@@ -55,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
 		Walk(new Vector2(x, y));
 
 		SetPosition();
+		
+		
 
 		//Wall slide check
         if (playerPosition != Position.Air)
@@ -93,8 +97,8 @@ public class PlayerMovement : MonoBehaviour
 
 		if (Input.GetButtonDown("Use") || Input.GetButtonDown("Use2"))
 		{
-			slot.Activate(this);
-			slot.occupied = false;
+			Debug.Log(queue);
+			queue.Activate(this);
 			airJump = true;
 		}
 	}

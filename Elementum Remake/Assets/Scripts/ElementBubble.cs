@@ -10,11 +10,10 @@ public class ElementBubble : MonoBehaviour {
 	public GameObject element;
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (!player.GetComponent<AbilitySlot>().occupied) {
+		if (!player.queue.Full) {
 			bubbleAnimation.animating = true;
 			runeAnimation.animating = true;
-			player.slot.occupied = true;
-			player.slot.element = element;
+			player.queue.AddElement(element);
 		}
 	}
 }

@@ -6,6 +6,8 @@ public abstract class Element : MonoBehaviour
 {
     protected Color color;
 
+    public Sprite sprite;
+
 
     public Color Color
     {

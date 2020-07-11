@@ -5,12 +5,14 @@ using UnityEngine;
 public class Air : Element
 {
     public Color airColor;              //Color the player will change to
+    public Sprite airSprite;
     public float forceMultiplier;       //Alter the force of the players standard jump
 
     // Start is called before the first frame update
     void Start()
     {
         color = airColor;
+        sprite = airSprite;
     }
 
     public override void Activate(PlayerMovement player)

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Fire : Element
 {
     public Color fireColor;             //Color the player will change to
+    public Sprite fireSprite;
     public float dashForce;             //How powerful the dash pushes the player
     public float dashTime;
 
@@ -12,6 +13,7 @@ public class Fire : Element
     void Start()
     {
         color = fireColor;
+        sprite = fireSprite;
     }
     public override void Activate(PlayerMovement player)
     {

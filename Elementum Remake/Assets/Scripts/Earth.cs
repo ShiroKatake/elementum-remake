@@ -5,6 +5,7 @@ using UnityEngine;
 public class Earth : Element
 {
     public Color earthColor;             //Color the player will change to
+    public Sprite earthSprite;
     public GameObject earthCube;
     public GameObject instance;
 
@@ -12,6 +13,7 @@ public class Earth : Element
     void Start()
     {
         color = earthColor;
+        sprite = earthSprite;
     }
 
     public override void Activate(PlayerMovement player) 
