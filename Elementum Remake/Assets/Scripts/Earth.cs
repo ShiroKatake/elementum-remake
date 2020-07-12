@@ -36,5 +36,8 @@ public class Earth : Element
         instance.GetComponent<Rigidbody2D>().transform.SetPositionAndRotation(newPos, new Quaternion());
         instance.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity;
         //earth cube should have velocity set to the same as the players so that it will path with them if they are in the air.
+    
     }
+
+    
 }

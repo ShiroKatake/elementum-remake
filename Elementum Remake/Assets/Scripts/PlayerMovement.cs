@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
 	public bool canMove = true;
 	public bool Immobilized;
 	public bool wallSlide;
+	public bool mountingEarth;
+	public bool wallJumped;
     public bool airJump;                //Flag triggered when the jump method is called from the air ability
 	public Position playerPosition;
 
@@ -49,6 +51,22 @@ public class PlayerMovement : MonoBehaviour
 		initialGravity = rb.gravityScale;
 	}
 
+	public void OnCollisionEnter2D(Collision2D collision)
+	{
+		Debug.Log("colliding");
+		if (collision.gameObject.tag == "Earth")
+		{
+			mountingEarth = true;
+		}
+	}
+
+	public void OnCollisionExit2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "Earth")
+		{
+			mountingEarth = false;
+		}
+	}
 	private void Update() 
 	{
 		//Take movement input from player
@@ -64,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
         if (playerPosition != Position.Air)
         {
 			airJump = false;
+			wallJumped = false;
 		}
 		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight) 
 		{
@@ -91,13 +110,14 @@ public class PlayerMovement : MonoBehaviour
 			}
 			if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
 			{
+				wallJumped = true;
 				WallJump();
+				
 			}
 		}
 
 		if (Input.GetButtonDown("Use") || Input.GetButtonDown("Use2"))
 		{
-			Debug.Log(queue);
 			queue.Activate(this);
 			airJump = true;
 		}
@@ -122,6 +142,7 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void WallJump() {
+
 		wallSlide = false;
 		Vector2 wallDir = (playerPosition == Position.WallRight) ? Vector2.left : Vector2.right;	//Work out which direction to wall jump to
 		Jump(Vector2.up + wallDir, jumpForce * 0.7f);
