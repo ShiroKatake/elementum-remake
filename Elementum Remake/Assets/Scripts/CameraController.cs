@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour
     public float xSpeed;
     public float ySpeed;
     public Vector3 offset;
+    public Vector3 UIoffset;
     public Vector3 smoothedPosition;
     public Vector3 desiredPosition;
 
@@ -43,5 +44,9 @@ public class CameraController : MonoBehaviour
         smoothedPosition.z = -1;
 
         transform.position = smoothedPosition;
+
+        transform.GetChild(0).transform.position = transform.position + UIoffset;
+        transform.GetChild(1).transform.position = transform.position;
+
     }
 }

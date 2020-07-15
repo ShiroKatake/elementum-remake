@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 401041351
-  m_SortingLayer: 1
+  m_SortingLayerID: 1582617953
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 29e26c4d097286c40b38490b408403a6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -142,11 +142,15 @@ MonoBehaviour:
   canMove: 1
   Immobilized: 0
   wallSlide: 0
+  wallJumped: 0
+  earthJumped: 0
+  mountingEarth: 0
   airJump: 0
   playerPosition: 3
   queue: {fileID: 7494934959259687912}
   rb: {fileID: 4007054639415675521}
   initialGravity: 0
+  spawnPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &4007054639415675523
 MonoBehaviour:
   m_ObjectHideFlags: 0
