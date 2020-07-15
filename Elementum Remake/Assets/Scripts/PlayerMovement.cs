@@ -27,8 +27,9 @@ public class PlayerMovement : MonoBehaviour
 	public bool canMove = true;
 	public bool Immobilized;
 	public bool wallSlide;
-	public bool mountingEarth;
 	public bool wallJumped;
+	public bool earthJumped;
+	public bool mountingEarth;
     public bool airJump;                //Flag triggered when the jump method is called from the air ability
 	public Position playerPosition;
 
@@ -51,22 +52,26 @@ public class PlayerMovement : MonoBehaviour
 		initialGravity = rb.gravityScale;
 	}
 
-	public void OnCollisionEnter2D(Collision2D collision)
+	public void OnTriggerStay2D(Collider2D collision)
 	{
-		Debug.Log("colliding");
+		
 		if (collision.gameObject.tag == "Earth")
 		{
-			mountingEarth = true;
+			if (wallSlide)
+			{
+				mountingEarth = true;
+			}
 		}
 	}
 
-	public void OnCollisionExit2D(Collision2D collision)
+	public void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject.tag == "Earth")
+		if (collision.gameObject.layer == 8)
 		{
-			mountingEarth = false;
+			wallJumped = false;
 		}
 	}
+
 	private void Update() 
 	{
 		//Take movement input from player
@@ -82,23 +87,27 @@ public class PlayerMovement : MonoBehaviour
         if (playerPosition != Position.Air)
         {
 			airJump = false;
-			wallJumped = false;
+			
 		}
 		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight) 
 		{
 			canMove = false;
+			
 			if ((playerPosition == Position.WallRight && Input.GetButtonDown("Horizontal")) || (playerPosition == Position.WallLeft && !Input.GetButtonDown("Horizontal")))
 			{
 				StartCoroutine(LeaveWall());
 			}
 			if (rb.velocity.y <= 0)
 			{
+				wallSlide = true;
 				rb.velocity *= new Vector2(1, 0.3f);
 			}
 		}
 		else
 		{
 			canMove = true;
+			wallSlide = false;
+			
 		}
 
 
@@ -142,8 +151,6 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void WallJump() {
-
-		wallSlide = false;
 		Vector2 wallDir = (playerPosition == Position.WallRight) ? Vector2.left : Vector2.right;	//Work out which direction to wall jump to
 		Jump(Vector2.up + wallDir, jumpForce * 0.7f);
 		
@@ -170,6 +177,7 @@ public class PlayerMovement : MonoBehaviour
 	IEnumerator LeaveWall()
 	{
 		yield return new WaitForSeconds(0.2f);
+
 		canMove = true;
 	}
 

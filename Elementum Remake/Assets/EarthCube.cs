@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class EarthCube : MonoBehaviour
 {
+    Vector2 kickback = new Vector2(20, 10);
+    Vector2 polarity;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,14 +19,25 @@ public class EarthCube : MonoBehaviour
         
     }
 
-    public void OnCollisionExit2D(Collision2D collision)
+    public void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("leaving collision");
+        PlayerMovement script = collision.gameObject.GetComponent<PlayerMovement>();
         if (collision.gameObject.tag == "Player")
         {
-            if (collision.gameObject.GetComponent<PlayerMovement>().mountingEarth && collision.gameObject.GetComponent<PlayerMovement>().wallJumped)
+            Debug.Log(script.wallJumped);
+            if (script.mountingEarth && script.wallJumped)
             {
-                GetComponent<Rigidbody2D>().velocity = -collision.gameObject.GetComponent<Rigidbody2D>().velocity/2;
+                Debug.Log("React");
+                if (collision.gameObject.GetComponent<Rigidbody2D>().velocity.x < 0)
+                {
+                    polarity = new Vector2(-1, 0);
+                }
+                else
+                {
+                    polarity = new Vector2(1, 0);
+                }
+                GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity - (polarity*kickback);
+                collision.GetComponent<PlayerMovement>().mountingEarth = false;
             }
         }
     }
