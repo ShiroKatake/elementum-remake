@@ -40,11 +40,13 @@ public class PlayerMovement : MonoBehaviour
 	private Collision coll;             //Player's collision box
 	public Rigidbody2D rb;             //Player's rigidbody
 	public float initialGravity;       //Initial gravity value on player's rigidbody
+	public Vector3 spawnPoint;
 
 	private void Awake() 
 	{
 		rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<Collision>();
+		spawnPoint = rb.transform.position;
 	}
 
 	private void Start() 
