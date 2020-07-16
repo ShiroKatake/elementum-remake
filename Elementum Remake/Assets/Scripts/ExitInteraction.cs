@@ -7,6 +7,8 @@ public class ExitInteraction : MonoBehaviour {
 	bool isTransitioning;	//Check if the scene is transitioning to stop function from repeating
 	Animator anim;          //Animator component of the LevelTransition child
 	public string destinationScene;
+	public Vector2 destinationDoor;
+	public int doorIndex;
 
 	private void Awake() {
 		anim = GetComponentInChildren<Animator>();
@@ -36,8 +38,8 @@ public class ExitInteraction : MonoBehaviour {
 		anim.SetTrigger("FadeOut");
 		yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length + timePadding);
 		isTransitioning = false;
-		Debug.Log(destinationScene);
-		Debug.Log(SceneManager.GetActiveScene().name);
+
+		GameData.spawnLocation = destinationDoor;
 		SceneManager.LoadScene(destinationScene);
 	}
 

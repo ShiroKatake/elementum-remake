@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<Collision>();
-		spawnPoint = rb.transform.position;
+		rb.transform.position = new Vector3(GameData.spawnLocation.x, GameData.spawnLocation.y);
 	}
 
 	private void Start() 
