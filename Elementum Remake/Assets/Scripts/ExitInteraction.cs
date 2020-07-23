@@ -9,6 +9,7 @@ public class ExitInteraction : MonoBehaviour {
 	public string destinationScene;
 	public Vector2 destinationDoor;
 	public int doorIndex;
+	public PlayerMovement player;
 
 	private void Awake() {
 		anim = GetComponentInChildren<Animator>();
@@ -24,6 +25,7 @@ public class ExitInteraction : MonoBehaviour {
 			DisplayIcon(1);
 			if (Input.GetButtonDown("Interact") && !isTransitioning) {
 				isTransitioning = true;
+				
 				StartCoroutine(TransitionToNextScene());
 			}
 		} else {
@@ -39,6 +41,7 @@ public class ExitInteraction : MonoBehaviour {
 		yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length + timePadding);
 		isTransitioning = false;
 
+		player.queue.Save();
 		GameData.spawnLocation = destinationDoor;
 		SceneManager.LoadScene(destinationScene);
 	}

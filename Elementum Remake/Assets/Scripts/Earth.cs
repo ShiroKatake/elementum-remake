@@ -14,6 +14,7 @@ public class Earth : Element
     {
         color = earthColor;
         sprite = earthSprite;
+        name = "Earth";
     }
 
     public override void Activate(PlayerMovement player) 

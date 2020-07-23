@@ -10,9 +10,40 @@ public class AbilityQueue : MonoBehaviour
     private int maxQueueLength;
     private SpriteRenderer uIslot;
 
-    private void Start()
+    public GameObject Air;
+    public GameObject Fire;
+    public GameObject Earth;
+
+    public void Save()
+    {
+        foreach (AbilitySlot a in queue)
+        {
+            if (a.Element.Name != null)
+            {
+                GameData.queue.Add(a.Element.Name);
+            }
+        }
+    }
+
+    private void Awake()
     {
         maxQueueLength = 2;
+        for(int i = 0; i < GameData.queue.Count; i++)
+        {
+            switch (GameData.queue[i])
+            {
+                case "Fire":
+                    queue[i].element = Instantiate(Fire);
+                    break;
+                case "Air":
+                    queue[i].element = Instantiate(Air);
+                    break;
+                case "Earth":
+                    queue[i].element = Instantiate(Earth);
+                    break;
+
+            }
+        }
     }
 
     // Update is called once per frame

@@ -13,6 +13,7 @@ public class Air : Element
     {
         color = airColor;
         sprite = airSprite;
+        name = "Air";
     }
 
     public override void Activate(PlayerMovement player)

@@ -204,3 +204,6 @@ MonoBehaviour:
   queue:
   - {fileID: 0}
   - {fileID: 0}
+  Air: {fileID: 509096997034549726, guid: d6fad9bc7d40e7549b4b26f414bca5e6, type: 3}
+  Fire: {fileID: 1193787037906680840, guid: 0554413dd5c868040a441e69b772a3da, type: 3}
+  Earth: {fileID: 8978017873083130187, guid: 3c7d2c90e717aa14981def73cfc37233, type: 3}

@@ -14,6 +14,7 @@ public class Fire : Element
     {
         color = fireColor;
         sprite = fireSprite;
+        name = "Fire";
     }
     public override void Activate(PlayerMovement player)
     {

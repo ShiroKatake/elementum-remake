@@ -5,9 +5,17 @@ using UnityEngine;
 public abstract class Element : MonoBehaviour
 {
     protected Color color;
+    protected string name;
 
     public Sprite sprite;
 
+    public string Name
+    {
+        get
+        {
+            return name;
+        }
+    }
 
     public Color Color
     {
