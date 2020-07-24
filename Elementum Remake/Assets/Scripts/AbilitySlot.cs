@@ -22,6 +22,8 @@ public class AbilitySlot : MonoBehaviour {
 	}
 
 	void Update() {
+
+		//Change the color of the slot depending on what element is occupying it
 		if (!occupied) {
 			color = Color.white;
 		} else {
@@ -30,6 +32,8 @@ public class AbilitySlot : MonoBehaviour {
 		transform.GetComponent<SpriteRenderer>().color = color;
 	}
 
+
+	//Activates the element in the slot, then clears slot
 	public void Activate(PlayerMovement player)
 	{
 		if (occupied)
@@ -40,6 +44,7 @@ public class AbilitySlot : MonoBehaviour {
 		}
 	}
 
+	//Places element into slot
 	public void SetElement(GameObject e)
 	{
 		element = e;

@@ -24,8 +24,7 @@ public class PlayerMovement : MonoBehaviour
 	public float wallJumpLerp;          //How much movement is restricted during wall jump
 
 	[Header("Checks")]
-	public bool canMove = true;
-	public bool Immobilized;
+	public bool Immobilized;			//Flag triggered by dash to prevent player movement during ability
 	public bool wallSlide;
 	public bool wallJumped;
 	public bool earthJumped;
@@ -46,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<Collision>();
+		//Debug.Log(GameData.spawnLocation.x + " : " + GameData.spawnLocation.y);
 		rb.transform.position = new Vector3(GameData.spawnLocation.x, GameData.spawnLocation.y);
 	}
 
@@ -93,11 +93,9 @@ public class PlayerMovement : MonoBehaviour
 		}
 		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight) 
 		{
-			canMove = false;
-			
 			if ((playerPosition == Position.WallRight && Input.GetButtonDown("Horizontal")) || (playerPosition == Position.WallLeft && !Input.GetButtonDown("Horizontal")))
 			{
-				StartCoroutine(LeaveWall());
+				StartCoroutine(CoyoteTime());
 			}
 			if (rb.velocity.y <= 0)
 			{
@@ -107,7 +105,6 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else
 		{
-			canMove = true;
 			wallSlide = false;
 			
 		}
@@ -136,11 +133,16 @@ public class PlayerMovement : MonoBehaviour
 
 	void Walk(Vector2 dir) 
 	{
-		if (!canMove || Immobilized)
+		if (Immobilized)
+		{
 			return;
-		if (playerPosition == Position.Ground) {
+		}
+		if (playerPosition == Position.Ground) 
+		{
 			rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
-		} else {
+		} 
+		else 
+		{
 			//If wall jumping, lerping the input will act as a damp so the player won't regain control immediately and accidentally cancel the wall jump
 			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), wallJumpLerp * Time.deltaTime);
 		}
@@ -158,7 +160,11 @@ public class PlayerMovement : MonoBehaviour
 		
 	}
 
-	
+	public void Freeze()
+	{
+		Immobilized = true;
+		rb.velocity = new Vector2(0, 0);
+	}
 
 	//Disabling input and change gravity to 0 before applying the new velocity will set the player up to move horizontally across
 	public IEnumerator DisableMovement(float dashTime) 
@@ -176,11 +182,9 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	//Players tend to move away as they jump off a wall to maximise distance. This little pause give the player some time to jump after they press the direction key.
-	IEnumerator LeaveWall()
+	IEnumerator CoyoteTime()
 	{
 		yield return new WaitForSeconds(0.2f);
-
-		canMove = true;
 	}
 
 	public void SetPosition()

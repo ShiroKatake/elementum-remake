@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class Element : MonoBehaviour
 {
-    protected Color color;
-    protected string name;
+    protected Color color;      //Color of element that slot will change to when it is occupied
+    protected string name;      //Allows elements to be identified by name when loading from GameData into new scene
 
     public Sprite sprite;
 
@@ -25,5 +25,6 @@ public abstract class Element : MonoBehaviour
         }
     }
 
+    //Performs the ability
     public abstract void Activate(PlayerMovement player);
 }

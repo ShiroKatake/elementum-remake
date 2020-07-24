@@ -34,7 +34,6 @@ public class AbilityQueue : MonoBehaviour
             queue[i] = GameObject.Find("/Player Camera/Slots/Ability Slot " + (i + 1).ToString()).GetComponent<AbilitySlot>();
             try
             {
-                Debug.Log("trying :" + GameData.queue[i]);
                 GameObject e = null;
                 switch (GameData.queue[i])
                 {
