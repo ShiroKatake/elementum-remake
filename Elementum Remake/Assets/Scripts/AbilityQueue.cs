@@ -7,7 +7,7 @@ public class AbilityQueue : MonoBehaviour
 
 
     public List<AbilitySlot> queue;
-    private int maxQueueLength;
+    private int maxQueueLength = 2;
     private SpriteRenderer uIslot;
 
     public GameObject Air;
@@ -18,7 +18,7 @@ public class AbilityQueue : MonoBehaviour
     {
         foreach (AbilitySlot a in queue)
         {
-            if (a.Element.Name != null)
+            if (a.element != null)
             {
                 GameData.queue.Add(a.Element.Name);
             }
@@ -27,22 +27,31 @@ public class AbilityQueue : MonoBehaviour
 
     private void Awake()
     {
-        maxQueueLength = 2;
-        for(int i = 0; i < GameData.queue.Count; i++)
+        
+        //create a refence to the ability slots in the scene
+        for (int i = 0; i < maxQueueLength; i++)
         {
-            switch (GameData.queue[i])
+            queue[i] = GameObject.Find("/Player Camera/Slots/Ability Slot " + (i + 1).ToString()).GetComponent<AbilitySlot>();
+            try
             {
-                case "Fire":
-                    queue[i].element = Instantiate(Fire);
-                    break;
-                case "Air":
-                    queue[i].element = Instantiate(Air);
-                    break;
-                case "Earth":
-                    queue[i].element = Instantiate(Earth);
-                    break;
-
+                Debug.Log("trying :" + GameData.queue[i]);
+                GameObject e = null;
+                switch (GameData.queue[i])
+                {
+                    case "Air":
+                        e = Instantiate(Air);
+                        break;
+                    case "Fire":
+                        e = Instantiate(Fire);
+                        break;
+                    case "Earth":
+                        e = Instantiate(Earth);
+                        break;
+                }
+                AddElement(e);
             }
+            catch { }
+            
         }
     }
 

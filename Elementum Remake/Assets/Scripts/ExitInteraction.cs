@@ -41,6 +41,8 @@ public class ExitInteraction : MonoBehaviour {
 		yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length + timePadding);
 		isTransitioning = false;
 
+
+		GameData.queue.Clear();
 		player.queue.Save();
 		GameData.spawnLocation = destinationDoor;
 		SceneManager.LoadScene(destinationScene);
