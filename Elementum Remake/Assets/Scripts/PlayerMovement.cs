@@ -23,8 +23,18 @@ public class PlayerMovement : MonoBehaviour
 	public float speed = 10f;           //How fast the player moves
 	public float wallJumpLerp;          //How much movement is restricted during wall jump
 
+	[Header("Jump Modifiers")]
+	public float fallMultiplier = 2.5f;
+	public float lowJumpMultiplier = 2f;
+	public bool coyoteTime;
+	public bool coyoteTimeAvailable;
+	public bool jumped;
+
 	[Header("Checks")]
-	public bool Immobilized;			//Flag triggered by dash to prevent player movement during ability
+	public bool Immobilized;            //Flag triggered by dash to prevent player movement during ability
+
+
+	public bool wallCoyoteTime;
 	public bool wallSlide;
 	public bool wallJumped;
 	public bool earthJumped;
@@ -71,6 +81,18 @@ public class PlayerMovement : MonoBehaviour
 		if (collision.gameObject.layer == 8)
 		{
 			wallJumped = false;
+			jumped = false;
+		}
+	}
+
+	public void OnCollisionExit2D(Collision2D collision)
+	{
+		if (collision.gameObject.layer == 8)
+		{
+			if (!jumped && playerPosition == Position.Air)
+			{
+				StartCoroutine(CoyoteTime());
+			}
 		}
 	}
 
@@ -81,11 +103,17 @@ public class PlayerMovement : MonoBehaviour
 		float y = Input.GetAxis("Vertical");
 		Walk(new Vector2(x, y));
 
-		SetPosition();
-		
-		
 
-		//Wall slide check
+
+		//set the Enum playerPosition to correspond with what the player is colliding with
+		SetPosition();
+
+		if (!Immobilized)
+		{
+			BetterJump();
+		}
+		
+		//player can't accidentally use air ability on ground
         if (playerPosition != Position.Air)
         {
 			airJump = false;
@@ -95,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			if ((playerPosition == Position.WallRight && Input.GetButtonDown("Horizontal")) || (playerPosition == Position.WallLeft && !Input.GetButtonDown("Horizontal")))
 			{
-				StartCoroutine(CoyoteTime());
+				StartCoroutine(WallCoyoteTime());
 			}
 			if (rb.velocity.y <= 0)
 			{
@@ -112,11 +140,11 @@ public class PlayerMovement : MonoBehaviour
 
 		if (Input.GetButtonDown("Jump")) 
 		{
-			if (playerPosition == Position.Ground)
+			if (playerPosition == Position.Ground || coyoteTime)
 			{
 				Jump(Vector2.up, jumpForce);
 			}
-			if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
+			else if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
 			{
 				wallJumped = true;
 				WallJump();
@@ -133,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
 
 	void Walk(Vector2 dir) 
 	{
-		if (Immobilized)
+		if (Immobilized || wallCoyoteTime)
 		{
 			return;
 		}
@@ -148,8 +176,21 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	public void BetterJump()
+	{
+		if (rb.velocity.y < 0)
+		{
+			rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+		}
+		else if ((rb.velocity.y > 0 && !Input.GetButton("Jump")) || rb.GetComponent<PlayerMovement>().airJump)
+		{
+			rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+		}
+	}
+
 	public void Jump(Vector2 dir, float force) 
 	{
+		jumped = true;
 		rb.velocity = new Vector2(rb.velocity.x, 0);	//Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
 		rb.velocity += dir * force;
 	}
@@ -166,25 +207,37 @@ public class PlayerMovement : MonoBehaviour
 		rb.velocity = new Vector2(0, 0);
 	}
 
+	
+
 	//Disabling input and change gravity to 0 before applying the new velocity will set the player up to move horizontally across
 	public IEnumerator DisableMovement(float dashTime) 
 	{
 		
 		Immobilized = true;                 //Also disabling BetterJump because the script deals with gravity
 		rb.gravityScale = 0;
-		GetComponent<BetterJump>().enabled = false;
 
 		yield return new WaitForSeconds(dashTime);
 
 		Immobilized = false;
 		rb.gravityScale = initialGravity;
-		GetComponent<BetterJump>().enabled = true;
+	}
+
+	private IEnumerator WallCoyoteTime()
+	{
+		wallCoyoteTime = true;
+		yield return new WaitForSeconds(0.2f);
+		wallCoyoteTime = false;
+
 	}
 
 	//Players tend to move away as they jump off a wall to maximise distance. This little pause give the player some time to jump after they press the direction key.
-	IEnumerator CoyoteTime()
+	private IEnumerator CoyoteTime()
 	{
+		coyoteTimeAvailable = false;
+		coyoteTime = true;
+		Debug.Log("Coyote Time");
 		yield return new WaitForSeconds(0.2f);
+		coyoteTime = false;
 	}
 
 	public void SetPosition()

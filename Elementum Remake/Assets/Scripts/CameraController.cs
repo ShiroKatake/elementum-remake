@@ -7,6 +7,9 @@ public class CameraController : MonoBehaviour
     public Transform target;
     public float xSpeed;
     public float ySpeed;
+    public float limitX;
+    public float limitY;
+
     public Vector3 offset;
     public Vector3 UIoffset;
     public Vector3 smoothedPosition;
@@ -19,28 +22,50 @@ public class CameraController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
-        if (target.position.x < transform.position.x - 10 || target.position.x > transform.position.x + 10)
+        if (target.position.x < transform.position.x - limitX || target.position.x > transform.position.x + limitX)
         {
-            xSpeed = Mathf.Lerp(xSpeed, xSpeed * 3, 0.001f);
+            xSpeed *= 1.005f;
+        }
+        else if (target.position.x < transform.position.x - (limitX*2) || target.position.x > transform.position.x + (limitX*2))
+        {
+            xSpeed *= 1.5f;
         }
         else
         {
-            xSpeed = 0.02f;
+            if (xSpeed > 1f)
+            {
+                xSpeed *= 0.9f;
+            }
+            else
+            {
+                xSpeed = 1f;
+            }
         }
-        if (target.position.y < transform.position.y - 5 || target.position.y > target.position.y + 5)
+        if (target.position.y < transform.position.y - limitY || target.position.y > target.position.y + limitY)
         {
-            ySpeed = Mathf.Lerp(ySpeed, ySpeed * 3, 0.001f);
+            ySpeed *= 1.005f;
+        }
+        else if (target.position.y < transform.position.y - (limitY + 2) || target.position.y > transform.position.y + (limitY + 2))
+        {
+            ySpeed *= 1.5f;
         }
         else
         {
-            ySpeed = 0.01f;
+            if (ySpeed > 1f)
+            {
+                ySpeed *= 0.9f;
+            }
+            else
+            {
+                ySpeed = 1f;
+            }
         }
 
         desiredPosition = target.position + offset;
-        smoothedPosition.x = Mathf.Lerp(transform.position.x, desiredPosition.x, xSpeed);
-        smoothedPosition.y = Mathf.Lerp(transform.position.y, desiredPosition.y, ySpeed);
+        smoothedPosition.x = Mathf.Lerp(transform.position.x, desiredPosition.x, Time.deltaTime*xSpeed);
+        smoothedPosition.y = Mathf.Lerp(transform.position.y, desiredPosition.y, Time.deltaTime*ySpeed);
         smoothedPosition.z = -1;
 
         transform.position = smoothedPosition;
