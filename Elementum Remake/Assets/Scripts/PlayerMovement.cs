@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
 	public bool coyoteTime;
 	public bool coyoteTimeAvailable;
 	public bool jumped;
+	public float queuedjump;
 
 	[Header("Checks")]
 	public bool Immobilized;            //Flag triggered by dash to prevent player movement during ability
@@ -74,6 +75,15 @@ public class PlayerMovement : MonoBehaviour
 				mountingEarth = true;
 			}
 		}
+
+		if (collision.gameObject.tag == "Ladder") 
+		{
+			if (Input.GetAxis("Vertical") > 0)
+			{
+				Debug.Log("laffering");
+				rb.velocity = new Vector2(rb.velocity.x, 10);
+			}
+		}
 	}
 
 	public void OnCollisionEnter2D(Collision2D collision)
@@ -102,8 +112,6 @@ public class PlayerMovement : MonoBehaviour
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
 		Walk(new Vector2(x, y));
-
-
 
 		//set the Enum playerPosition to correspond with what the player is colliding with
 		SetPosition();
@@ -137,9 +145,24 @@ public class PlayerMovement : MonoBehaviour
 			
 		}
 
+		if ((queuedjump > 0))
+		{
+			if (playerPosition == Position.Ground)
+			{
+				Jump(Vector2.up, jumpForce);
+			}
+			else if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
+			{
+				wallJumped = true;
+				WallJump();
 
+			}
+		}
+
+		queuedjump -= Time.deltaTime;
 		if (Input.GetButtonDown("Jump")) 
 		{
+			queuedjump = 0.2f;
 			if (playerPosition == Position.Ground || coyoteTime)
 			{
 				Jump(Vector2.up, jumpForce);
@@ -193,17 +216,18 @@ public class PlayerMovement : MonoBehaviour
 		jumped = true;
 		rb.velocity = new Vector2(rb.velocity.x, 0);	//Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
 		rb.velocity += dir * force;
+		queuedjump = 0;
 	}
 
 	private void WallJump() {
+		Freeze();
 		Vector2 wallDir = (playerPosition == Position.WallRight) ? Vector2.left : Vector2.right;	//Work out which direction to wall jump to
 		Jump(Vector2.up + wallDir, jumpForce * 0.7f);
-		
+		queuedjump = 0;
 	}
 
 	public void Freeze()
 	{
-		Immobilized = true;
 		rb.velocity = new Vector2(0, 0);
 	}
 
@@ -235,7 +259,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		coyoteTimeAvailable = false;
 		coyoteTime = true;
-		Debug.Log("Coyote Time");
 		yield return new WaitForSeconds(0.2f);
 		coyoteTime = false;
 	}
