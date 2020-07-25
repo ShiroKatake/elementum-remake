@@ -13,7 +13,7 @@ public class Hazard : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-            collision.gameObject.GetComponent<Rigidbody2D>().transform.position = collision.gameObject.GetComponent<PlayerMovement>().spawnPoint;
+            collision.gameObject.GetComponent<Rigidbody2D>().transform.position = GameData.spawnLocation;
         }
     }
 }
