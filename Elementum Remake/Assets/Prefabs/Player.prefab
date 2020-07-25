@@ -143,7 +143,9 @@ MonoBehaviour:
   coyoteTime: 0
   coyoteTimeAvailable: 0
   jumped: 0
+  queuedjump: 0
   Immobilized: 0
+  wallCoyoteTime: 0
   wallSlide: 0
   wallJumped: 0
   earthJumped: 0
@@ -191,6 +193,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   queue:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   Air: {fileID: 509096997034549726, guid: d6fad9bc7d40e7549b4b26f414bca5e6, type: 3}

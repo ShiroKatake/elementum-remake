@@ -4,6 +4,7 @@ public class AbilitySlot : MonoBehaviour {
 	public bool occupied;
 	public GameObject element;
 	public Color color;
+	public bool active;
 
 	public Sprite Sprite
 	{
@@ -19,6 +20,19 @@ public class AbilitySlot : MonoBehaviour {
 		{
 			return element.GetComponent<Element>();
 		}
+	}
+
+	public bool Occupied
+	{
+		get
+		{
+			return occupied;
+		}
+	}
+
+	public void Awake()
+	{
+		active = true;
 	}
 
 	void Update() {
@@ -47,7 +61,10 @@ public class AbilitySlot : MonoBehaviour {
 	//Places element into slot
 	public void SetElement(GameObject e)
 	{
-		element = e;
-		occupied = true;
+		if (e != null)
+		{
+			element = e;
+			occupied = true;
+		}
 	}
 }

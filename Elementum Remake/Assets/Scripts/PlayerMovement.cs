@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
 			if (Input.GetAxis("Vertical") > 0)
 			{
 				Debug.Log("laffering");
-				rb.velocity = new Vector2(rb.velocity.x, 10);
+				rb.velocity = new Vector2(rb.velocity.x/2, 10);
 			}
 		}
 	}

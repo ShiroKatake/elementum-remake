@@ -7,8 +7,7 @@ public class AbilityQueue : MonoBehaviour
 
 
     public List<AbilitySlot> queue;
-    private int maxQueueLength = 2;
-    private SpriteRenderer uIslot;
+    private static int maxQueueLength = 1;
 
     public GameObject Air;
     public GameObject Fire;
@@ -18,18 +17,23 @@ public class AbilityQueue : MonoBehaviour
     {
         foreach (AbilitySlot a in queue)
         {
-            if (a.element != null)
             {
-                GameData.queue.Add(a.Element.Name);
+                if (a.element != null)
+                {
+                    GameData.queue.Add(a.Element.Name);
+                }
+                else
+                {
+                    GameData.queue.Add("empty");
+                }
             }
         }
     }
 
-    private void Awake()
+    private void Start()
     {
-        
         //create a refence to the ability slots in the scene
-        for (int i = 0; i < maxQueueLength; i++)
+        for (int i = 0; i < 5; i++)
         {
             queue[i] = GameObject.Find("/Player Camera/Slots/Ability Slot " + (i + 1).ToString()).GetComponent<AbilitySlot>();
             try
@@ -47,6 +51,7 @@ public class AbilityQueue : MonoBehaviour
                         e = Instantiate(Earth);
                         break;
                 }
+                Debug.Log(e);
                 AddElement(e);
             }
             catch { }
@@ -64,7 +69,7 @@ public class AbilityQueue : MonoBehaviour
     {
         get
         {
-            if (queue[queue.Count - 1].occupied)
+            if (queue[queue.Count - (6-maxQueueLength)].Occupied)
             {
                 return true;
             }
@@ -79,7 +84,7 @@ public class AbilityQueue : MonoBehaviour
             int lastActiveSlot = 0;
             for (int i = 0; i < queue.Count; i++)
             {
-                if (queue[i].occupied)
+                if (queue[i].Occupied)
                 {
                     lastActiveSlot = i;
                 }
@@ -92,17 +97,16 @@ public class AbilityQueue : MonoBehaviour
     //When a player increases the maximum length of their queue, this will be called
     public void Add()
     {
-        if (queue.Count < maxQueueLength)
-        {
-            queue.Add(new AbilitySlot());
-        }
+        queue[maxQueueLength].gameObject.SetActive(true);
+        queue[maxQueueLength].active = true;
+        maxQueueLength += 1;
     }
 
     public void AddElement(GameObject element)
     {
         foreach (AbilitySlot a in queue)
         {
-            if (!a.occupied)
+            if (!a.Occupied && a.active)
             {
                 a.SetElement(element);
                 return;
@@ -112,6 +116,19 @@ public class AbilityQueue : MonoBehaviour
 
     private void DrawUI()
     {
+        for (int i = 0; i < 5; i++)
+        {
+            if (i < maxQueueLength)
+            {
+                
+            }
+            else
+            {
+                queue[i].gameObject.SetActive(false);
+                queue[i].active = false;
+            }
+
+        }
     }
 
     public void Activate(PlayerMovement player)

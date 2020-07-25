@@ -41,7 +41,7 @@ public class ExitInteraction : MonoBehaviour {
 
 		//Saves Scene Data to GameData
 		GameData.queue.Clear();
-		player.queue.Save(); 
+		player.queue.Save();
 		
 		GameData.spawnLocation = destinationDoor;
 
