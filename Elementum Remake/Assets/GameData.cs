@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameData : MonoBehaviour
 {
-    public static Vector2 spawnLocation;
+    public static Vector2 spawnLocation = new Vector2(7, 10);
     public static List<string> queue = new List<string>();
     
 

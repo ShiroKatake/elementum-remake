@@ -18,6 +18,9 @@ public enum Position
 
 public class PlayerMovement : MonoBehaviour 
 {
+	[Header("Debugging")]
+	public bool debugSpawn;
+
 	[Header("Stats")]
 	public float jumpForce;             //How high the player jumps
 	public float speed = 10f;           //How fast the player moves
@@ -57,7 +60,11 @@ public class PlayerMovement : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<Collision>();
 		//Debug.Log(GameData.spawnLocation.x + " : " + GameData.spawnLocation.y);
-		rb.transform.position = new Vector3(GameData.spawnLocation.x, GameData.spawnLocation.y);
+		if (debugSpawn)
+		{
+			GameData.spawnLocation = GameObject.Find("TestSpawnPoint").transform.position;
+		}
+		Respawn();
 	}
 
 	private void Start() 
@@ -120,6 +127,11 @@ public class PlayerMovement : MonoBehaviour
 		{
 			BetterJump();
 		}
+
+		if (Input.GetButtonDown("Respawn"))
+		{
+			Respawn();
+		}
 		
 		//player can't accidentally use air ability on ground
         if (playerPosition != Position.Air)
@@ -180,6 +192,12 @@ public class PlayerMovement : MonoBehaviour
 			queue.Activate(this);
 			airJump = true;
 		}
+	}
+
+	private void Respawn()
+	{
+		Debug.Log("respawning");
+		rb.transform.position = new Vector3(GameData.spawnLocation.x, GameData.spawnLocation.y);
 	}
 
 	void Walk(Vector2 dir) 

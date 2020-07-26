@@ -47,4 +47,4 @@ MonoBehaviour:
   airColor: {r: 0.64705884, g: 0.6901961, b: 0.8078432, a: 1}
   airSprite: {fileID: 111358919221266109, guid: f3ed1cc1f05525d47b8e9ff8035f56fc,
     type: 3}
-  forceMultiplier: 1.1
+  forceMultiplier: 1.6

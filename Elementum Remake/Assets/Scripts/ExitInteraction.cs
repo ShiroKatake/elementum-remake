@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ExitInteraction : MonoBehaviour {
 	bool playerInBounds;			//Check if player is overlapping with the exit
@@ -9,6 +10,8 @@ public class ExitInteraction : MonoBehaviour {
 	public string destinationScene;	//The scene the door links to
 	public Vector2 destinationDoor; //The position of the linked door
 	public PlayerMovement player;
+	public bool locked;
+	public TMP_Text text;
 
 	private void Awake() {
 		anim = GetComponentInChildren<Animator>();
@@ -20,13 +23,37 @@ public class ExitInteraction : MonoBehaviour {
 	}
 
 	void Update() {
+		if (Input.GetButtonDown("Open"))
+		{
+			locked = false;
+		}
+
+
+		if (locked)
+		{
+			GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1);
+
+		}
+		else
+		{
+			GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 0);
+		}
+
 		if (Input.GetButtonDown("Interact") && !isTransitioning && playerInBounds) {
-			isTransitioning = true;
+			if (locked)
+			{
 
-			player.Freeze();
+			}
+			else
+			{
+				isTransitioning = true;
 
-			Debug.Log(destinationDoor.x + " : " + destinationDoor.y);
-			StartCoroutine(TransitionToNextScene());
+				player.Freeze();
+
+				Debug.Log(destinationDoor.x + " : " + destinationDoor.y);
+				StartCoroutine(TransitionToNextScene());
+			}
+			
 		}
 	}
 	

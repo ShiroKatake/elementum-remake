@@ -135,11 +135,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62bdb010fc27db041ae35ae7a951ecf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugSpawn: 1
   jumpForce: 20
   speed: 10
   wallJumpLerp: 4
   fallMultiplier: 2.5
-  lowJumpMultiplier: 2
+  lowJumpMultiplier: 8
   coyoteTime: 0
   coyoteTimeAvailable: 0
   jumped: 0

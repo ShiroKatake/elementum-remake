@@ -15,6 +15,10 @@ public class CameraController : MonoBehaviour
     public Vector3 smoothedPosition;
     public Vector3 desiredPosition;
 
+    [Header("Camera Shake")]
+    public float xIntensity;
+    public float yIntensity;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +49,7 @@ public class CameraController : MonoBehaviour
         }
         if (target.position.y < transform.position.y - limitY || target.position.y > target.position.y + limitY)
         {
-            ySpeed *= 1.005f;
+            ySpeed *= 1.05f;
         }
         else if (target.position.y < transform.position.y - (limitY + 2) || target.position.y > transform.position.y + (limitY + 2))
         {
@@ -53,13 +57,13 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            if (ySpeed > 1f)
+            if (ySpeed > 2f)
             {
                 ySpeed *= 0.9f;
             }
             else
             {
-                ySpeed = 1f;
+                ySpeed = 2f;
             }
         }
 
@@ -73,5 +77,10 @@ public class CameraController : MonoBehaviour
         transform.GetChild(0).transform.position = transform.position + UIoffset;
         transform.GetChild(1).transform.position = transform.position;
 
+    }
+
+    private void Shake()
+    {
+        //select a static point to shake around, give the camera two points to oscillate between. alter the speed of the lerp to change insensity
     }
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8924968918996365149}
   - component: {fileID: 1630008882416975586}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Point Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 8309336263666176244}
   - component: {fileID: 8309336263666176247}
   - component: {fileID: 8309336263666176246}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rune Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,8 +140,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 401041351
+  m_SortingLayer: 2
   m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: b45efbbed19203e4db395e53eb39f524, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 8309336263916506595}
   - component: {fileID: 8309336263916506594}
   - component: {fileID: 8309336263916506621}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bubble Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,8 +236,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 401041351
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: b45efbbed19203e4db395e53eb39f524, type: 3}
   m_Color: {r: 0.2901961, g: 0.16862746, b: 0.10588236, a: 1}
@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 8309336264169175259}
   - component: {fileID: 8309336264169175258}
   - component: {fileID: 8309336264169175253}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Earth Rune Bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,8 +337,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 401041351
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: b45efbbed19203e4db395e53eb39f524, type: 3}
   m_Color: {r: 0.2901961, g: 0.16862746, b: 0.10588236, a: 1}
@@ -393,7 +393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8309336264784946657}
   - component: {fileID: 8309336264784946662}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Fire Rune
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,8 +450,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 401041351
+  m_SortingLayer: 2
   m_SortingOrder: 3
   m_Sprite: {fileID: -918050165348625369, guid: 4abd34efb94c72b4090a5153b2d92338,
     type: 3}
@@ -531,6 +531,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Earth
+      objectReference: {fileID: 0}
+    - target: {fileID: 8978017873083130187, guid: 3c7d2c90e717aa14981def73cfc37233,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c7d2c90e717aa14981def73cfc37233, type: 3}
