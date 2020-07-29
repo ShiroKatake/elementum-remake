@@ -16,6 +16,6 @@ public class InterfaceScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        text.text = Bit.collectedBits.Count.ToString();
+        text.text = GameData.bits.ToString();
     }
 }

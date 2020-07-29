@@ -51,7 +51,6 @@ public class AbilityQueue : MonoBehaviour
                         e = Instantiate(Earth);
                         break;
                 }
-                Debug.Log(e);
                 AddElement(e);
             }
             catch { }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    private static bool spawned = false;
+
     public Transform target;
     public float xSpeed;
     public float ySpeed;
@@ -18,6 +20,19 @@ public class CameraController : MonoBehaviour
     [Header("Camera Shake")]
     public float xIntensity;
     public float yIntensity;
+
+    private void Awake()
+    {
+        if (!spawned)
+        {
+            spawned = true;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()

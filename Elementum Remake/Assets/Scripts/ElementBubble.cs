@@ -9,6 +9,11 @@ public class ElementBubble : MonoBehaviour {
 	public RuneAnimation runeAnimation;
 	public GameObject element;
 
+	private void Awake()
+	{
+		player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+	}
+
 	void OnTriggerEnter2D(Collider2D other) {
 		if (!player.queue.Full) {
 			bubbleAnimation.animating = true;

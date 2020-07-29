@@ -18,6 +18,8 @@ public enum Position
 
 public class PlayerMovement : MonoBehaviour 
 {
+	private static bool spawned = false;
+
 	[Header("Debugging")]
 	public bool debugSpawn;
 
@@ -36,8 +38,6 @@ public class PlayerMovement : MonoBehaviour
 
 	[Header("Checks")]
 	public bool Immobilized;            //Flag triggered by dash to prevent player movement during ability
-
-
 	public bool wallCoyoteTime;
 	public bool wallSlide;
 	public bool wallJumped;
@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
 	[Header("Abilities")]
 	public AbilityQueue queue;
+	public GameObject holding;
 
 	[Header("Physics")]
 	private Collision coll;             //Player's collision box
@@ -57,14 +58,23 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Awake() 
 	{
-		rb = GetComponent<Rigidbody2D>();
-		coll = GetComponent<Collision>();
-		//Debug.Log(GameData.spawnLocation.x + " : " + GameData.spawnLocation.y);
-		if (debugSpawn)
+		if(!spawned)
 		{
-			GameData.spawnLocation = GameObject.Find("TestSpawnPoint").transform.position;
+			spawned = true;
+			DontDestroyOnLoad(gameObject);
+			rb = GetComponent<Rigidbody2D>();
+			coll = GetComponent<Collision>();
+			if (debugSpawn)
+			{
+				GameData.spawnLocation = GameObject.Find("TestSpawnPoint").transform.position;
+			}
+			Respawn();
 		}
-		Respawn();
+		else
+		{
+			DestroyImmediate(gameObject);
+		}
+
 	}
 
 	private void Start() 
@@ -87,10 +97,17 @@ public class PlayerMovement : MonoBehaviour
 		{
 			if (Input.GetAxis("Vertical") > 0)
 			{
-				Debug.Log("laffering");
 				rb.velocity = new Vector2(rb.velocity.x/2, 10);
 			}
 		}
+		if (holding != null)
+		{
+			if (collision.gameObject == holding.GetComponent<Key>().door)
+			{
+				holding.GetComponent<Key>().Activate();
+			}
+		}
+		
 	}
 
 	public void OnCollisionEnter2D(Collision2D collision)
@@ -169,6 +186,11 @@ public class PlayerMovement : MonoBehaviour
 				WallJump();
 
 			}
+		}
+
+		if (holding != null)
+		{
+			holding.transform.position = new Vector2(transform.position.x, transform.position.y + 1.3f);
 		}
 
 		queuedjump -= Time.deltaTime;

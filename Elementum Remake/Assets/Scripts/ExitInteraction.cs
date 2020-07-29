@@ -10,10 +10,13 @@ public class ExitInteraction : MonoBehaviour {
 	public string destinationScene;	//The scene the door links to
 	public Vector2 destinationDoor; //The position of the linked door
 	public PlayerMovement player;
+
 	public bool locked;
+
 	public TMP_Text text;
 
 	private void Awake() {
+		player = GameObject.Find("Player").GetComponent<PlayerMovement>();
 		anim = GetComponentInChildren<Animator>();
 		anim.SetTrigger("FadeIn");
 	}
@@ -23,11 +26,6 @@ public class ExitInteraction : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetButtonDown("Open"))
-		{
-			locked = false;
-		}
-
 
 		if (locked)
 		{
