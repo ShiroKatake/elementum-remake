@@ -119,7 +119,7 @@ MonoBehaviour:
   player: {fileID: 0}
   bubbleAnimation: {fileID: 4022802643700317253}
   runeAnimation: {fileID: 4022802643052516888}
-  element: {fileID: 4022802642935830762}
+  element: Air
 --- !u!1 &4022802643052516891
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,12 +533,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6fad9bc7d40e7549b4b26f414bca5e6, type: 3}
---- !u!1 &4022802642935830762 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 509096997034549726, guid: d6fad9bc7d40e7549b4b26f414bca5e6,
-    type: 3}
-  m_PrefabInstance: {fileID: 3513776057604323636}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4022802642935830760 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 509096997034549724, guid: d6fad9bc7d40e7549b4b26f414bca5e6,

@@ -297,7 +297,7 @@ MonoBehaviour:
   player: {fileID: 0}
   bubbleAnimation: {fileID: 1328762591729543129}
   runeAnimation: {fileID: 1328762590939462354}
-  element: {fileID: 1328762591385745898}
+  element: Fire
 --- !u!1 &1328762591729543128
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,12 +539,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0554413dd5c868040a441e69b772a3da, type: 3}
---- !u!1 &1328762591385745898 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1193787037906680840, guid: 0554413dd5c868040a441e69b772a3da,
-    type: 3}
-  m_PrefabInstance: {fileID: 207614686143399394}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1328762591385745896 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1193787037906680842, guid: 0554413dd5c868040a441e69b772a3da,

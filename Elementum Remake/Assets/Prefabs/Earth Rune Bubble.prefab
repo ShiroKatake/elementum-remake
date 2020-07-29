@@ -382,7 +382,7 @@ MonoBehaviour:
   player: {fileID: 0}
   bubbleAnimation: {fileID: 8309336263916506621}
   runeAnimation: {fileID: 8309336263666176246}
-  element: {fileID: 5709690829156009852}
+  element: Earth
 --- !u!1 &8309336264784946656
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,12 +539,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c7d2c90e717aa14981def73cfc37233, type: 3}
---- !u!1 &5709690829156009852 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8978017873083130187, guid: 3c7d2c90e717aa14981def73cfc37233,
-    type: 3}
-  m_PrefabInstance: {fileID: 3721299573564253751}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5709690829156009853 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8978017873083130186, guid: 3c7d2c90e717aa14981def73cfc37233,

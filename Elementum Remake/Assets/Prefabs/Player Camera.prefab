@@ -579,6 +579,8 @@ MonoBehaviour:
   UIoffset: {x: -2, y: -1, z: 1}
   smoothedPosition: {x: 0, y: 0, z: 0}
   desiredPosition: {x: 0, y: 0, z: 0}
+  xIntensity: 0
+  yIntensity: 0
 --- !u!114 &6194008039164986881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,7 +723,11 @@ MonoBehaviour:
   occupied: 0
   element: {fileID: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
+  elementName: 
   active: 0
+  Air: {fileID: 0}
+  Fire: {fileID: 0}
+  Earth: {fileID: 0}
 --- !u!1 &3354618756353387898
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,7 +826,11 @@ MonoBehaviour:
   occupied: 0
   element: {fileID: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
+  elementName: 
   active: 0
+  Air: {fileID: 0}
+  Fire: {fileID: 0}
+  Earth: {fileID: 0}
 --- !u!1 &4646212280840461203
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,7 +1346,11 @@ MonoBehaviour:
   occupied: 0
   element: {fileID: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
+  elementName: 
   active: 0
+  Air: {fileID: 0}
+  Fire: {fileID: 0}
+  Earth: {fileID: 0}
 --- !u!1 &6842896161584794365
 GameObject:
   m_ObjectHideFlags: 0
@@ -1435,7 +1449,11 @@ MonoBehaviour:
   occupied: 0
   element: {fileID: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
+  elementName: 
   active: 0
+  Air: {fileID: 0}
+  Fire: {fileID: 0}
+  Earth: {fileID: 0}
 --- !u!1 &6977316226371400274
 GameObject:
   m_ObjectHideFlags: 0
@@ -2028,4 +2046,8 @@ MonoBehaviour:
   occupied: 0
   element: {fileID: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
+  elementName: 
   active: 0
+  Air: {fileID: 0}
+  Fire: {fileID: 0}
+  Earth: {fileID: 0}

@@ -9,9 +9,7 @@ public class AbilityQueue : MonoBehaviour
     public List<AbilitySlot> queue;
     private static int maxQueueLength = 1;
 
-    public GameObject Air;
-    public GameObject Fire;
-    public GameObject Earth;
+    
 
     public void Save()
     {
@@ -36,25 +34,6 @@ public class AbilityQueue : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             queue[i] = GameObject.Find("/Player Camera/Slots/Ability Slot " + (i + 1).ToString()).GetComponent<AbilitySlot>();
-            try
-            {
-                GameObject e = null;
-                switch (GameData.queue[i])
-                {
-                    case "Air":
-                        e = Instantiate(Air);
-                        break;
-                    case "Fire":
-                        e = Instantiate(Fire);
-                        break;
-                    case "Earth":
-                        e = Instantiate(Earth);
-                        break;
-                }
-                AddElement(e);
-            }
-            catch { }
-            
         }
     }
 
@@ -101,7 +80,7 @@ public class AbilityQueue : MonoBehaviour
         maxQueueLength += 1;
     }
 
-    public void AddElement(GameObject element)
+    public void AddElement(string element)
     {
         foreach (AbilitySlot a in queue)
         {

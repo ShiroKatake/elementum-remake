@@ -7,7 +7,7 @@ public class ElementBubble : MonoBehaviour {
 	public PlayerMovement player;
 	public BubbleAnimation bubbleAnimation;
 	public RuneAnimation runeAnimation;
-	public GameObject element;
+	public string element;
 
 	private void Awake()
 	{

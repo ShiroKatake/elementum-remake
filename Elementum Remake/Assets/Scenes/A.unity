@@ -1675,22 +1675,22 @@ PrefabInstance:
     - target: {fileID: 3697080003629219903, guid: 29b574d4539598548a1629ae752dd8f3,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3697080003629219903, guid: 29b574d4539598548a1629ae752dd8f3,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3697080003629219903, guid: 29b574d4539598548a1629ae752dd8f3,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3697080003629219903, guid: 29b574d4539598548a1629ae752dd8f3,
         type: 3}
       propertyPath: m_textInfo.pageCount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3970157768515117474, guid: 29b574d4539598548a1629ae752dd8f3,
         type: 3}
@@ -67605,6 +67605,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 575449648}
+    - target: {fileID: 3048092928002622795, guid: d341aa22d4d243f4fa1ac0f77a1b98f5,
+        type: 3}
+      propertyPath: locked
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3048092928002622798, guid: d341aa22d4d243f4fa1ac0f77a1b98f5,
         type: 3}
       propertyPath: m_LocalPosition.x
