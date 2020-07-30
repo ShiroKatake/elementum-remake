@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugSpawn: 1
-  jumpForce: 20
+  jumpForce: 22
   speed: 10
   wallJumpLerp: 4
   fallMultiplier: 2.5
