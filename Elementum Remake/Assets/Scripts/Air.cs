@@ -8,6 +8,8 @@ public class Air : Element
     public Sprite airSprite;
     public float forceMultiplier;       //Alter the force of the players standard jump
 
+    public AudioClip airSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,7 @@ public class Air : Element
 
     public override void Activate(PlayerMovement player)
     {
+        SoundManager.PlaySound(airSound);
         player.Jump(Vector2.up, player.jumpForce * forceMultiplier);
     }
 }

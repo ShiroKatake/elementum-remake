@@ -48,3 +48,4 @@ MonoBehaviour:
   airSprite: {fileID: 111358919221266109, guid: f3ed1cc1f05525d47b8e9ff8035f56fc,
     type: 3}
   forceMultiplier: 1.6
+  airSound: {fileID: 8300000, guid: 771215d320fdd48478ec50da82f264b7, type: 3}

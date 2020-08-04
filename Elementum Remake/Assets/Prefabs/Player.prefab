@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4007054639415675520}
   - component: {fileID: 4007054639415675522}
   - component: {fileID: 7494934959259687912}
+  - component: {fileID: 6451784638302954247}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -139,6 +140,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugSpawn: 1
+  debugCoyoteTime: {fileID: 0}
+  playerJump: {fileID: 8300000, guid: 771215d320fdd48478ec50da82f264b7, type: 3}
+  playerLand: {fileID: 8300000, guid: 4c5d78da2d12acc4aa822e0104f1366e, type: 3}
   jumpForce: 22
   speed: 10
   wallJumpLerp: 4
@@ -152,15 +156,18 @@ MonoBehaviour:
   wallCoyoteTime: 0
   wallSlide: 0
   wallJumped: 0
+  slideMultiplier: 0
   earthJumped: 0
   mountingEarth: 0
   airJump: 0
+  previousPosition: 0
   playerPosition: 3
+  previousVector: {x: 0, y: 0}
   queue: {fileID: 7494934959259687912}
   holding: {fileID: 0}
+  edgeDetect: {fileID: 0}
   rb: {fileID: 4007054639415675521}
   initialGravity: 0
-  spawnPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &4007054639415675522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,6 +192,8 @@ MonoBehaviour:
   bottomOffset: {x: 0, y: -0.5}
   rightOffset: {x: 0.5, y: 0}
   leftOffset: {x: -0.5, y: 0}
+  boxSize: {x: 0.95, y: 0.5}
+  boxCenterOffset: {x: 0, y: -0.25}
 --- !u!114 &7494934959259687912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,6 +212,22 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!70 &6451784638302954247
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4007054639415675525}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.45, y: 0}
+  m_Size: {x: 0.1, y: 1}
+  m_Direction: 0
 --- !u!1001 &5556093656738378575
 PrefabInstance:
   m_ObjectHideFlags: 0

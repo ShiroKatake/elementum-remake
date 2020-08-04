@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 6ee26b0f3d7ed344482a0f7ec42c77dc
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Keqima
+  fontNames:
+  - Keqima
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 82bc10cb47e991b4798dffcdcb5af33e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

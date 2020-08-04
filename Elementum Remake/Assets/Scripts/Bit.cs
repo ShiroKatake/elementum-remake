@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Bit : DestroyOnLoad
 {
+    public AudioClip collect;
+
     private void Awake()
     {
         scene = SceneManager.GetActiveScene().buildIndex;
@@ -16,6 +18,7 @@ public class Bit : DestroyOnLoad
     {
         if (collision.gameObject.tag == "Player")
         {
+            SoundManager.PlaySound(collect);
             Collect();
             GameData.bits++;
         }

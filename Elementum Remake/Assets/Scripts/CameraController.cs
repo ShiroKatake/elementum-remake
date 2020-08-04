@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CameraController : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class CameraController : MonoBehaviour
     public Vector3 smoothedPosition;
     public Vector3 desiredPosition;
 
+    public bool paused;
+    public GameObject pauseMenu;
+
     [Header("Camera Shake")]
     public float xIntensity;
     public float yIntensity;
@@ -27,6 +31,8 @@ public class CameraController : MonoBehaviour
         {
             spawned = true;
             DontDestroyOnLoad(gameObject);
+
+            pauseMenu.SetActive(false);
         }
         else
         {
@@ -43,6 +49,26 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
+        if (paused)
+        {
+            if (Input.GetButtonDown("ESC"))
+            {
+                paused = false;
+            }
+            Pause();
+            
+        }
+        else
+        {
+            if (Input.GetButtonDown("ESC"))
+            {
+                paused = true;
+            }
+            Resume();
+        }
+
         if (target.position.x < transform.position.x - limitX || target.position.x > transform.position.x + limitX)
         {
             xSpeed *= 1.005f;
@@ -92,6 +118,24 @@ public class CameraController : MonoBehaviour
         transform.GetChild(0).transform.position = transform.position + UIoffset;
         transform.GetChild(1).transform.position = transform.position;
 
+    }
+
+    private void Pause()
+    {
+        Time.timeScale = 0;
+        pauseMenu.SetActive(true);
+    }
+
+    private void Resume()
+    {
+        Time.timeScale = 1;
+        pauseMenu.SetActive(false);
+    }
+
+    public void ButtonResume()
+    {
+        Resume();
+        paused = false;
     }
 
     private void Shake()
