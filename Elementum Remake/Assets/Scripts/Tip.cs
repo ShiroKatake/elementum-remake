@@ -6,7 +6,7 @@ using TMPro;
 public class Tip : MonoBehaviour
 {
     public Animator animator;
-    public bool active;
+    public bool inputDisabled;
 
     // Start is called before the first frame update
     void Start()
@@ -17,25 +17,39 @@ public class Tip : MonoBehaviour
     void Update()
     {
        if (Input.GetButtonDown("TipTest"))
-        {
-            FadeInTip("boob");
-        }
+       {
+            FadeInTip("boob", true);
+            StartCoroutine(InputDisable());
+       }
+       if (Input.GetButtonDown("Jump"))
+       {
+            if (!inputDisabled)
+            {
+                FadeInTip("", false);
+            }
+       }
     }
 
-    public void FadeInTip(string tip)
+    public void FadeInTip(string tip, bool active)
     {
-        if (!active)
+        GetComponentInChildren<TMP_Text>().text = tip;
+        if (active)
         {
             animator.SetBool("fadeIn", true);
-            active = true;
-            GetComponentInChildren<TMP_Text>().text = tip;
+            PlayerMovement.player.cinematicOverride = true;
         }
         else
         {
             animator.SetBool("fadeIn", false);
-            active = false;
-            GetComponentInChildren<TMP_Text>().text = "";
-
+            PlayerMovement.player.cinematicOverride = false;
         }
+    }
+
+    private IEnumerator InputDisable()
+    {
+        inputDisabled = true;
+
+        yield return new WaitForSeconds(1.5f);
+        inputDisabled = false;
     }
 }

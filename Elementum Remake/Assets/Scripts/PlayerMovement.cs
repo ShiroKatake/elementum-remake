@@ -20,6 +20,10 @@ public enum Position
 public class PlayerMovement : MonoBehaviour 
 {
 	private static bool spawned = false;
+	public static PlayerMovement player;
+
+	public GameObject hand;
+	public bool cinematicOverride;
 
 	[Header("Debugging")]
 	public bool debugSpawn;
@@ -71,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			spawned = true;
 			DontDestroyOnLoad(gameObject);
+			player = gameObject.GetComponent<PlayerMovement>();
 			rb = GetComponent<Rigidbody2D>();
 			coll = GetComponent<Collision>();
 			if (debugSpawn)
@@ -161,34 +166,59 @@ public class PlayerMovement : MonoBehaviour
 		//set the Enum playerPosition to correspond with what the player is colliding with
 		SetPosition();
 
+		//reset the hand as false each frame
+		hand.SetActive(false);
+
 		debugCoyoteTime.text = playerPosition.ToString();
+
 
 		if (!Immobilized)
 		{
 			BetterJump();
 		}
 
+		if (holding != null)
+		{
+			holding.transform.position = new Vector2(transform.position.x, transform.position.y + 1.3f);
+		}
+
 		if (Input.GetButtonDown("Respawn"))
 		{
 			Respawn();
 		}
-		
-		//player can't accidentally use air ability on ground
-        if (playerPosition != Position.Air)
-        {
+
+		//reset the airjump to false when the player is no longer in the air
+		if (playerPosition != Position.Air)
+		{
 			airJump = false;
-			
+
 		}
 
-		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight) 
+		
+
+		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
 		{
-			if ((playerPosition == Position.WallRight && Input.GetButtonDown("Horizontal")) || (playerPosition == Position.WallLeft && !Input.GetButtonDown("Horizontal")))
+
+
+			if ((playerPosition == Position.WallRight && Input.GetAxis("Horizontal") < 0) || (playerPosition == Position.WallLeft && Input.GetAxis("Horizontal") > 0))
 			{
+				Debug.Log("this is happening");
 				StartCoroutine(WallCoyoteTime());
 			}
 			if (rb.velocity.y <= 0)
 			{
-				wallSlide = true;
+				if (playerPosition == Position.WallLeft && Input.GetAxis("Horizontal") < 0)
+				{
+					wallSlide = true;
+					hand.SetActive(true);
+					hand.GetComponent<SpriteRenderer>().flipX = true;
+				}
+				else if (playerPosition == Position.WallRight && Input.GetAxis("Horizontal") > 0)
+				{
+					wallSlide = true;
+					hand.SetActive(true);
+					hand.GetComponent<SpriteRenderer>().flipX = false;
+				}
 				if (slideMultiplier < 1)
 				{
 					slideMultiplier += 0.003f;
@@ -215,27 +245,26 @@ public class PlayerMovement : MonoBehaviour
 
 			}
 		}
-
-		if (holding != null)
-		{
-			holding.transform.position = new Vector2(transform.position.x, transform.position.y + 1.3f);
-		}
-
+		
 		queuedjump -= Time.deltaTime;
-		if (Input.GetButtonDown("Jump")) 
+
+		if (!cinematicOverride)
 		{
-			queuedjump = 0.2f;
-			if (playerPosition == Position.Ground || coyoteTime)
+			if (Input.GetButtonDown("Jump"))
 			{
-				SoundManager.PlaySound(playerJump);
-				Jump(Vector2.up, jumpForce);
-			}
-			else if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
-			{
-				wallJumped = true;
-				SoundManager.PlaySound(playerJump);
-				WallJump();
-				
+				queuedjump = 0.2f;
+				if (playerPosition == Position.Ground || coyoteTime)
+				{
+					SoundManager.PlaySound(playerJump);
+					Jump(Vector2.up, jumpForce);
+				}
+				else if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
+				{
+					wallJumped = true;
+					SoundManager.PlaySound(playerJump);
+					WallJump();
+
+				}
 			}
 		}
 
