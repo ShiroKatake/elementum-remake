@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
 {
     private static bool spawned = false;
 
+    public bool freeze;
+
     public Transform target;
     public float xSpeed;
     public float ySpeed;
@@ -49,74 +51,76 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!freeze)
+        {
+            if (paused)
+            {
+                if (Input.GetButtonDown("ESC"))
+                {
+                    paused = false;
+                }
+                Pause();
+
+            }
+            else
+            {
+                if (Input.GetButtonDown("ESC"))
+                {
+                    paused = true;
+                }
+                Resume();
+            }
+
+            if (target.position.x < transform.position.x - limitX || target.position.x > transform.position.x + limitX)
+            {
+                xSpeed *= 1.005f;
+            }
+            else if (target.position.x < transform.position.x - (limitX * 2) || target.position.x > transform.position.x + (limitX * 2))
+            {
+                xSpeed *= 1.5f;
+            }
+            else
+            {
+                if (xSpeed > 1f)
+                {
+                    xSpeed *= 0.9f;
+                }
+                else
+                {
+                    xSpeed = 1f;
+                }
+            }
+            if (target.position.y < transform.position.y - limitY || target.position.y > target.position.y + limitY)
+            {
+                ySpeed *= 1.05f;
+            }
+            else if (target.position.y < transform.position.y - (limitY + 2) || target.position.y > transform.position.y + (limitY + 2))
+            {
+                ySpeed *= 1.5f;
+            }
+            else
+            {
+                if (ySpeed > 2f)
+                {
+                    ySpeed *= 0.9f;
+                }
+                else
+                {
+                    ySpeed = 2f;
+                }
+            }
+
+            desiredPosition = target.position + offset;
+            smoothedPosition.x = Mathf.Lerp(transform.position.x, desiredPosition.x, Time.deltaTime * xSpeed);
+            smoothedPosition.y = Mathf.Lerp(transform.position.y, desiredPosition.y, Time.deltaTime * ySpeed);
+            smoothedPosition.z = -1;
+
+            transform.position = smoothedPosition;
+
+            transform.GetChild(0).transform.position = transform.position + UIoffset;
+            transform.GetChild(1).transform.position = transform.position;
+        }
         
-
-        if (paused)
-        {
-            if (Input.GetButtonDown("ESC"))
-            {
-                paused = false;
-            }
-            Pause();
-            
-        }
-        else
-        {
-            if (Input.GetButtonDown("ESC"))
-            {
-                paused = true;
-            }
-            Resume();
-        }
-
-        if (target.position.x < transform.position.x - limitX || target.position.x > transform.position.x + limitX)
-        {
-            xSpeed *= 1.005f;
-        }
-        else if (target.position.x < transform.position.x - (limitX*2) || target.position.x > transform.position.x + (limitX*2))
-        {
-            xSpeed *= 1.5f;
-        }
-        else
-        {
-            if (xSpeed > 1f)
-            {
-                xSpeed *= 0.9f;
-            }
-            else
-            {
-                xSpeed = 1f;
-            }
-        }
-        if (target.position.y < transform.position.y - limitY || target.position.y > target.position.y + limitY)
-        {
-            ySpeed *= 1.05f;
-        }
-        else if (target.position.y < transform.position.y - (limitY + 2) || target.position.y > transform.position.y + (limitY + 2))
-        {
-            ySpeed *= 1.5f;
-        }
-        else
-        {
-            if (ySpeed > 2f)
-            {
-                ySpeed *= 0.9f;
-            }
-            else
-            {
-                ySpeed = 2f;
-            }
-        }
-
-        desiredPosition = target.position + offset;
-        smoothedPosition.x = Mathf.Lerp(transform.position.x, desiredPosition.x, Time.deltaTime*xSpeed);
-        smoothedPosition.y = Mathf.Lerp(transform.position.y, desiredPosition.y, Time.deltaTime*ySpeed);
-        smoothedPosition.z = -1;
-
-        transform.position = smoothedPosition;
-
-        transform.GetChild(0).transform.position = transform.position + UIoffset;
-        transform.GetChild(1).transform.position = transform.position;
 
     }
 
@@ -136,6 +140,13 @@ public class CameraController : MonoBehaviour
     {
         Resume();
         paused = false;
+    }
+
+    public void JumpToTarget()
+    {
+        transform.position = target.position;
+        desiredPosition = target.position;
+        smoothedPosition = target.position;
     }
 
     private void Shake()

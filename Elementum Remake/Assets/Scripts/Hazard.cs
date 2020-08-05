@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Hazard : MonoBehaviour
 {
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Earth")
@@ -13,7 +14,7 @@ public class Hazard : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-            collision.gameObject.GetComponent<Rigidbody2D>().transform.position = GameData.spawnLocation;
+            PlayerMovement.player.alive = false;
         }
     }
 }

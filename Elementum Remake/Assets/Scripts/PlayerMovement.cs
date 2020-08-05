@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public GameObject hand;
 	public bool cinematicOverride;
+	public bool alive;
 
 	[Header("Debugging")]
 	public bool debugSpawn;
@@ -202,7 +203,6 @@ public class PlayerMovement : MonoBehaviour
 
 			if ((playerPosition == Position.WallRight && Input.GetAxis("Horizontal") < 0) || (playerPosition == Position.WallLeft && Input.GetAxis("Horizontal") > 0))
 			{
-				Debug.Log("this is happening");
 				StartCoroutine(WallCoyoteTime());
 			}
 			if (rb.velocity.y <= 0)
@@ -236,11 +236,13 @@ public class PlayerMovement : MonoBehaviour
 		{
 			if (playerPosition == Position.Ground)
 			{
+				SoundManager.PlaySound(playerJump);
 				Jump(Vector2.up, jumpForce);
 			}
 			else if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
 			{
 				wallJumped = true;
+				SoundManager.PlaySound(playerJump);
 				WallJump();
 
 			}
@@ -279,6 +281,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		Debug.Log("respawning");
 		rb.transform.position = new Vector3(GameData.spawnLocation.x, GameData.spawnLocation.y);
+		alive = true;
 	}
 
 	void Walk(Vector2 dir) 
