@@ -63,6 +63,8 @@ public class SceneController : MonoBehaviour
 
     private void Start()
     {
+        player.cinematicOverride = true;
+        player.disabled = true;
         StartCoroutine(FadeIn());
     }
 
@@ -92,6 +94,8 @@ public class SceneController : MonoBehaviour
         typer.Type();
 
         yield return new WaitForSeconds(2);
+        player.disabled = false;
+        player.cinematicOverride = false;
         sceneFadeIn.SetBool("Open", true);
     }
 

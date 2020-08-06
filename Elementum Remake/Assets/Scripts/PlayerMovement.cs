@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public GameObject hand;
 	public bool cinematicOverride;
+	public bool disabled;
 	public bool alive;
 
 	[Header("Debugging")]
@@ -162,7 +163,11 @@ public class PlayerMovement : MonoBehaviour
 		//Take movement input from player
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
-		Walk(new Vector2(x, y));
+
+		if (!disabled)
+		{
+			Walk(new Vector2(x, y));
+		}
 
 		//set the Enum playerPosition to correspond with what the player is colliding with
 		SetPosition();
@@ -183,10 +188,7 @@ public class PlayerMovement : MonoBehaviour
 			holding.transform.position = new Vector2(transform.position.x, transform.position.y + 1.3f);
 		}
 
-		if (Input.GetButtonDown("Respawn"))
-		{
-			Respawn();
-		}
+		
 
 		//reset the airjump to false when the player is no longer in the air
 		if (playerPosition != Position.Air)
@@ -250,6 +252,8 @@ public class PlayerMovement : MonoBehaviour
 		
 		queuedjump -= Time.deltaTime;
 
+
+		//All input other than movement disabled when in cinematic
 		if (!cinematicOverride)
 		{
 			if (Input.GetButtonDown("Jump"))
@@ -268,12 +272,17 @@ public class PlayerMovement : MonoBehaviour
 
 				}
 			}
-		}
 
-		if (Input.GetButtonDown("Use") || Input.GetButtonDown("Use2"))
-		{
-			queue.Activate(this);
-			airJump = true;
+			if (Input.GetButtonDown("Use") || Input.GetButtonDown("Use2"))
+			{
+				queue.Activate(this);
+				airJump = true;
+			}
+
+			if (Input.GetButtonDown("Respawn"))
+			{
+				Respawn();
+			}
 		}
 	}
 
