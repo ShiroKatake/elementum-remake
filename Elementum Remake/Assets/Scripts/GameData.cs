@@ -42,7 +42,19 @@ public class GameData : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene(1);
+        Animator animator = GameObject.Find("Menu Camera/Pause Menu/Veil").GetComponent<Animator>();
+        animator.gameObject.SetActive(true);
+        animator.SetBool("fadeOut", true);
+
+
+        StartCoroutine(LoadScene(1, 2));
+    }
+
+    public IEnumerator LoadScene(int scene, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        SceneManager.LoadScene(scene);
         player.SetActive(true);
         playerCamera.SetActive(true);
     }

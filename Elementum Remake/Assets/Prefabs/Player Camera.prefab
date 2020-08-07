@@ -640,6 +640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6923916318971195773}
   - component: {fileID: 4244383998662307574}
+  - component: {fileID: 6005708361754051700}
   m_Layer: 0
   m_Name: Death Fade
   m_TagString: Untagged
@@ -712,6 +713,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &6005708361754051700
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166306955859151876}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 15b0d87f6b655fe4895a202f271ce14f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2689052896397337543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2260,7 +2280,7 @@ GameObject:
   - component: {fileID: 1972974704537344717}
   - component: {fileID: 3042201043861533216}
   - component: {fileID: 4220290967403665451}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Bits
   m_TagString: Untagged
   m_Icon: {fileID: 0}

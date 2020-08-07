@@ -20,7 +20,7 @@ public class SceneController : MonoBehaviour
 {
     private static bool spawned = false;
 
-    public Scene currentScene;
+    public static Scene currentScene;
     public ScenePhase phase;
     
     private PlayerMovement player;
@@ -81,12 +81,19 @@ public class SceneController : MonoBehaviour
 
     IEnumerator Respawn()
     {
+        player.disabled = true;
         yield return new WaitForSeconds(1f);
         player.Respawn();
         playerCamera.JumpToTarget();
         playerCamera.freeze = false;
         deathFade.SetBool("fadeIn", false);
+        StartCoroutine(EnableMovement(0.3f));
+    }
 
+    IEnumerator EnableMovement(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        player.disabled = false;
     }
 
     IEnumerator FadeIn()
@@ -100,13 +107,6 @@ public class SceneController : MonoBehaviour
     }
 
     private void Load()
-    {
-
-    }
-
-    
-
-    public void Save()
     {
 
     }

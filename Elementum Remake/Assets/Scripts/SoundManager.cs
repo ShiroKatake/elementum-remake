@@ -6,6 +6,7 @@ public class SoundManager : MonoBehaviour
 {
     private static bool spawned = false;
     private AudioSource sound;
+    public AudioSource musicPlayer;
     
 
     // Start is called before the first frame update
@@ -14,6 +15,8 @@ public class SoundManager : MonoBehaviour
         if (!spawned)
         {
             spawned = true;
+            DontDestroyOnLoad(gameObject);
+            musicPlayer.Play();
         }
         else
         {
@@ -37,6 +40,7 @@ public class SoundManager : MonoBehaviour
 
         }
     }
+
 
     public static void PlaySound(AudioClip clip)
     {

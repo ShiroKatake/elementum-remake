@@ -382,6 +382,7 @@ MonoBehaviour:
   player: {fileID: 0}
   bubbleAnimation: {fileID: 8309336263916506621}
   runeAnimation: {fileID: 8309336263666176246}
+  collect: {fileID: 8300000, guid: d640a547cce7db64292e81fc13510bbc, type: 3}
   element: Earth
 --- !u!1 &8309336264784946656
 GameObject:

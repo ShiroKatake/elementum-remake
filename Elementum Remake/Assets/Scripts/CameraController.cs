@@ -6,6 +6,7 @@ using TMPro;
 public class CameraController : MonoBehaviour
 {
     private static bool spawned = false;
+    public static CameraController playerCamera;
 
     public bool freeze;
 
@@ -33,6 +34,7 @@ public class CameraController : MonoBehaviour
         {
             spawned = true;
             DontDestroyOnLoad(gameObject);
+            playerCamera = this;
 
             pauseMenu.SetActive(false);
         }

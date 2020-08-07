@@ -14,6 +14,7 @@ public enum Position
 	WallLeft,
 	WallRight,
 	Ground,
+	Ladder,
 	Air
 }
 
@@ -30,10 +31,22 @@ public class PlayerMovement : MonoBehaviour
 	[Header("Debugging")]
 	public bool debugSpawn;
 	public TMP_Text debugCoyoteTime;
+	public bool debug;
 
 	[Header("Sound")]
 	public AudioClip playerJump;
-	public AudioClip playerLand;
+
+	public AudioClip playerLandA;
+	public AudioClip playerLandB;
+	public AudioClip playerLandC;
+
+	public AudioClip playerLadderA;
+	public AudioClip playerLadderB;
+	public AudioClip playerLadderC;
+
+	public AudioClip Death;
+
+	public float ladderTimer;
 
 	[Header("Stats")]
 	public float jumpForce;             //How high the player jumps
@@ -54,12 +67,13 @@ public class PlayerMovement : MonoBehaviour
 	public bool wallSlide;
 	public bool wallJumped;
 	public float slideMultiplier;
+	public bool onLadder;
 	public bool earthJumped;
 	public bool mountingEarth;
     public bool airJump;                //Flag triggered when the jump method is called from the air ability
 	public Position previousPosition;
 	public Position playerPosition;
-	public Vector2 previousVector;
+	public Vector2 previousVelocity;
 
 	[Header("Abilities")]
 	public AbilityQueue queue;
@@ -110,23 +124,9 @@ public class PlayerMovement : MonoBehaviour
 				mountingEarth = true;
 			}
 		}
-
-		if (collision.gameObject.tag == "Ladder") 
+		if (collision.gameObject.tag == "Ladder")
 		{
-			if (Input.GetButton("Up"))
-			{
-				rb.velocity = new Vector2(rb.velocity.x / 1.2f, 10);
-			}
-			else if (Input.GetButton("Down"))
-			{
-				rb.velocity = new Vector2(rb.velocity.x / 1.2f, -10);
-			}
-			else
-			{
-				if (rb.velocity.y < 0)
-				{
-					rb.velocity = new Vector2(rb.velocity.x, 0);
-				}			}
+			onLadder = true;
 		}
 		if (holding != null)
 		{
@@ -137,11 +137,26 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	public void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.gameObject.tag == "Ladder")
+		{
+			
+		}
+	}
+
+	public void OnTriggerExit2D(Collider2D collision)
+	{
+		if (collision.gameObject.tag == "Ladder")
+		{
+			onLadder = false;
+		}
+	}
+
 	public void OnCollisionEnter2D(Collision2D collision)
 	{
 		if (collision.gameObject.layer == 8)
 		{
-			
 			wallJumped = false;
 			jumped = false;
 		}
@@ -164,6 +179,11 @@ public class PlayerMovement : MonoBehaviour
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
 
+		if (!alive)
+		{
+			SoundManager.PlaySound(Death);
+		}
+
 		if (!disabled)
 		{
 			Walk(new Vector2(x, y));
@@ -175,8 +195,12 @@ public class PlayerMovement : MonoBehaviour
 		//reset the hand as false each frame
 		hand.SetActive(false);
 
-		debugCoyoteTime.text = playerPosition.ToString();
+		if (debug)
+		{
+			debugCoyoteTime.text = previousVelocity.ToString();
+		}
 
+		
 
 		if (!Immobilized)
 		{
@@ -194,12 +218,49 @@ public class PlayerMovement : MonoBehaviour
 		if (playerPosition != Position.Air)
 		{
 			airJump = false;
+			if (previousPosition == Position.Air)
+			{
+				if (!onLadder)
+				{
+					switch(Random.Range(0,2))
+					{
+						case 0:
+							SoundManager.PlaySound(playerLandA);
+							break;
+						case 1:
+							SoundManager.PlaySound(playerLandB);
+							break;
+						case 2:
+							SoundManager.PlaySound(playerLandC);
+							break;
 
+					}
+						
+				}
+			}
 		}
 
-		
-
-		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
+		if (playerPosition == Position.Ladder)
+		{
+			if (Input.GetButton("Up"))
+			{
+				rb.velocity = new Vector2(rb.velocity.x / 1.2f, 10);
+				LadderSound();
+			}
+			else if (Input.GetButton("Down"))
+			{
+				rb.velocity = new Vector2(rb.velocity.x / 1.2f, -10);
+				LadderSound();
+			}
+			else
+			{
+				if (rb.velocity.y < 0)
+				{
+					rb.velocity = new Vector2(rb.velocity.x, 0);
+				}
+			}
+		}
+		else if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
 		{
 
 
@@ -251,7 +312,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 		
 		queuedjump -= Time.deltaTime;
-
+		ladderTimer -= Time.deltaTime;
 
 		//All input other than movement disabled when in cinematic
 		if (!cinematicOverride)
@@ -282,6 +343,38 @@ public class PlayerMovement : MonoBehaviour
 			if (Input.GetButtonDown("Respawn"))
 			{
 				Respawn();
+			}
+		}
+	}
+
+	public void LateUpdate()
+	{
+		if (rb.velocity.y != 0 && rb.velocity.x != 0)
+		{
+			previousVelocity = rb.velocity;
+		}
+	}
+
+	public void LadderSound()
+	{
+		if (ladderTimer < -0.3f)
+		{
+			if (playerPosition == Position.Ladder)
+			{
+				switch (Random.Range(0, 2))
+				{
+					case 0:
+						SoundManager.PlaySound(playerLadderA);
+						break;
+					case 1:
+						SoundManager.PlaySound(playerLadderB);
+						break;
+					case 2:
+						SoundManager.PlaySound(playerLadderC);
+						break;
+
+				}
+				ladderTimer = 0;
 			}
 		}
 	}
@@ -377,6 +470,11 @@ public class PlayerMovement : MonoBehaviour
 	public void SetPosition()
 	{
 		previousPosition = playerPosition;
+		if (onLadder)
+		{
+			playerPosition = Position.Ladder;
+			return;
+		}
 		if (coll.onLeftWall && !coll.onGround)
 		{
 			playerPosition = Position.WallLeft;

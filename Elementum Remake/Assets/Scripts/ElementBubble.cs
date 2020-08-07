@@ -7,6 +7,9 @@ public class ElementBubble : MonoBehaviour {
 	public PlayerMovement player;
 	public BubbleAnimation bubbleAnimation;
 	public RuneAnimation runeAnimation;
+
+	public AudioClip collect;
+
 	public string element;
 
 	private void Awake()
@@ -16,6 +19,7 @@ public class ElementBubble : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		if (!player.queue.Full) {
+			SoundManager.PlaySound(collect);
 			bubbleAnimation.animating = true;
 			runeAnimation.animating = true;
 			player.queue.AddElement(element);

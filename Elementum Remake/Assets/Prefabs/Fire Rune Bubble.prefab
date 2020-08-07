@@ -297,6 +297,7 @@ MonoBehaviour:
   player: {fileID: 0}
   bubbleAnimation: {fileID: 1328762591729543129}
   runeAnimation: {fileID: 1328762590939462354}
+  collect: {fileID: 8300000, guid: d640a547cce7db64292e81fc13510bbc, type: 3}
   element: Fire
 --- !u!1 &1328762591729543128
 GameObject:

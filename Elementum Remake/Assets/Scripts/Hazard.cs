@@ -13,8 +13,8 @@ public class Hazard : MonoBehaviour
         }
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             PlayerMovement.player.alive = false;
+            PlayerMovement.player.disabled = true;
         }
     }
 }
