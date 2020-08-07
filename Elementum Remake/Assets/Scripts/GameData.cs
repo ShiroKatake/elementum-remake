@@ -27,17 +27,22 @@ public class GameData : MonoBehaviour
 
             player = GameObject.Find("Player");
             playerCamera = GameObject.Find("Player Camera");
-            if (SceneManager.GetActiveScene().buildIndex == 0)
-            {
-                player.SetActive(false);
-                playerCamera.SetActive(false);
-            }
+            
         }
         else
         {
             DestroyImmediate(gameObject);
         }
         
+    }
+
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            player.SetActive(false);
+            playerCamera.SetActive(false);
+        }
     }
 
     public void StartGame()
@@ -47,7 +52,7 @@ public class GameData : MonoBehaviour
         animator.SetBool("fadeOut", true);
 
 
-        StartCoroutine(LoadScene(1, 2));
+        StartCoroutine(LoadScene(2, 2));
     }
 
     public IEnumerator LoadScene(int scene, float delay)
@@ -61,12 +66,16 @@ public class GameData : MonoBehaviour
 
     public void LoadMenu()
     {
+        SceneManager.LoadScene(0);
+    }
+
+    public void LoadMenuFromGame()
+    {
         spawnLocation = player.transform.position;
         playerCamera.GetComponent<CameraController>().ButtonResume();
         player.SetActive(false);
         playerCamera.SetActive(false);
-        SceneManager.LoadScene(0);
-
+        LoadMenu();
     }
 
     public void ExitGame()

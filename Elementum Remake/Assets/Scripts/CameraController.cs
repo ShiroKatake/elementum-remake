@@ -34,7 +34,6 @@ public class CameraController : MonoBehaviour
         {
             spawned = true;
             DontDestroyOnLoad(gameObject);
-            playerCamera = this;
 
             pauseMenu.SetActive(false);
         }
@@ -53,26 +52,26 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (paused)
+        {
+            if (Input.GetButtonDown("ESC"))
+            {
+                paused = false;
+            }
+            Pause();
+
+        }
+        else
+        {
+            if (Input.GetButtonDown("ESC"))
+            {
+                paused = true;
+            }
+            Resume();
+        }
+
         if (!freeze)
         {
-            if (paused)
-            {
-                if (Input.GetButtonDown("ESC"))
-                {
-                    paused = false;
-                }
-                Pause();
-
-            }
-            else
-            {
-                if (Input.GetButtonDown("ESC"))
-                {
-                    paused = true;
-                }
-                Resume();
-            }
-
             if (target.position.x < transform.position.x - limitX || target.position.x > transform.position.x + limitX)
             {
                 xSpeed *= 1.005f;
