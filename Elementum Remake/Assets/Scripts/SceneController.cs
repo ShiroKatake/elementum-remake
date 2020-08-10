@@ -8,8 +8,8 @@ public enum ScenePhase
 {
     Loading,
     Open,
-    Title,
     Game,
+    Paused,
     Cinematic,
     Close,
     Save
@@ -21,12 +21,16 @@ public class SceneController : MonoBehaviour
     private static bool spawned = false;
 
     public static Scene currentScene;
-    public ScenePhase phase;
-    
+    public static ScenePhase phase;
+    private bool paused;
+
+
     private PlayerMovement player;
     private CameraController playerCamera;
     public TypeWriterEffect typer;
 
+    private SpriteRenderer sceneVeil;
+    private TMP_Text bits;
     private Animator sceneFadeIn;
     private Animator deathFade;
 
@@ -43,8 +47,11 @@ public class SceneController : MonoBehaviour
             player = GameObject.Find("Player").GetComponent<PlayerMovement>();
             playerCamera = GameObject.Find("Player Camera").GetComponent<CameraController>();
             sceneFadeIn = GameObject.Find("Player Camera/UI").GetComponent<Animator>();
+            sceneVeil = GameObject.Find("Player Camera/UI/Scene Fade In").GetComponent<SpriteRenderer>();
             deathFade = GameObject.Find("Player Camera/UI/Death Fade").GetComponent<Animator>();
             typer.display = GameObject.Find("Player Camera/UI/Scene Intro").GetComponent<TMP_Text>();
+            bits = GameObject.Find("Player Camera/UI/Bits").GetComponent<TMP_Text>();
+            
         }
         else
         {
@@ -55,45 +62,155 @@ public class SceneController : MonoBehaviour
 
     private void UpdateScene(Scene current, Scene next)
     {
-        Debug.Log("scene changed to " + next.name);
+        phase = ScenePhase.Loading;
         typer.text = next.name;
         currentScene = next;
-
     }
 
     private void Start()
     {
-        player.cinematicOverride = true;
-        player.disabled = true;
-        StartCoroutine(FadeIn());
+        
     }
 
     private void Update()
     {
-        if (!player.alive)
+        if (phase == ScenePhase.Loading)
         {
-            playerCamera.freeze = true;
-            deathFade.SetBool("fadeIn", true);
-            StartCoroutine(Respawn());
-            player.alive = true;
+            //load the level
+
+            //reset some transition variables
+            sceneVeil.color = new Color(sceneVeil.color.r, sceneVeil.color.g, sceneVeil.color.b, 255);
+            bits.color = new Color(bits.color.r, bits.color.g, bits.color.b, 0);
+
+            phase = ScenePhase.Open;
         }
+        if (phase == ScenePhase.Open)
+        {
+            if (currentScene.buildIndex != 0)
+            {
+                player.cinematicOverride = true;
+                player.disabled = true;
+                StartCoroutine(FadeIn());
+            }
+            phase = ScenePhase.Cinematic;
+        }
+        else if (phase == ScenePhase.Game)
+        {
+            if (paused)
+            {
+                if (Input.GetButtonDown("ESC"))
+                {
+                    paused = false;
+                    Resume();
+                }
+            }
+            else
+            {
+                if (Input.GetButtonDown("ESC"))
+                {
+                    paused = true;
+                    Pause();
+                }
+            }
+
+            if (!player.alive)
+            {
+                player.alive = true;
+                playerCamera.freeze = true;
+                deathFade.SetBool("fadeIn", true);
+                ChangeScenePhase(ScenePhase.Cinematic);
+                StartCoroutine(Respawn());
+                
+            }
+        }
+        
+
+        
+    }
+
+    public void Pause()
+    {
+        Time.timeScale = 0;
+        playerCamera.pauseMenu.SetActive(true);
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1;
+        playerCamera.pauseMenu.SetActive(false);
+    }
+
+    public void ButtonResume()
+    {
+        Resume();
+        phase = ScenePhase.Game;
+    }
+
+    public void LoadMenu()
+    {
+        ButtonResume();
+        SceneManager.LoadScene(0);
+    }
+
+    public void LoadMenuFromGame()
+    {
+        GameData.spawnLocation = player.transform.position;
+        ButtonResume();
+        player.gameObject.SetActive(false);
+        playerCamera.gameObject.SetActive(false);
+        LoadMenu();
+    }
+
+    public void StartGame()
+    {
+        Animator animator = GameObject.Find("Menu Camera/Pause Menu/Veil").GetComponent<Animator>();
+        animator.gameObject.SetActive(true);
+        animator.SetTrigger("fadeOut");
+        StartCoroutine(LoadScene(2, 2));
+    }
+
+    public IEnumerator LoadScene(int scene, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(scene);
+        player.gameObject.SetActive(true);
+        playerCamera.gameObject.SetActive(true);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 
     IEnumerator Respawn()
     {
-        player.disabled = true;
         yield return new WaitForSeconds(1f);
         player.Respawn();
         playerCamera.JumpToTarget();
-        playerCamera.freeze = false;
         deathFade.SetBool("fadeIn", false);
-        StartCoroutine(EnableMovement(0.3f));
+        StartCoroutine(ChangeScenePhaseOnDelay(ScenePhase.Game, 0.3f));
     }
 
-    IEnumerator EnableMovement(float delay)
+    IEnumerator ChangeScenePhaseOnDelay(ScenePhase scenePhase, float delay)
     {
         yield return new WaitForSeconds(delay);
-        player.disabled = false;
+        ChangeScenePhase(scenePhase);
+    }
+
+    private void ChangeScenePhase(ScenePhase scenePhase)
+    {
+        phase = scenePhase;
+        if (phase == ScenePhase.Game)
+        {
+            player.disabled = false;
+            player.cinematicOverride = false;
+            playerCamera.freeze = false;
+        }
+        else
+        {
+            player.disabled = true;
+            player.cinematicOverride = true;
+        }
     }
 
     IEnumerator FadeIn()
@@ -101,13 +218,7 @@ public class SceneController : MonoBehaviour
         typer.Type();
 
         yield return new WaitForSeconds(2);
-        player.disabled = false;
-        player.cinematicOverride = false;
         sceneFadeIn.SetBool("Open", true);
-    }
-
-    private void Load()
-    {
-
+        StartCoroutine(ChangeScenePhaseOnDelay(ScenePhase.Game, 1));
     }
 }

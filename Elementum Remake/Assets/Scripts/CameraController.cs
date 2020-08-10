@@ -52,24 +52,6 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (paused)
-        {
-            if (Input.GetButtonDown("ESC"))
-            {
-                paused = false;
-            }
-            Pause();
-
-        }
-        else
-        {
-            if (Input.GetButtonDown("ESC"))
-            {
-                paused = true;
-            }
-            Resume();
-        }
-
         if (!freeze)
         {
             if (target.position.x < transform.position.x - limitX || target.position.x > transform.position.x + limitX)
@@ -125,29 +107,11 @@ public class CameraController : MonoBehaviour
 
     }
 
-    private void Pause()
-    {
-        Time.timeScale = 0;
-        pauseMenu.SetActive(true);
-    }
-
-    private void Resume()
-    {
-        Time.timeScale = 1;
-        pauseMenu.SetActive(false);
-    }
-
-    public void ButtonResume()
-    {
-        Resume();
-        paused = false;
-    }
-
     public void JumpToTarget()
     {
-        transform.position = target.position;
-        desiredPosition = target.position;
-        smoothedPosition = target.position;
+        transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+        desiredPosition = transform.position;
+        smoothedPosition = transform.position;
     }
 
     private void Shake()

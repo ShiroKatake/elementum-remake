@@ -52,4 +52,16 @@ public class SoundManager : MonoBehaviour
         AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
         audioSource.PlayOneShot(clip);
     }
+
+    public static void PlaySound(AudioClip clip, float volume)
+    {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
+        GameObject soundGameObject = new GameObject("Sound");
+        AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
+        audioSource.volume = volume;
+        audioSource.PlayOneShot(clip);
+    }
 }

@@ -70,3 +70,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568ecac0fcb61644daadf2e4f5885033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  death: {fileID: 8300000, guid: 44018bc91a41d43479c3b695b2b0a9c4, type: 3}
+  earthBreak: {fileID: 8300000, guid: 6e8d6b238294d6b48be4bb681040b673, type: 3}

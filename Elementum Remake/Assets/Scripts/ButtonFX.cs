@@ -10,16 +10,30 @@ public class ButtonFX : MonoBehaviour
 
     public void HoverSound()
     {
-        SoundManager.PlaySound(hover);
+        CreateSound(hover, 1);
     }
 
     public void ClickSound()
     {
-        SoundManager.PlaySound(click);
+        CreateSound(click, 1);
     }
 
     public void PlaySound()
     {
-        SoundManager.PlaySound(play);
+        CreateSound(play, 0.5f);
+    }
+
+    public void CreateSound(AudioClip sound, float volume)
+    {
+        if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+            SoundManager.PlaySound(sound, volume);
+            Time.timeScale = 0;
+        }
+        else
+        {
+            SoundManager.PlaySound(sound, volume);
+        }
     }
 }

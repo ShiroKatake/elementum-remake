@@ -8,8 +8,7 @@ public class Menu : MonoBehaviour
     private Button play;
     private Button options;
     private Button exit;
-
-    private GameData dataController;
+    private SceneController sceneController;
 
     // Start is called before the first frame update
     void Start()
@@ -17,11 +16,11 @@ public class Menu : MonoBehaviour
         play = GameObject.Find("Menu Camera/Pause Menu/PlayButton").GetComponent<Button>();
         options = GameObject.Find("Menu Camera/Pause Menu/Options").GetComponent<Button>();
         exit = GameObject.Find("Menu Camera/Pause Menu/Exit").GetComponent<Button>();
-        dataController = GameObject.Find("DataController").GetComponent<GameData>();
+        sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
 
 
-        play.onClick.AddListener(dataController.StartGame);
-        exit.onClick.AddListener(dataController.ExitGame);
+        play.onClick.AddListener(sceneController.StartGame);
+        exit.onClick.AddListener(sceneController.ExitGame);
         Debug.Log("listeners added");
     }
 }

@@ -190,7 +190,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 400, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7641564798661627921
 CanvasRenderer:
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 257
+  m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -657,7 +657,7 @@ Transform:
   m_GameObject: {fileID: 2166306955859151876}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalScale: {x: 50, y: 50, z: 1}
   m_Children: []
   m_Father: {fileID: 1931336775972268227}
   m_RootOrder: 4
@@ -1094,8 +1094,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3207455661485360998}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.1}
+  m_LocalScale: {x: 50, y: 50, z: 1}
   m_Children: []
   m_Father: {fileID: 1931336775972268227}
   m_RootOrder: 2
@@ -1370,6 +1370,7 @@ GameObject:
   - component: {fileID: 6223264595285445730}
   - component: {fileID: 5515742564361172622}
   - component: {fileID: 364178706665981467}
+  - component: {fileID: 4366176252003741870}
   m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
@@ -1595,6 +1596,34 @@ MonoBehaviour:
   hover: {fileID: 8300000, guid: b7da318dabf4ef440ad785b9c0fa4a8c, type: 3}
   click: {fileID: 8300000, guid: c1bd624d68a23ca42812305333ac6329, type: 3}
   play: {fileID: 8300000, guid: 9575caad729cb0948ba408dcabe51b58, type: 3}
+--- !u!114 &4366176252003741870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3843009778151319879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 364178706665981467}
+          m_MethodName: HoverSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &3965692133773778834
 GameObject:
   m_ObjectHideFlags: 0
@@ -1808,7 +1837,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4499506826962927222}
+      - m_Target: {fileID: -2593081713770121438}
         m_MethodName: ClickSound
         m_Mode: 1
         m_Arguments:

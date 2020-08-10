@@ -44,42 +44,4 @@ public class GameData : MonoBehaviour
             playerCamera.SetActive(false);
         }
     }
-
-    public void StartGame()
-    {
-        Animator animator = GameObject.Find("Menu Camera/Pause Menu/Veil").GetComponent<Animator>();
-        animator.gameObject.SetActive(true);
-        animator.SetBool("fadeOut", true);
-
-
-        StartCoroutine(LoadScene(2, 2));
-    }
-
-    public IEnumerator LoadScene(int scene, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        SceneManager.LoadScene(scene);
-        player.SetActive(true);
-        playerCamera.SetActive(true);
-    }
-
-    public void LoadMenu()
-    {
-        SceneManager.LoadScene(0);
-    }
-
-    public void LoadMenuFromGame()
-    {
-        spawnLocation = player.transform.position;
-        playerCamera.GetComponent<CameraController>().ButtonResume();
-        player.SetActive(false);
-        playerCamera.SetActive(false);
-        LoadMenu();
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
-    }
 }

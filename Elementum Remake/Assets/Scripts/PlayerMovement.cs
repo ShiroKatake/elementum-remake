@@ -33,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
 	public TMP_Text debugCoyoteTime;
 	public bool debug;
 
+	[Header("Animation")]
+	public Animator anim;
+
 	[Header("Sound")]
 	public AudioClip playerJump;
 
@@ -43,8 +46,6 @@ public class PlayerMovement : MonoBehaviour
 	public AudioClip playerLadderA;
 	public AudioClip playerLadderB;
 	public AudioClip playerLadderC;
-
-	public AudioClip Death;
 
 	public float ladderTimer;
 
@@ -84,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
 	public BoxCollider2D edgeDetect;
 	public Rigidbody2D rb;             //Player's rigidbody
 	public float initialGravity;       //Initial gravity value on player's rigidbody
+	public float lastX;
 
 	private void Awake() 
 	{
@@ -127,6 +129,7 @@ public class PlayerMovement : MonoBehaviour
 		if (collision.gameObject.tag == "Ladder")
 		{
 			onLadder = true;
+			anim.SetBool("OnLadder", true);
 		}
 		if (holding != null)
 		{
@@ -137,19 +140,12 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	public void OnTriggerEnter2D(Collider2D collision)
-	{
-		if (collision.gameObject.tag == "Ladder")
-		{
-			
-		}
-	}
-
 	public void OnTriggerExit2D(Collider2D collision)
 	{
 		if (collision.gameObject.tag == "Ladder")
 		{
 			onLadder = false;
+			anim.SetBool("OnLadder", false);
 		}
 	}
 
@@ -159,7 +155,14 @@ public class PlayerMovement : MonoBehaviour
 		{
 			wallJumped = false;
 			jumped = false;
+			anim.SetBool("Jumping", false);
 		}
+	}
+
+	public IEnumerator SetLandingFalse()
+	{
+		yield return new WaitForSeconds(1);
+		anim.SetBool("Landing", false);
 	}
 
 	public void OnCollisionExit2D(Collision2D collision)
@@ -179,15 +182,7 @@ public class PlayerMovement : MonoBehaviour
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
 
-		if (!alive)
-		{
-			SoundManager.PlaySound(Death);
-		}
-
-		if (!disabled)
-		{
-			Walk(new Vector2(x, y));
-		}
+		Walk(new Vector2(x, y));
 
 		//set the Enum playerPosition to correspond with what the player is colliding with
 		SetPosition();
@@ -197,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (debug)
 		{
-			debugCoyoteTime.text = previousVelocity.ToString();
+			debugCoyoteTime.text = SceneController.phase.ToString();
 		}
 
 		
@@ -212,6 +207,22 @@ public class PlayerMovement : MonoBehaviour
 			holding.transform.position = new Vector2(transform.position.x, transform.position.y + 1.3f);
 		}
 
+		if (playerPosition == Position.Air)
+		{
+			if (rb.velocity.y < 0)
+			{
+				anim.SetBool("Falling", true);
+			}
+			if ((x > 0 && x < lastX)||(x < 0 && x > lastX))
+			{
+				anim.SetBool("AirTurning", true);
+			}
+		}
+		else
+		{
+			anim.SetBool("AirTurning", false);
+			anim.SetBool("Falling", false);
+		}
 		
 
 		//reset the airjump to false when the player is no longer in the air
@@ -260,27 +271,34 @@ public class PlayerMovement : MonoBehaviour
 				}
 			}
 		}
-		else if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
+		if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
 		{
-
+			Debug.Log("this is happening");
 
 			if ((playerPosition == Position.WallRight && Input.GetAxis("Horizontal") < 0) || (playerPosition == Position.WallLeft && Input.GetAxis("Horizontal") > 0))
 			{
+				if (playerPosition == Position.WallLeft)
+				{
+					GetComponent<SpriteRenderer>().flipX = true;
+				}
+				else
+				{
+					GetComponent<SpriteRenderer>().flipX = false;
+				}
 				StartCoroutine(WallCoyoteTime());
 			}
 			if (rb.velocity.y <= 0)
 			{
+				wallSlide = true;
+				anim.SetBool("WallGrab", true);
 				if (playerPosition == Position.WallLeft && Input.GetAxis("Horizontal") < 0)
 				{
-					wallSlide = true;
-					hand.SetActive(true);
-					hand.GetComponent<SpriteRenderer>().flipX = true;
+					GetComponent<SpriteRenderer>().flipX = true;
 				}
 				else if (playerPosition == Position.WallRight && Input.GetAxis("Horizontal") > 0)
 				{
-					wallSlide = true;
-					hand.SetActive(true);
-					hand.GetComponent<SpriteRenderer>().flipX = false;
+
+					GetComponent<SpriteRenderer>().flipX = false;
 				}
 				if (slideMultiplier < 1)
 				{
@@ -292,6 +310,7 @@ public class PlayerMovement : MonoBehaviour
 		else
 		{
 			wallSlide = false;
+			anim.SetBool("WallGrab", false);
 			slideMultiplier = 0.3f;
 		}
 
@@ -388,9 +407,22 @@ public class PlayerMovement : MonoBehaviour
 
 	void Walk(Vector2 dir) 
 	{
-		if (Immobilized || wallCoyoteTime)
+		if (Immobilized || wallCoyoteTime || disabled || dir == new Vector2(0,0))
 		{
+			anim.SetBool("Moving", false);
 			return;
+		}
+		anim.SetBool("Moving", true);
+		if (!wallCoyoteTime)
+		{
+			if (dir.x < 0)
+			{
+				GetComponent<SpriteRenderer>().flipX = true;
+			}
+			else
+			{
+				GetComponent<SpriteRenderer>().flipX = false;
+			}
 		}
 		if (playerPosition == Position.Ground) 
 		{
@@ -418,6 +450,7 @@ public class PlayerMovement : MonoBehaviour
 	public void Jump(Vector2 dir, float force) 
 	{
 		jumped = true;
+		anim.SetBool("Jumping", true);
 		rb.velocity = new Vector2(rb.velocity.x, 0);	//Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
 		rb.velocity += dir * force;
 		queuedjump = 0;
@@ -452,8 +485,10 @@ public class PlayerMovement : MonoBehaviour
 
 	private IEnumerator WallCoyoteTime()
 	{
+		anim.SetBool("WallCoyote", true);
 		wallCoyoteTime = true;
 		yield return new WaitForSeconds(0.2f);
+		anim.SetBool("WallCoyote", false);
 		wallCoyoteTime = false;
 
 	}

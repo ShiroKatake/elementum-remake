@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 7494934959259687912}
   - component: {fileID: 6451784638302954247}
   - component: {fileID: 214535326922615543}
+  - component: {fileID: 7647724130906538324}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -162,7 +163,8 @@ SpriteRenderer:
   m_SortingLayerID: 1582617953
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 29e26c4d097286c40b38490b408403a6, type: 3}
+  m_Sprite: {fileID: -2987179049035696926, guid: ce2b627239e3a0448aa0d561abb353e3,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -187,7 +189,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.5}
   m_Direction: 0
 --- !u!50 &4007054639415675521
 Rigidbody2D:
@@ -229,6 +231,7 @@ MonoBehaviour:
   debugSpawn: 0
   debugCoyoteTime: {fileID: 0}
   debug: 0
+  anim: {fileID: 7647724130906538324}
   playerJump: {fileID: 8300000, guid: 25cbd464f436fbe4cadf114c21d815c8, type: 3}
   playerLandA: {fileID: 8300000, guid: 7f616f52eb957fd4487ffd6b88a387aa, type: 3}
   playerLandB: {fileID: 8300000, guid: d134a2d2a0604ba45b71c9a329493ce7, type: 3}
@@ -236,7 +239,6 @@ MonoBehaviour:
   playerLadderA: {fileID: 8300000, guid: d02164b9b97822b4394ecbde374436da, type: 3}
   playerLadderB: {fileID: 8300000, guid: 9a0c380815c8b2241b10e2c9aded7206, type: 3}
   playerLadderC: {fileID: 8300000, guid: 4c3d83bbfadf33c48ba82e745d3d2997, type: 3}
-  Death: {fileID: 8300000, guid: 44018bc91a41d43479c3b695b2b0a9c4, type: 3}
   ladderTimer: 0
   jumpForce: 22
   speed: 10
@@ -264,6 +266,7 @@ MonoBehaviour:
   edgeDetect: {fileID: 0}
   rb: {fileID: 4007054639415675521}
   initialGravity: 0
+  lastX: 0
 --- !u!114 &4007054639415675522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,7 +292,7 @@ MonoBehaviour:
   rightOffset: {x: 0.5, y: 0}
   leftOffset: {x: -0.5, y: 0}
   boxSize: {x: 0.95, y: 0.5}
-  boxCenterOffset: {x: 0, y: -0.3}
+  boxCenterOffset: {x: 0, y: -0.9}
 --- !u!114 &7494934959259687912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,7 +324,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.45, y: -0.25}
+  m_Offset: {x: -0.3, y: -0.75}
   m_Size: {x: 0.1, y: 0.5}
   m_Direction: 0
 --- !u!70 &214535326922615543
@@ -337,9 +340,28 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.45, y: -0.25}
+  m_Offset: {x: 0.3, y: -0.75}
   m_Size: {x: 0.1, y: 0.5}
   m_Direction: 0
+--- !u!95 &7647724130906538324
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4007054639415675525}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c033e0fec4ef10c499ae56fbb27803e1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &5556093656738378575
 PrefabInstance:
   m_ObjectHideFlags: 0
