@@ -15,11 +15,6 @@ public class DoorLock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Open"))
-        {
-            locked = false;
-        }
-
         if (locked)
         {
             GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1);

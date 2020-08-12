@@ -178,6 +178,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Update() 
 	{
+
 		//Take movement input from player
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
@@ -194,8 +195,24 @@ public class PlayerMovement : MonoBehaviour
 		{
 			debugCoyoteTime.text = SceneController.phase.ToString();
 		}
+		if ((lastX > 0 && x < lastX) || (lastX < 0 && x > lastX))
+		{
+			Debug.Log("Slowing");
 
-		
+			if (playerPosition == Position.Air)
+			{
+				anim.SetBool("AirTurning", true);
+			}
+			else if (playerPosition == Position.Ground)
+			{
+				anim.SetBool("GroundTurning", true);
+			}
+		}
+		else
+		{
+			anim.SetBool("AirTurning", false);
+			anim.SetBool("GroundTurning", false);
+		}
 
 		if (!Immobilized)
 		{
@@ -212,10 +229,6 @@ public class PlayerMovement : MonoBehaviour
 			if (rb.velocity.y < 0)
 			{
 				anim.SetBool("Falling", true);
-			}
-			if ((x > 0 && x < lastX)||(x < 0 && x > lastX))
-			{
-				anim.SetBool("AirTurning", true);
 			}
 		}
 		else
@@ -364,6 +377,8 @@ public class PlayerMovement : MonoBehaviour
 				Respawn();
 			}
 		}
+
+		lastX = x;
 	}
 
 	public void LateUpdate()
@@ -417,10 +432,28 @@ public class PlayerMovement : MonoBehaviour
 		{
 			if (dir.x < 0)
 			{
+				if (!GetComponent<SpriteRenderer>().flipX)
+				{
+					Debug.Log("Turning");
+					anim.SetTrigger("Turn");
+				}
+				else
+				{
+					
+				}
 				GetComponent<SpriteRenderer>().flipX = true;
 			}
 			else
 			{
+				if (GetComponent<SpriteRenderer>().flipX)
+				{
+					Debug.Log("Turning");
+					anim.SetTrigger("Turn");
+				}
+				else
+				{
+					anim.SetBool("Fliped", false);
+				}
 				GetComponent<SpriteRenderer>().flipX = false;
 			}
 		}

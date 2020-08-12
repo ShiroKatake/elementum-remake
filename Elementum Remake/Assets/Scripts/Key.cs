@@ -15,10 +15,15 @@ public class Key : DestroyOnLoad
         DestroyCollected();
     }
 
+    private void Start()
+    {
+        door = GameObject.Find(doorName);
+    }
+
     // Start is called before the first frame update
     void Update()
     {
-        door = GameObject.Find(doorName);
+        
         if (door != null)
         {
             door.GetComponent<ExitInteraction>().locked = true;
@@ -39,5 +44,10 @@ public class Key : DestroyOnLoad
     {
         door.GetComponent<ExitInteraction>().locked = false;
         Collect();
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawLine(transform.position, door.transform.position);
     }
 }

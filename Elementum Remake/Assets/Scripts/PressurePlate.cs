@@ -35,6 +35,7 @@ public class PressurePlate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (activated)
         {
             sprite.sprite = down;
@@ -46,5 +47,10 @@ public class PressurePlate : MonoBehaviour
             sprite.sprite = up;
             door.GetComponent<ExitInteraction>().locked = true;
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawLine(transform.position, door.transform.position);
     }
 }

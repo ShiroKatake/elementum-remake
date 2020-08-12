@@ -228,6 +228,7 @@ MonoBehaviour:
   cinematicOverride: 0
   disabled: 0
   alive: 0
+  grass: {fileID: 0}
   debugSpawn: 0
   debugCoyoteTime: {fileID: 0}
   debug: 0
