@@ -26,7 +26,7 @@ public class AbilitySlotPickup : MonoBehaviour
             var pos = transform.position;
             collectedAbilitySlotPickups.Add(SceneManager.GetActiveScene().buildIndex + pos.x.ToString() + pos.y.ToString());
             Destroy(this.gameObject);
-            collision.gameObject.GetComponent<PlayerMovement>().queue.Add();
+            collision.gameObject.GetComponent<PlayerAbility>().queue.Add();
         }
     }
 }

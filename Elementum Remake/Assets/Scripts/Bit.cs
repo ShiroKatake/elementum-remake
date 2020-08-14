@@ -5,7 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Bit : DestroyOnLoad
 {
+    public delegate void CollectDelegate();
+    public static event CollectDelegate collectEvent;
+
     public AudioClip collect;
+    public bool isCollected;
 
     private void Awake()
     {
@@ -18,9 +22,12 @@ public class Bit : DestroyOnLoad
     {
         if (collision.gameObject.tag == "Player")
         {
+            if (!isCollected)
+            {
             SoundManager.PlaySound(collect);
             Collect();
-            GameData.bits++;
+            collectEvent?.Invoke();
+            }
         }
     }
 }

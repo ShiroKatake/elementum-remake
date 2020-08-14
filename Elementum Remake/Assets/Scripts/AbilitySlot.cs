@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 
 public class AbilitySlot : MonoBehaviour {
+
 	public bool occupied;
 	public GameObject element;
 	public Color color;
@@ -62,7 +63,7 @@ public class AbilitySlot : MonoBehaviour {
 
 
 	//Activates the element in the slot, then clears slot
-	public void Activate(PlayerMovement player)
+	public bool Activate(GameObject player)
 	{
 		if (occupied)
 		{
@@ -70,6 +71,11 @@ public class AbilitySlot : MonoBehaviour {
 			element = null;
 			occupied = false;
 			elementName = "";
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 

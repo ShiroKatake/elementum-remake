@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ElementBubble : MonoBehaviour {
 
-	public PlayerMovement player;
+	public PlayerAbility player;
 	public BubbleAnimation bubbleAnimation;
 	public RuneAnimation runeAnimation;
 
@@ -14,7 +14,7 @@ public class ElementBubble : MonoBehaviour {
 
 	private void Awake()
 	{
-		player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+		player = GameObject.Find("Player").GetComponent<PlayerAbility>();
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {

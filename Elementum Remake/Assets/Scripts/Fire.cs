@@ -16,7 +16,7 @@ public class Fire : Element
         sprite = fireSprite;
         name = "Fire";
     }
-    public override void Activate(PlayerMovement player)
+    public override void Activate(GameObject player)
     {
         // Determine the direction of the dash
         Vector2 dir;
@@ -31,8 +31,9 @@ public class Fire : Element
         }
 
         //Stop player from moving and execute dash
-        StartCoroutine(player.DisableMovement(dashTime));
-        StartCoroutine(Dash(dir, dashForce, player));
+        StartCoroutine(player.GetComponent<PlayerMovement>().DisableMovement(dashTime));
+        StartCoroutine(Dash(dir, dashForce, player.GetComponent<PlayerMovement>()));
+        SelfDestruct();
     }
 
     private IEnumerator Dash(Vector2 dir, float dashForce, PlayerMovement player)

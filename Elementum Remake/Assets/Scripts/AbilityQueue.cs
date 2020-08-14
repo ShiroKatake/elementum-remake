@@ -109,9 +109,9 @@ public class AbilityQueue : MonoBehaviour
         }
     }
 
-    public void Activate(PlayerMovement player)
+    public bool Activate(GameObject player)
     {
-        queue[LastOccupiedSlot].Activate(player);
+        return queue[LastOccupiedSlot].Activate(player);
     }
 
 }

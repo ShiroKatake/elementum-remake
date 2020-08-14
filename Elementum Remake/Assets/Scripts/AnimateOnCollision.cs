@@ -26,7 +26,14 @@ public class AnimateOnCollision : MonoBehaviour
             }
             else
             {
-                anim.SetFloat("PlayerVelocity", collision.gameObject.GetComponent<Rigidbody2D>().velocity.y);
+                if (GetComponent<SpriteRenderer>().flipX)
+                {
+                    anim.SetFloat("PlayerVelocity", -1*collision.gameObject.GetComponent<Rigidbody2D>().velocity.y);
+                }
+                else
+                {
+                    anim.SetFloat("PlayerVelocity", collision.gameObject.GetComponent<Rigidbody2D>().velocity.y);
+                }
             }
         }
     }

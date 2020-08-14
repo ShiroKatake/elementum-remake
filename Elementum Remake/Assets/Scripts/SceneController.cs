@@ -25,7 +25,7 @@ public class SceneController : MonoBehaviour
     private bool paused;
 
 
-    private PlayerMovement player;
+    private PlayerController player;
     private CameraController playerCamera;
     public TypeWriterEffect typer;
 
@@ -44,7 +44,7 @@ public class SceneController : MonoBehaviour
 
 
             SceneManager.activeSceneChanged += UpdateScene;
-            player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+            player = GameObject.Find("Player").GetComponent<PlayerController>();
             playerCamera = GameObject.Find("Player Camera").GetComponent<CameraController>();
             sceneFadeIn = GameObject.Find("Player Camera/UI").GetComponent<Animator>();
             sceneVeil = GameObject.Find("Player Camera/UI/Scene Fade In").GetComponent<SpriteRenderer>();
@@ -69,11 +69,18 @@ public class SceneController : MonoBehaviour
 
     private void Start()
     {
-        
+        SceneManager.activeSceneChanged += UpdateScene;
+        PlayerController.deathEvent += OnPlayerDeath;
+        ExitInteraction.doorEvent += TransitionToNextScene;
     }
 
     private void Update()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            player.gameObject.SetActive(false);
+            playerCamera.gameObject.SetActive(false);
+        }
         if (phase == ScenePhase.Loading)
         {
             //load the level
@@ -112,20 +119,15 @@ public class SceneController : MonoBehaviour
                     Pause();
                 }
             }
-
-            if (!player.alive)
-            {
-                player.alive = true;
-                playerCamera.freeze = true;
-                deathFade.SetBool("fadeIn", true);
-                ChangeScenePhase(ScenePhase.Cinematic);
-                StartCoroutine(Respawn());
-                
-            }
         }
-        
+    }
 
-        
+    public void OnPlayerDeath()
+    {
+        playerCamera.freeze = true;
+        deathFade.SetBool("fadeIn", true);
+        ChangeScenePhase(ScenePhase.Cinematic);
+        StartCoroutine(Respawn());
     }
 
     public void Pause()
@@ -197,6 +199,8 @@ public class SceneController : MonoBehaviour
         ChangeScenePhase(scenePhase);
     }
 
+
+
     private void ChangeScenePhase(ScenePhase scenePhase)
     {
         phase = scenePhase;
@@ -213,12 +217,33 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    private void TransitionToNextScene(Vector2 destination, string scene)
+    {
+        sceneFadeIn.SetBool("Open", false);
+        StartCoroutine(Transition(destination, scene));
+
+        
+    }
+
+    IEnumerator Transition(Vector2 destination, string scene)
+    {
+        yield return new WaitForSeconds(1);
+
+        //Saves Scene Data to GameData
+        GameData.queue.Clear();
+        player.GetComponent<PlayerAbility>().queue.Save();
+
+        GameData.spawnLocation = destination;
+        //Change Scene
+        SceneManager.LoadScene(scene);
+    }
+
     IEnumerator FadeIn()
     {
         typer.Type();
-
-        yield return new WaitForSeconds(2);
         sceneFadeIn.SetBool("Open", true);
-        StartCoroutine(ChangeScenePhaseOnDelay(ScenePhase.Game, 1));
+        yield return new WaitForSeconds(2);
+
+        ChangeScenePhase(ScenePhase.Game);
     }
 }

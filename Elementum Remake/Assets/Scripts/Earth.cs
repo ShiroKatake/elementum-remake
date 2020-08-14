@@ -7,7 +7,6 @@ public class Earth : Element
     public Color earthColor;             //Color the player will change to
     public Sprite earthSprite;
     public GameObject earthCube;
-    public GameObject instance;
 
     // Start is called before the first frame update
     void Start()
@@ -17,27 +16,29 @@ public class Earth : Element
         name = "Earth";
     }
 
-    public override void Activate(PlayerMovement player) 
+    public override void Activate(GameObject player) 
     {
-        float offset;
+        Vector2 offset;
         if (Input.GetButtonDown("Use2"))
         {
-            offset = player.rb.GetComponent<SpriteRenderer>().sprite.rect.width / 8;
+            offset.x = 1.2f;
         }
         else
         {
-            offset = -1 * player.rb.GetComponent<SpriteRenderer>().sprite.rect.width / 8;
+            offset.x = -1.2f;
         }
-        Vector2 newPos = new Vector2(player.rb.position.x + offset, player.rb.position.y);
-        if (instance != null)
+        Vector2 newPos = new Vector2(player.GetComponent<PlayerMovement>().rb.position.x + offset.x, player.GetComponent<PlayerMovement>().rb.position.y - 0.5f);
+
+        GameObject clone = GameObject.Find("Earth Cube(Clone)");
+        if (clone != null)
         {
-            Destroy(instance);
+            Destroy(clone);
         }
-        instance = Instantiate(earthCube);
+        GameObject instance = Instantiate(earthCube);
         instance.GetComponent<Rigidbody2D>().transform.SetPositionAndRotation(newPos, new Quaternion());
-        instance.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity;
+        instance.transform.SetParent(player.transform);
         //earth cube should have velocity set to the same as the players so that it will path with them if they are in the air.
-    
+        SelfDestruct();
     }
 
     

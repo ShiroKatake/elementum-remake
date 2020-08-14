@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7569414936035632404}
   - component: {fileID: 7569414936035632406}
   - component: {fileID: 7569414936035632393}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Bit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,6 +98,7 @@ MonoBehaviour:
   spawn: {x: 0, y: 0}
   scene: 0
   collect: {fileID: 8300000, guid: cde4672db9cfa714491a46558a75371f, type: 3}
+  isCollected: 0
 --- !u!58 &7569414936035632393
 CircleCollider2D:
   m_ObjectHideFlags: 0

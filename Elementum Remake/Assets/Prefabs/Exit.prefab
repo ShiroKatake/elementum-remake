@@ -271,7 +271,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3048092928002622794}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.98999, y: -6.549988, z: 0}
+  m_LocalPosition: {x: 9.98999, y: -6.549988, z: 10}
   m_LocalScale: {x: 2, y: 3, z: 1}
   m_Children:
   - {fileID: 3048092927116724184}
@@ -368,9 +368,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3433345a61b8bc54287424fd28436ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationScene: 
+  destinationScene: Voill's Garden
   destinationDoor: {x: 0, y: 0}
   player: {fileID: 0}
+  locked: 0
+  text: {fileID: 0}
 --- !u!114 &2142238644895206413
 MonoBehaviour:
   m_ObjectHideFlags: 0

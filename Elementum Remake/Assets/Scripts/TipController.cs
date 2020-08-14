@@ -32,12 +32,12 @@ public class TipController : MonoBehaviour
         {
             StartCoroutine(InputDisable());
             animator.SetBool("fadeIn", true);
-            PlayerMovement.player.cinematicOverride = true;
+            PlayerController.player.cinematicOverride = true;
         }
         else
         {
             animator.SetBool("fadeIn", false);
-            PlayerMovement.player.cinematicOverride = false;
+            PlayerController.player.cinematicOverride = false;
         }
     }
 

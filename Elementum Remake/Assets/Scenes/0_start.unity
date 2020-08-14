@@ -667,7 +667,7 @@ PrefabInstance:
     - target: {fileID: 4220290967403665451, guid: 29b574d4539598548a1629ae752dd8f3,
         type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 16777215
+      value: 3841982463
       objectReference: {fileID: 0}
     - target: {fileID: 4674517216682234447, guid: 29b574d4539598548a1629ae752dd8f3,
         type: 3}
@@ -2778,6 +2778,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Menu Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196405125692043270, guid: da9741f45fa48d44b9b7f3a0e6e7a00d,
+        type: 3}
+      propertyPath: orthographic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196405125692043270, guid: da9741f45fa48d44b9b7f3a0e6e7a00d,
+        type: 3}
+      propertyPath: m_ClearFlags
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1196405125692043271, guid: da9741f45fa48d44b9b7f3a0e6e7a00d,
         type: 3}

@@ -72,3 +72,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   death: {fileID: 8300000, guid: 44018bc91a41d43479c3b695b2b0a9c4, type: 3}
   earthBreak: {fileID: 8300000, guid: 6e8d6b238294d6b48be4bb681040b673, type: 3}
+  playerCooldown: 0

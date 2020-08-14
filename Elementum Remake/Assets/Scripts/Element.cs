@@ -26,5 +26,10 @@ public abstract class Element : MonoBehaviour
     }
 
     //Performs the ability
-    public abstract void Activate(PlayerMovement player);
+    public abstract void Activate(GameObject player);
+
+    public void SelfDestruct()
+    {
+        Destroy(gameObject);
+    }
 }

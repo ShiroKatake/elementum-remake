@@ -4,6 +4,10 @@ using UnityEngine.SceneManagement;
 using TMPro;
 
 public class ExitInteraction : MonoBehaviour {
+
+	public delegate void EnterDoor(Vector2 coordinates, string scene);
+	public static event EnterDoor doorEvent;
+
 	bool playerInBounds;			//Check if player is overlapping with the exit
 	bool isTransitioning;			//Check if the scene is transitioning to stop function from repeating
 	Animator anim;					//Animator component of the LevelTransition child
@@ -45,33 +49,11 @@ public class ExitInteraction : MonoBehaviour {
 			else
 			{
 				isTransitioning = true;
-
-				player.Freeze();
-
-				Debug.Log(destinationDoor.x + " : " + destinationDoor.y);
-				StartCoroutine(TransitionToNextScene());
+				player.GetComponent<PlayerJump>().Freeze();
+				doorEvent?.Invoke(destinationDoor, destinationScene);
 			}
 			
 		}
-	}
-	
-	//changes scene with simple animation
-	private IEnumerator TransitionToNextScene() {
-
-		//Instant scene switching doesn't feel as good as having half a second breather for the eyes
-		float timePadding = 0.5f;
-		anim.SetTrigger("FadeOut");
-		yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length + timePadding);
-		isTransitioning = false;
-
-		//Saves Scene Data to GameData
-		GameData.queue.Clear();
-		player.queue.Save();
-		
-		GameData.spawnLocation = destinationDoor;
-
-		//Change Scene
-		SceneManager.LoadScene(destinationScene);
 	}
 
 	//Player has entered bounds
