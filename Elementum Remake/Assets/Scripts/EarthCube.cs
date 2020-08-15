@@ -7,6 +7,9 @@ public class EarthCube : MonoBehaviour
     Vector2 kickback = new Vector2(25, 10);
     Vector2 polarity;
 
+    public AudioClip land;
+    public AudioClip earthBreak;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,11 +22,48 @@ public class EarthCube : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Break()
+    {
+        SoundManager.PlaySound(earthBreak);
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.GetComponent<PlayerJump>().mountingEarth = true;
+            if (collision.GetComponent<PlayerController>().OnWall(collision.GetComponent<PlayerController>().playerPosition))
+            {
+                collision.GetComponent<PlayerJump>().mountingEarth = true;
+            }
+            else
+            {
+                collision.GetComponent<PlayerJump>().mountingEarth = false;
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (collision.gameObject.GetComponent<PlayerController>().playerPosition == Position.Air)
+            {
+                gameObject.transform.SetParent(collision.transform);
+            }
+        }
+
+        if (collision.gameObject.layer == 8)
+        {
+            SoundManager.PlaySound(land);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            gameObject.transform.SetParent(null);
         }
     }
 
@@ -52,11 +92,9 @@ public class EarthCube : MonoBehaviour
                 {
                     polarity.y = 1;
                 }
-                transform.SetParent(null);
                 GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity - (polarity*kickback);
                 
             }
         }
-        script.mountingEarth = false;
     }
 }

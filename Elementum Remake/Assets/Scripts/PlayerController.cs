@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     public PlayerSound sound;
     public PlayerAbility ability;
     public Animator anim;
+    public SpriteRenderer render;
 
     public GameObject airPuff;
     public GameObject dustPuff;
@@ -140,6 +141,27 @@ public class PlayerController : MonoBehaviour
                 ability.active = false;
             }
         }
+
+        if (playerPosition == Position.WallLeft)
+        {
+            render.flipX = true;
+        }
+        else if (playerPosition == Position.WallRight)
+        {
+            render.flipX = false;
+        }
+        if (playerPosition == Position.Air)
+        {
+            if (previousPosition == Position.WallLeft)
+            {
+                render.flipX = false;
+            }
+            else if (previousPosition == Position.WallRight)
+            {
+                Debug.Log("flipping");
+                render.flipX = true;
+            }
+        }
         SetAnimationParameters();
     }
 
@@ -174,6 +196,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool OnWall(Position position)
+    {
+        if (position == Position.WallLeft || position == Position.WallRight)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public void AirPuff()
     {
         GameObject puff = Instantiate(airPuff);
@@ -182,24 +213,28 @@ public class PlayerController : MonoBehaviour
 
     public void DustPuff()
     {
+        if (playerPosition == Position.Ground)
+        {
         GameObject puff = Instantiate(dustPuff);
         puff.transform.position = new Vector2(transform.position.x, transform.position.y);
+
+        }
     }
 
     public void SetPosition()
     {
         previousPosition = playerPosition;
-        if (coll.onLeftWall && !coll.onGround)
-        {
-            playerPosition = Position.WallLeft;
-        }
-        if (coll.onRightWall && !coll.onGround)
-        {
-            playerPosition = Position.WallRight;
-        }
         if (coll.onGround)
         {
             playerPosition = Position.Ground;
+        }
+        if (coll.onLeftWall && previousPosition != Position.Ground)
+        {
+            playerPosition = Position.WallLeft;
+        }
+        if (coll.onRightWall && previousPosition != Position.Ground)
+        {
+            playerPosition = Position.WallRight;
         }
         if (!coll.onGround && !coll.onWall)
         {

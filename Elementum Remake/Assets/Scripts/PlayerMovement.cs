@@ -38,11 +38,6 @@ public class PlayerMovement : MonoBehaviour
 		initialGravity = rb.gravityScale;
 		
 	}
-
-
-
-	
-
 	private void Update() 
 	{
 		//Take movement input from player
@@ -51,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (player.alive)
 		{
-			if (Immobilized || player.jump.wallCoyoteTime || player.disabled || new Vector2(x, y) == new Vector2(0, 0))
+			if (CantMove(new Vector2(x,y)))
 			{
 				anim.SetBool("Moving", false);
 			}
@@ -128,6 +123,15 @@ public class PlayerMovement : MonoBehaviour
 		{
 			rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
 		}
+	}
+
+	public bool CantMove(Vector2 move)
+	{
+		if (Immobilized || player.jump.wallCoyoteTime || player.disabled || move == new Vector2(0, 0) || player.jump.MountingEarthInAir())
+		{
+			return true;
+		}
+		return false;
 	}
 
 	public void LateUpdate()

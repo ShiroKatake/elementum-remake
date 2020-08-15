@@ -201,3 +201,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b29a8992eb7fb4781c2e2482d5a36c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  land: {fileID: 8300000, guid: eb38cfe39f30e7f40a93f9c7dbc1f093, type: 3}
+  earthBreak: {fileID: 8300000, guid: 83c5d9a3fb51afe499b5b1f606c2924b, type: 3}

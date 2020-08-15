@@ -22,8 +22,6 @@ public class PlayerJump : MonoBehaviour
     public bool wallJumped;
     public bool wallSlide;
     public float slideMultiplier;
-
-    public bool earthJumped;
     public bool mountingEarth;
 
     // Start is called before the first frame update
@@ -58,19 +56,15 @@ public class PlayerJump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mountingEarth && wallJumped)
+        {
+            mountingEarth = false;
+        }
         //WallStuff
         if (player.Position == Position.WallLeft || player.Position == Position.WallRight)
         {
             if ((player.Position == Position.WallRight && Input.GetAxis("Horizontal") < 0) || (player.Position == Position.WallLeft && Input.GetAxis("Horizontal") > 0))
             {
-                if (player.Position == Position.WallLeft)
-                {
-                    GetComponent<SpriteRenderer>().flipX = true;
-                }
-                else
-                {
-                    GetComponent<SpriteRenderer>().flipX = false;
-                }
                 StartCoroutine(WallCoyoteTime());
             }
             if (rb.velocity.y <= 0)
@@ -136,10 +130,20 @@ public class PlayerJump : MonoBehaviour
 
         queuedjump -= Time.deltaTime;
     }
+
+    public bool MountingEarthInAir()
+    {
+        if (player.previousPosition == Position.Air && mountingEarth)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public void Jump(Vector2 dir, float force)
     {
         jumped = true;
-        rb.velocity = new Vector2(rb.velocity.x, 0);    //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
+        rb.velocity = new Vector2(0, 0);    //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
         rb.velocity += dir * force;
         queuedjump = 0;
     }
@@ -149,7 +153,6 @@ public class PlayerJump : MonoBehaviour
         Freeze();
         Vector2 wallDir = (player.Position == Position.WallRight) ? Vector2.left : Vector2.right;    //Work out which direction to wall jump to
         Jump(Vector2.up + wallDir, jumpForce * 0.7f);
-        queuedjump = 0;
     }
 
     private IEnumerator CoyoteTime()

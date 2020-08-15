@@ -12,7 +12,8 @@ public class Hazard : MonoBehaviour
     {
         if (collision.gameObject.tag == "Earth")
         {
-            Destroy(collision.gameObject);
+            collision.GetComponent<EarthCube>().Break();
+            
         }
         if (collision.gameObject.tag == "Player")
         {

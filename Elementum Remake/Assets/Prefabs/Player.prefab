@@ -115,6 +115,7 @@ MonoBehaviour:
   sound: {fileID: 1471298710174245544}
   ability: {fileID: 5459189583660695716}
   anim: {fileID: 7647724130906538324}
+  render: {fileID: 4007054639415675524}
   airPuff: {fileID: 4162443556862482648, guid: 93dd02614ed29f847b66a721284f8c0f, type: 3}
   dustPuff: {fileID: 4162443556862482648, guid: 79b93ef62b52e6c429d18560649617a8,
     type: 3}
@@ -172,7 +173,6 @@ MonoBehaviour:
   wallJumped: 0
   wallSlide: 0
   slideMultiplier: 0
-  earthJumped: 0
   mountingEarth: 0
 --- !u!114 &4007054639415675520
 MonoBehaviour:
@@ -191,8 +191,8 @@ MonoBehaviour:
   ladderTimer: 0
   climbing: 0
   speed: 10
-  wallJumpLerp: 4
-  fallMultiplier: 1
+  wallJumpLerp: 3.7
+  fallMultiplier: 2
   lowJumpMultiplier: 9
   Immobilized: 0
   previousVelocity: {x: 0, y: 0}
@@ -216,6 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   queue: {fileID: 7494934959259687912}
   active: 0
+  earthCube: {fileID: 0}
 --- !u!114 &4007054639415675522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +241,7 @@ MonoBehaviour:
   bottomOffset: {x: 0, y: -0.5}
   rightOffset: {x: 0.5, y: 0}
   leftOffset: {x: -0.5, y: 0}
-  boxSize: {x: 0.95, y: 0.5}
+  boxSize: {x: 0.9, y: 0.5}
   boxCenterOffset: {x: 0, y: -0.9}
 --- !u!114 &7494934959259687912
 MonoBehaviour:
