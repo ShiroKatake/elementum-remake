@@ -22,7 +22,7 @@ public class Air : Element
     {
         SoundManager.PlaySound(airSound);
         player.GetComponent<PlayerController>().anim.SetTrigger("AirAbility");
-        player.GetComponent<PlayerJump>().Jump(Vector2.up, player.GetComponent<PlayerJump>().jumpForce * forceMultiplier);
+        player.GetComponent<PlayerJump>().Jump(Vector2.up, player.GetComponent<PlayerJump>().jumpForce * forceMultiplier, 0);
         SelfDestruct();
     }
 }

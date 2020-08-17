@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayerID: 1582617953
   m_SortingLayer: 3
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: a2af65046c4d3124fb7413717ef3cc47, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cc570b6922c4b8443911537cb293406f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,7 +97,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawn: {x: 0, y: 0}
   scene: 0
-  collect: {fileID: 8300000, guid: cde4672db9cfa714491a46558a75371f, type: 3}
+  bitPuff: {fileID: 1886470397600886630, guid: 6c46bf35176d6334fb466c1833a2495e, type: 3}
+  collect: {fileID: 8300000, guid: 31d95fa3d61582b4e9860fc50b8d86ff, type: 3}
   isCollected: 0
 --- !u!58 &7569414936035632393
 CircleCollider2D:
@@ -110,8 +111,8 @@ CircleCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.1}
+  m_Offset: {x: -0.05, y: 0}
   serializedVersion: 2
   m_Radius: 0.5

@@ -34,7 +34,9 @@ public class PlayerController : MonoBehaviour
     public PlayerAbility ability;
     public Animator anim;
     public SpriteRenderer render;
+    public GameObject cape;
 
+    public Color capeDefault;
     public GameObject airPuff;
     public GameObject dustPuff;
 
@@ -83,6 +85,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         debugCoyoteTime = GameObject.Find("/Player Camera/Debug/PlayerPosition").GetComponent<TMP_Text>();
+        
     }
 
     public void OnTriggerStay2D(Collider2D collision)
@@ -114,9 +117,20 @@ public class PlayerController : MonoBehaviour
         //set the Enum playerPosition to correspond with what the player is colliding with
         SetPosition();
 
+        ability.disabled = !alive;
+
         if (debug)
         {
             debugCoyoteTime.text = playerPosition .ToString();
+        }
+
+        if (ability.queue.Empty)
+        {
+            cape.GetComponent<SpriteRenderer>().color = capeDefault;
+        }
+        else
+        {
+            cape.GetComponent<SpriteRenderer>().color = ability.queue.queue[ability.queue.LastOccupiedSlot].color;
         }
 
         if (holding != null)
@@ -163,6 +177,8 @@ public class PlayerController : MonoBehaviour
             }
         }
         SetAnimationParameters();
+
+        cape.GetComponent<SpriteRenderer>().flipX = render.flipX;
     }
 
     private void SetAnimationParameters()

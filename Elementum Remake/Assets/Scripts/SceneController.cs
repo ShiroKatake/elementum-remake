@@ -65,6 +65,7 @@ public class SceneController : MonoBehaviour
         phase = ScenePhase.Loading;
         typer.text = next.name;
         currentScene = next;
+        player.Respawn();
     }
 
     private void Start()
@@ -72,6 +73,7 @@ public class SceneController : MonoBehaviour
         SceneManager.activeSceneChanged += UpdateScene;
         PlayerController.deathEvent += OnPlayerDeath;
         ExitInteraction.doorEvent += TransitionToNextScene;
+        Interaction.eventTrigger += NewEvent;
     }
 
     private void Update()
@@ -122,9 +124,18 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void NewEvent(int id)
+    {
+        switch(id)
+        {
+            case 1:
+                player.cape.SetActive(true);
+                break;
+        }
+    }
+
     public void OnPlayerDeath()
     {
-        playerCamera.freeze = true;
         deathFade.SetBool("fadeIn", true);
         ChangeScenePhase(ScenePhase.Cinematic);
         StartCoroutine(Respawn());

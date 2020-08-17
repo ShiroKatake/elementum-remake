@@ -23,7 +23,6 @@ public class DestroyOnLoad : MonoBehaviour
     protected void Collect()
     {
         collected.Add(scene.ToString() + spawn.x.ToString() + spawn.y.ToString());
-        Debug.Log("Collected");
         Destroy(this.gameObject);
     }
 }

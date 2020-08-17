@@ -7,6 +7,7 @@ public class Bit : DestroyOnLoad
 {
     public delegate void CollectDelegate();
     public static event CollectDelegate collectEvent;
+    public GameObject bitPuff;
 
     public AudioClip collect;
     public bool isCollected;
@@ -24,9 +25,14 @@ public class Bit : DestroyOnLoad
         {
             if (!isCollected)
             {
-            SoundManager.PlaySound(collect);
-            Collect();
+            SoundManager.PlaySound(collect, 0.5f);
             collectEvent?.Invoke();
+                GameObject puff = Instantiate(bitPuff);
+                puff.transform.position = gameObject.transform.position;
+
+            // Make sure this is the last thing to happen as it will destroy the object
+            Collect();
+            
             }
         }
     }

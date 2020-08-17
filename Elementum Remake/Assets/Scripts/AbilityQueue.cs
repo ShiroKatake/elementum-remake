@@ -72,6 +72,18 @@ public class AbilityQueue : MonoBehaviour
         }
     } 
 
+    public bool Empty
+    {
+        get
+        {
+            if (queue[0].occupied)
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+
     //When a player increases the maximum length of their queue, this will be called
     public void Add()
     {

@@ -101,7 +101,7 @@ public class PlayerJump : MonoBehaviour
                 if (player.Position == Position.Ground || coyoteTime)
                 {
                     SoundManager.PlaySound(playerJump);
-                    Jump(Vector2.up, jumpForce);
+                    Jump(Vector2.up, jumpForce, rb.velocity.x);
                 }
                 else if (player.Position == Position.WallLeft || player.Position == Position.WallRight)
                 {
@@ -116,7 +116,7 @@ public class PlayerJump : MonoBehaviour
                 if (player.Position == Position.Ground)
                 {
                     SoundManager.PlaySound(playerJump);
-                    Jump(Vector2.up, jumpForce);
+                    Jump(Vector2.up, jumpForce,rb.velocity.x);
                 }
                 else if (player.Position == Position.WallLeft || player.Position == Position.WallRight)
                 {
@@ -140,10 +140,10 @@ public class PlayerJump : MonoBehaviour
         return false;
     }
 
-    public void Jump(Vector2 dir, float force)
+    public void Jump(Vector2 dir, float force, float x)
     {
         jumped = true;
-        rb.velocity = new Vector2(0, 0);    //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
+        rb.velocity = new Vector2(x, 0);    //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
         rb.velocity += dir * force;
         queuedjump = 0;
     }
@@ -152,7 +152,7 @@ public class PlayerJump : MonoBehaviour
     {
         Freeze();
         Vector2 wallDir = (player.Position == Position.WallRight) ? Vector2.left : Vector2.right;    //Work out which direction to wall jump to
-        Jump(Vector2.up + wallDir, jumpForce * 0.7f);
+        Jump(Vector2.up + wallDir, jumpForce * 0.7f, rb.velocity.x);
     }
 
     private IEnumerator CoyoteTime()
