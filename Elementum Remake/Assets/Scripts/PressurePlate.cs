@@ -9,13 +9,21 @@ public class PressurePlate : MonoBehaviour
     public SpriteRenderer sprite;
     
     public bool activated;
-    public GameObject door;
+    public GameObject linkedObject;
+
+    public AudioClip downSound;
+    public AudioClip upSound;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Earth")
         {
+            if (!activated)
+            {
+                SoundManager.PlaySound(downSound, 0.5f);
+            }
             activated = true;
+            
         }
     }
 
@@ -23,7 +31,13 @@ public class PressurePlate : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Earth")
         {
+            if (activated)
+            {
+                SoundManager.PlaySound(upSound, 0.5f);
+            }
             activated = false;
+            
+            
         }
     }
     // Start is called before the first frame update
@@ -39,18 +53,18 @@ public class PressurePlate : MonoBehaviour
         if (activated)
         {
             sprite.sprite = down;
-            door.GetComponent<ExitInteraction>().locked = false;
+            linkedObject.GetComponent<ObjectOnRail>().active = true;
 
         }
         else
         {
             sprite.sprite = up;
-            door.GetComponent<ExitInteraction>().locked = true;
+            linkedObject.GetComponent<ObjectOnRail>().active = false;
         }
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawLine(transform.position, door.transform.position);
+        Gizmos.DrawLine(transform.position, linkedObject.transform.position);
     }
 }

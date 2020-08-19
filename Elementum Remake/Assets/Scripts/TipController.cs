@@ -5,6 +5,9 @@ using TMPro;
 
 public class TipController : MonoBehaviour
 {
+    public delegate void TipDelegate(ScenePhase targetPhase);
+    public static event TipDelegate tipDisplaying;
+
     public Animator animator;
     public bool inputDisabled;
 
@@ -30,14 +33,14 @@ public class TipController : MonoBehaviour
         GetComponentInChildren<TMP_Text>().text = tip;
         if (active)
         {
+            tipDisplaying?.Invoke(ScenePhase.Cinematic);
             StartCoroutine(InputDisable());
             animator.SetBool("fadeIn", true);
-            PlayerController.player.cinematicOverride = true;
         }
         else
         {
+            tipDisplaying?.Invoke(ScenePhase.Game);
             animator.SetBool("fadeIn", false);
-            PlayerController.player.cinematicOverride = false;
         }
     }
 

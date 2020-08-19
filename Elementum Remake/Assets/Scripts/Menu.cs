@@ -21,6 +21,5 @@ public class Menu : MonoBehaviour
 
         play.onClick.AddListener(sceneController.StartGame);
         exit.onClick.AddListener(sceneController.ExitGame);
-        Debug.Log("listeners added");
     }
 }

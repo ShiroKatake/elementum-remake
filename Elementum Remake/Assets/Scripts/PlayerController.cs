@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     public Color capeDefault;
     public GameObject airPuff;
     public GameObject dustPuff;
+    public GameObject wallDustPuff;
 
     [Header("Debugging")]
     public bool debugSpawn;
@@ -51,9 +52,6 @@ public class PlayerController : MonoBehaviour
     public Position playerPosition;
 
     public GameObject holding;
-
-    public bool cinematicOverride;
-    public bool disabled;
     public bool alive;
 
 
@@ -85,7 +83,33 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         debugCoyoteTime = GameObject.Find("/Player Camera/Debug/PlayerPosition").GetComponent<TMP_Text>();
+        SceneController.ScenePhaseChanged += ChangePlayerState;
         
+    }
+
+    public void ChangePlayerState(ScenePhase current, ScenePhase next)
+    {
+        switch(next)
+        {
+            
+            case ScenePhase.Loading:
+            case ScenePhase.Open:
+            case ScenePhase.Paused:
+            case ScenePhase.Close:
+                player.movement.disabled = true;
+                player.jump.disabled = true;
+                player.ability.disabled = true;
+                break;
+            case ScenePhase.Cinematic:
+                player.jump.disabled = true;
+                player.ability.disabled = true;
+                break;
+            case ScenePhase.Game:
+                player.movement.disabled = false;
+                player.jump.disabled = false;
+                player.ability.disabled = false;
+                break;
+        }
     }
 
     public void OnTriggerStay2D(Collider2D collision)
@@ -117,8 +141,6 @@ public class PlayerController : MonoBehaviour
         //set the Enum playerPosition to correspond with what the player is colliding with
         SetPosition();
 
-        ability.disabled = !alive;
-
         if (debug)
         {
             debugCoyoteTime.text = playerPosition .ToString();
@@ -148,34 +170,30 @@ public class PlayerController : MonoBehaviour
         {
             if (player.PreviousPosition == Position.Air)
             {
-                if (!onLadder)
-                {
-                    sound.LandSound();
-                }
                 ability.active = false;
             }
         }
 
-        if (playerPosition == Position.WallLeft)
-        {
-            render.flipX = true;
-        }
-        else if (playerPosition == Position.WallRight)
-        {
-            render.flipX = false;
-        }
-        if (playerPosition == Position.Air)
-        {
-            if (previousPosition == Position.WallLeft)
-            {
-                render.flipX = false;
-            }
-            else if (previousPosition == Position.WallRight)
-            {
-                Debug.Log("flipping");
-                render.flipX = true;
-            }
-        }
+        //if (playerPosition == Position.WallLeft)
+        //{
+        //    render.flipX = true;
+        //}
+        //else if (playerPosition == Position.WallRight)
+        //{
+        //    render.flipX = false;
+        //}
+        //if (playerPosition == Position.Air)
+        //{
+        //    if (previousPosition == Position.WallLeft)
+        //    {
+        //        render.flipX = false;
+        //    }
+        //    else if (previousPosition == Position.WallRight)
+        //    {
+        //        Debug.Log("flipping");
+        //        render.flipX = true;
+        //    }
+        //}
         SetAnimationParameters();
 
         cape.GetComponent<SpriteRenderer>().flipX = render.flipX;
@@ -184,8 +202,8 @@ public class PlayerController : MonoBehaviour
     private void SetAnimationParameters()
     {
         anim.SetBool("OnLadder", movement.climbing);
-        anim.SetBool("WallGrab", jump.wallSlide);
-        anim.SetBool("WallCoyote", jump.wallCoyoteTime);
+        anim.SetBool("WallMounted", jump.wallSlide);
+        anim.SetBool("WallGrab", jump.wallGrab);
         anim.SetBool("Jumping", jump.jumped);
         anim.SetBool("Falling", movement.falling);
         anim.SetBool("SlowingDown", movement.turning);
@@ -208,13 +226,12 @@ public class PlayerController : MonoBehaviour
             anim.SetTrigger("Dead");
             alive = false;
             sound.DeathSound();
-            disabled = true;
         }
     }
 
-    public bool OnWall(Position position)
+    public bool OnWall()
     {
-        if (position == Position.WallLeft || position == Position.WallRight)
+        if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
         {
             return true;
         }
@@ -235,6 +252,23 @@ public class PlayerController : MonoBehaviour
         puff.transform.position = new Vector2(transform.position.x, transform.position.y);
 
         }
+    }
+
+    public void WallDustPuff()
+    {
+        GameObject puff = Instantiate(wallDustPuff);
+        float xOffset = 0;
+        if (render.flipX)
+        {
+            xOffset = -0.3f;
+        }
+        else
+        {
+            puff.GetComponent<SpriteRenderer>().flipX = true;
+            xOffset = 0.3f;
+        }
+        puff.transform.position = new Vector2(transform.position.x+xOffset, transform.position.y-1);
+        
     }
 
     public void SetPosition()

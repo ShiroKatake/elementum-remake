@@ -203,3 +203,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   land: {fileID: 8300000, guid: eb38cfe39f30e7f40a93f9c7dbc1f093, type: 3}
   earthBreak: {fileID: 8300000, guid: 83c5d9a3fb51afe499b5b1f606c2924b, type: 3}
+  dustPuff: {fileID: 4162443556862482648, guid: 79b93ef62b52e6c429d18560649617a8,
+    type: 3}

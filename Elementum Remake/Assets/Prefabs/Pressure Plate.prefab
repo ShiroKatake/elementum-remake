@@ -126,4 +126,6 @@ MonoBehaviour:
   down: {fileID: 6246163242151688727, guid: f3ed1cc1f05525d47b8e9ff8035f56fc, type: 3}
   sprite: {fileID: 428192310041638736}
   activated: 0
-  door: {fileID: 0}
+  linkedObject: {fileID: 0}
+  downSound: {fileID: 8300000, guid: f1bd1a60fd530d2489e8ccee57d9e04c, type: 3}
+  upSound: {fileID: 8300000, guid: 2552543aaa11521418df1c23444a396a, type: 3}

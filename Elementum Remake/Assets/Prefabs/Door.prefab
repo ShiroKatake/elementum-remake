@@ -94,11 +94,21 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3048092928002622793, guid: d341aa22d4d243f4fa1ac0f77a1b98f5,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3048092928002622794, guid: d341aa22d4d243f4fa1ac0f77a1b98f5,
         type: 3}
       propertyPath: m_Name
       value: Exit
       objectReference: {fileID: 0}
+    - target: {fileID: 3048092928002622795, guid: d341aa22d4d243f4fa1ac0f77a1b98f5,
+        type: 3}
+      propertyPath: enterDoor
+      value: 
+      objectReference: {fileID: 8300000, guid: 0c71e1fde8368214eb9bf549bb3d1fd1, type: 3}
     - target: {fileID: 3048092928002622798, guid: d341aa22d4d243f4fa1ac0f77a1b98f5,
         type: 3}
       propertyPath: m_LocalPosition.x

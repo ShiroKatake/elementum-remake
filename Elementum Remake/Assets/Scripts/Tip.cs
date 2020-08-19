@@ -23,7 +23,7 @@ public class Tip : MonoBehaviour
         {
             activated = true;
             overlay.FadeInTip(text, true);
-            tipActivate.Invoke();
+            tipActivate?.Invoke();
         }
     }
 }

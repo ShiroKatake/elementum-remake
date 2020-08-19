@@ -9,6 +9,7 @@ public class EarthCube : MonoBehaviour
 
     public AudioClip land;
     public AudioClip earthBreak;
+    public GameObject dustPuff;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,7 @@ public class EarthCube : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (collision.GetComponent<PlayerController>().OnWall(collision.GetComponent<PlayerController>().playerPosition))
+            if (collision.GetComponent<PlayerController>().OnWall())
             {
                 collision.GetComponent<PlayerJump>().mountingEarth = true;
             }
@@ -55,8 +56,15 @@ public class EarthCube : MonoBehaviour
 
         if (collision.gameObject.layer == 8)
         {
+            DustPuff();
             SoundManager.PlaySound(land);
         }
+    }
+
+    public void DustPuff()
+    {
+        GameObject puff = Instantiate(dustPuff);
+        puff.transform.position = new Vector2(transform.position.x, transform.position.y);
     }
 
     private void OnCollisionExit2D(Collision2D collision)

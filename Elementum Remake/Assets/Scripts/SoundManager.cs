@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
     private static bool spawned = false;
     private AudioSource sound;
-    public AudioSource musicPlayer;
+    public AudioSource tarrinsTheme;
+    public AudioSource puzzleTheme;
+    public AudioSource viollsTheme;
+    public AudioSource menuTheme;
     
 
     // Start is called before the first frame update
@@ -15,8 +19,8 @@ public class SoundManager : MonoBehaviour
         if (!spawned)
         {
             spawned = true;
+            SceneManager.activeSceneChanged += ChangeMusic;
             DontDestroyOnLoad(gameObject);
-            musicPlayer.Play();
         }
         else
         {
@@ -41,6 +45,31 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void ChangeMusic(Scene current, Scene next)
+    {
+        if (next.buildIndex == 1 || next.buildIndex == 0)
+        {
+            return;
+        }
+        StopMusic();
+        switch (next.buildIndex)
+        {
+            case 2:
+                tarrinsTheme.Play();
+                break;
+            case 3:
+                viollsTheme.Play();
+                break;
+        }
+    }
+
+    public void StopMusic()
+    {
+        tarrinsTheme.Stop();
+        puzzleTheme.Stop();
+        viollsTheme.Stop();
+        menuTheme.Stop();
+    }
 
     public static void PlaySound(AudioClip clip)
     {

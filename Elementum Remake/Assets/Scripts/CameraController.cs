@@ -47,6 +47,20 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         transform.position = target.position;
+        SceneController.ScenePhaseChanged += ChangeCameraState;
+    }
+
+    private void ChangeCameraState(ScenePhase current, ScenePhase next)
+    {
+        switch (next)
+        {
+            case ScenePhase.Paused:
+                freeze = true;
+                break;
+            case ScenePhase.Game:
+                freeze = false;
+                break;
+        }
     }
 
     // Update is called once per frame

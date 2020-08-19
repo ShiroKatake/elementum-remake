@@ -18,6 +18,9 @@ public enum ScenePhase
 
 public class SceneController : MonoBehaviour
 {
+    public delegate void SceneDelegate(ScenePhase current, ScenePhase next);
+    public static event SceneDelegate ScenePhaseChanged;
+
     private static bool spawned = false;
 
     public static Scene currentScene;
@@ -74,6 +77,7 @@ public class SceneController : MonoBehaviour
         PlayerController.deathEvent += OnPlayerDeath;
         ExitInteraction.doorEvent += TransitionToNextScene;
         Interaction.eventTrigger += NewEvent;
+        TipController.tipDisplaying += ChangeScenePhase;
     }
 
     private void Update()
@@ -97,8 +101,6 @@ public class SceneController : MonoBehaviour
         {
             if (currentScene.buildIndex != 0)
             {
-                player.cinematicOverride = true;
-                player.disabled = true;
                 StartCoroutine(FadeIn());
             }
             phase = ScenePhase.Cinematic;
@@ -168,6 +170,7 @@ public class SceneController : MonoBehaviour
     public void LoadMenuFromGame()
     {
         GameData.spawnLocation = player.transform.position;
+        GameData.sceneIndex = SceneManager.GetActiveScene().buildIndex;
         ButtonResume();
         player.gameObject.SetActive(false);
         playerCamera.gameObject.SetActive(false);
@@ -179,7 +182,7 @@ public class SceneController : MonoBehaviour
         Animator animator = GameObject.Find("Menu Camera/Pause Menu/Veil").GetComponent<Animator>();
         animator.gameObject.SetActive(true);
         animator.SetTrigger("fadeOut");
-        StartCoroutine(LoadScene(2, 2));
+        StartCoroutine(LoadScene(GameData.sceneIndex, 2));
     }
 
     public IEnumerator LoadScene(int scene, float delay)
@@ -214,18 +217,8 @@ public class SceneController : MonoBehaviour
 
     private void ChangeScenePhase(ScenePhase scenePhase)
     {
+        ScenePhaseChanged?.Invoke(phase, scenePhase);
         phase = scenePhase;
-        if (phase == ScenePhase.Game)
-        {
-            player.disabled = false;
-            player.cinematicOverride = false;
-            playerCamera.freeze = false;
-        }
-        else
-        {
-            player.disabled = true;
-            player.cinematicOverride = true;
-        }
     }
 
     private void TransitionToNextScene(Vector2 destination, string scene)

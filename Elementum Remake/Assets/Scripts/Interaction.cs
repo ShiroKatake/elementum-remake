@@ -26,6 +26,7 @@ public class Interaction : MonoBehaviour
             if (Input.GetButtonDown("Up"))
             {
                 eventTrigger.Invoke(id);
+                gameObject.SetActive(false);
             }
         }
     }

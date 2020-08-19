@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
 
 	public PlayerController player;
-	
+	public bool disabled;
 
 	[Header("Animation")]
 	public Animator anim;
@@ -16,12 +16,12 @@ public class PlayerMovement : MonoBehaviour
 	[Header("Stats")]
 	public float speed;					//How fast the player moves
 	public float wallJumpLerp;          //How much movement is restricted during wall jump
+	public float airbourneLerp;
 	public float fallMultiplier;
 	public float lowJumpMultiplier;
 
 	[Header("Checks")]
 	public bool Immobilized;            //Flag triggered by dash to prevent player movement during ability
-	public Vector2 previousVelocity;
 	public bool falling;
 	public bool turning;
 
@@ -40,113 +40,147 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void Update() 
 	{
-		//Take movement input from player
-		float x = Input.GetAxis("Horizontal");
-		float y = Input.GetAxis("Vertical");
-
-		if (player.alive)
+		//Check the script is not disabled by the playercontroller
+		if (!disabled)
 		{
-			if (CantMove(new Vector2(x,y)))
+			//Take movement input from player
+			float x = Input.GetAxis("Horizontal");
+			float y = Input.GetAxis("Vertical");
+
+			if (rb.velocity.x < -5 || rb.velocity.x > 5)
 			{
-				anim.SetBool("Moving", false);
+				speed = 10;
 			}
 			else
 			{
-				Walk(new Vector2(x, y));
+				speed = 15;
 			}
-			if (player.onLadder)
+
+			
+
+			if (player.alive)
 			{
-				climbing = true;
-				if (Input.GetButton("Up"))
+				//Make sure player movement isnt being prevented by another action
+				if (CantMove(new Vector2(x, y)))
 				{
-					rb.velocity = new Vector2(rb.velocity.x / 1.2f, 10);
-					ladderTimer = player.sound.LadderSound(ladderTimer);
+
 				}
-				else if (Input.GetButton("Down"))
+				else
 				{
-					rb.velocity = new Vector2(rb.velocity.x / 1.2f, -10);
-					ladderTimer = player.sound.LadderSound(ladderTimer);
+					Walk(new Vector2(x, y));
+				}
+
+				//Set the animation to idle if the player is moving a tiny bit or not at all
+				if (x < 0.1 && x > -0.1)
+				{
+					anim.SetBool("Moving", false);
+				}
+
+				//Climbing ladders
+				if (player.onLadder)
+				{
+					climbing = true;
+					if (Input.GetButton("Up"))
+					{
+						rb.velocity = new Vector2(rb.velocity.x / 1.2f, 10);
+						ladderTimer = player.sound.LadderSound(ladderTimer);
+					}
+					else if (Input.GetButton("Down"))
+					{
+						rb.velocity = new Vector2(rb.velocity.x / 1.2f, -10);
+						ladderTimer = player.sound.LadderSound(ladderTimer);
+					}
+					else
+					{
+						climbing = false;
+					}
 				}
 				else
 				{
 					climbing = false;
 				}
 			}
+
+			//Detect if the player is accelerating towards 0
+			if ((lastX > 0 && x < lastX) || (lastX < 0 && x > lastX))
+			{
+				turning = true;
+			}
 			else
 			{
-				climbing = false;
+				turning = false;
 			}
-		}
 
-		if ((lastX > 0 && x < lastX) || (lastX < 0 && x > lastX))
-		{
-			turning = true;
-		}
-		else
-		{
-			turning = false;
-		}
+			//Skip the falling acceleration if the player is dashing or airjumping 
+			//NOTE: Immobilized might be redundant due to player.ability.active
+			if (Immobilized || player.ability.active)
+			{
+			}
+			else
+			{
+				BetterFall();
+			}
 
-		if (Immobilized || player.ability.active)
-		{
-		}
-		else
-		{
-			BetterFall();
-		}
-
-		if (player.Position == Position.Air)
-		{
-			if (rb.velocity.y < 0)
+			//Check if the player is falling
+			if (rb.velocity.y < 0 && player.Position != Position.Ground)
 			{
 				falling = true;
-				anim.SetBool("Falling", true);
+				if (player.Position == Position.Air)
+				{
+					anim.SetBool("Falling", true);
+				}
+				else
+				{
+					anim.SetBool("Falling", false);
+				}
 			}
-		}
-		else
-		{
-			falling = false;
-			anim.SetBool("Falling", false);
+			else
+			{
+				falling = false;
+				anim.SetBool("Falling", false);
+			}
+
+			//Save the x position for use in the next frame
+			lastX = x;
 		}
 
+		//count down till the next time the ladder will make a sound
+		//NOTE: this can all be replaced with an event on the ladder animation, but will require an idle ladder animation
 		ladderTimer -= Time.deltaTime;
-		lastX = x;
 	}
 
+
+	//Increases gravity on the player if they are not holding the jump button 
+	//Or if they are travelling downwards
 	public void BetterFall()
 	{
-		if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+		if (!falling && !Input.GetButton("Jump"))
 		{
 			rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
 		}
-		else if (rb.velocity.y < 0 )
+		else if (falling)
 		{
 			rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
 		}
 	}
 
+
+	//Check if any variables that would prevent movement are true
 	public bool CantMove(Vector2 move)
 	{
-		if (Immobilized || player.jump.wallCoyoteTime || player.disabled || move == new Vector2(0, 0) || player.jump.MountingEarthInAir())
+		if (Immobilized || player.jump.wallCoyoteTime || player.jump.MountingEarthInAir())
 		{
 			return true;
 		}
 		return false;
 	}
 
-	public void LateUpdate()
-	{
-		if (rb.velocity.y != 0 && rb.velocity.x != 0)
-		{
-			previousVelocity = rb.velocity;
-		}
-	}
-
 	void Walk(Vector2 dir) 
 	{
-			
+		//Walking animation component
+		//NOTE: This should be moved to a different script or at least a different method
 		anim.SetBool("Moving", true);
-		if (!player.jump.wallCoyoteTime)
+		if (!player.OnWall())
 		{
 			if (dir.x < 0)
 			{
@@ -165,15 +199,23 @@ public class PlayerMovement : MonoBehaviour
 				GetComponent<SpriteRenderer>().flipX = false;
 			}
 		}
-		if (player.Position == Position.Ground) 
+		
+		//Decide the effect of moving based on whether the player in the air or not
+		if (player.OnWall() || (player.Position == Position.Air && player.jump.wallJumped))
 		{
-			rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
-		} 
-		else 
-		{
+
 			//If wall jumping, lerping the input will act as a damp so the player won't regain control immediately and accidentally cancel the wall jump
 			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), wallJumpLerp * Time.deltaTime);
 		}
+		else if (player.Position == Position.Air)
+		{
+			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), airbourneLerp * Time.deltaTime);
+		}
+		else
+		{
+			rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
+		} 
+		
 	}
 
 	
@@ -192,10 +234,4 @@ public class PlayerMovement : MonoBehaviour
 		Immobilized = false;
 		rb.gravityScale = initialGravity;
 	}
-
-	
-
-	
-
-	
 }

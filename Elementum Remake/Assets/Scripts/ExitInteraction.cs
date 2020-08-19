@@ -14,15 +14,13 @@ public class ExitInteraction : MonoBehaviour {
 	public string destinationScene;	//The scene the door links to
 	public Vector2 destinationDoor; //The position of the linked door
 	public PlayerMovement player;
-
+	public AudioClip enterDoor;
 	public bool locked;
 
 	public TMP_Text text;
 
 	private void Awake() {
 		player = GameObject.Find("Player").GetComponent<PlayerMovement>();
-		anim = GetComponentInChildren<Animator>();
-		anim.SetTrigger("FadeIn");
 	}
 
 	void Start() {
@@ -49,6 +47,7 @@ public class ExitInteraction : MonoBehaviour {
 			else
 			{
 				isTransitioning = true;
+				SoundManager.PlaySound(enterDoor);
 				player.GetComponent<PlayerJump>().Freeze();
 				doorEvent?.Invoke(destinationDoor, destinationScene);
 			}

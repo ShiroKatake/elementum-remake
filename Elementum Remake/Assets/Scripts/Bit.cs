@@ -29,7 +29,7 @@ public class Bit : DestroyOnLoad
             collectEvent?.Invoke();
                 GameObject puff = Instantiate(bitPuff);
                 puff.transform.position = gameObject.transform.position;
-
+                isCollected = true;
             // Make sure this is the last thing to happen as it will destroy the object
             Collect();
             

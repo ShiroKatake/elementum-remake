@@ -8,6 +8,14 @@ public class Hazard : MonoBehaviour
     public AudioClip earthBreak;
     public float playerCooldown;
 
+    public BoxCollider2D hitBox;
+    public SpriteRenderer render;
+
+    public void Start()
+    {
+        hitBox.size = new Vector2(render.size.x-0.3f, render.size.y/2);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Earth")
