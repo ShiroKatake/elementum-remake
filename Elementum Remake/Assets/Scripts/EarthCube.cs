@@ -33,13 +33,14 @@ public class EarthCube : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (collision.GetComponent<PlayerController>().OnWall())
+            PlayerController player = collision.GetComponent<PlayerController>();
+            if (player.OnWall())
             {
-                collision.GetComponent<PlayerJump>().mountingEarth = true;
+                player.mountingEarth = true;
             }
             else
             {
-                collision.GetComponent<PlayerJump>().mountingEarth = false;
+                player.mountingEarth = false;
             }
         }
     }
@@ -78,13 +79,14 @@ public class EarthCube : MonoBehaviour
     public void OnTriggerExit2D(Collider2D collision)
     {
         
-        PlayerJump script = collision.GetComponent<PlayerJump>();
+        PlayerController script = collision.GetComponent<PlayerController>();
+        Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
         if (collision.gameObject.tag == "Player")
         {
-            if (script.mountingEarth && script.wallJumped)
+            if (script.mountingEarth && script.jump.wallJumped)
             {
                 Vector2 polarity = new Vector2();
-                if (collision.gameObject.GetComponent<Rigidbody2D>().velocity.x < 0)
+                if (rb.velocity.x < 0)
                 {
                     polarity.x = -1;
                 }
@@ -92,7 +94,7 @@ public class EarthCube : MonoBehaviour
                 {
                     polarity.x = 1;
                 }
-                if (collision.gameObject.GetComponent<Rigidbody2D>().velocity.y < 0)
+                if (rb.velocity.y < 0)
                 {
                     polarity.y = -1;
                 }
@@ -100,7 +102,7 @@ public class EarthCube : MonoBehaviour
                 {
                     polarity.y = 1;
                 }
-                GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity - (polarity*kickback);
+                GetComponent<Rigidbody2D>().velocity = rb.velocity - (polarity*kickback);
                 
             }
         }

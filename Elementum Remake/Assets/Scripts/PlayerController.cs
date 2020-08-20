@@ -19,23 +19,39 @@ public enum Position
     Air
 }
 
+public enum Action
+{
+    MoutingEarth,
+    OnLadder,
+    Jumping,
+    Falling,
+    Walking
+}
+
+//This Script is responsible for keeping track of the player's state and allowing other scripts to access some variables from one another
 public class PlayerController : MonoBehaviour
 {
     private static bool spawned = false;
     public static PlayerController player;
 
-    public delegate void DeathDelegate();
-    public static event DeathDelegate deathEvent;
+    public delegate void simpleDelegate();
+    public static event simpleDelegate deathEvent;
+    public static event simpleDelegate playerFalling;
 
+
+    [Header("Player Script References")]
     public PlayerMovement movement;
     public PlayerJump jump;
     public Collision coll;
     public PlayerSound sound;
     public PlayerAbility ability;
-    public Animator anim;
+    public PlayerAnimation animations;
+    public PlayerWallInteractions wall;
+
     public SpriteRenderer render;
     public GameObject cape;
 
+    [Header("")]
     public Color capeDefault;
     public GameObject airPuff;
     public GameObject dustPuff;
@@ -50,8 +66,8 @@ public class PlayerController : MonoBehaviour
     public bool onLadder;
     public Position previousPosition;
     public Position playerPosition;
-
-    public GameObject holding;
+    public Action playerAction;
+    public bool mountingEarth;
     public bool alive;
 
 
@@ -87,6 +103,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    //Each time the scene phase changes, the player will be notified and will enable and disable stripts in accordance
     public void ChangePlayerState(ScenePhase current, ScenePhase next)
     {
         switch(next)
@@ -114,13 +131,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerStay2D(Collider2D collision)
     {
-        if (holding != null)
-        {
-            if (collision.gameObject == holding.GetComponent<Key>().door)
-            {
-                holding.GetComponent<Key>().Activate();
-            }
-        }
+        
         if (collision.gameObject.tag == "Ladder")
         {
             onLadder = true;
@@ -138,12 +149,19 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mountingEarth && jump.wallJumped)
+        {
+            mountingEarth = false;
+        }
+
         //set the Enum playerPosition to correspond with what the player is colliding with
         SetPosition();
+        //set the Enum playerAction to correspond with what the player is currently doing
+        SetAction();
 
         if (debug)
         {
-            debugCoyoteTime.text = playerPosition .ToString();
+            debugCoyoteTime.text = playerPosition.ToString();
         }
 
         if (ability.queue.Empty)
@@ -155,23 +173,11 @@ public class PlayerController : MonoBehaviour
             cape.GetComponent<SpriteRenderer>().color = ability.queue.queue[ability.queue.LastOccupiedSlot].color;
         }
 
-        if (holding != null)
-        {
-            holding.transform.position = new Vector2(transform.position.x, transform.position.y + 1.3f);
-        }
+        
 
         if (Input.GetButtonDown("Respawn"))
         {
             Respawn();
-        }
-
-        //reset the airjump to false when the player is no longer in the air
-        if (player.Position != Position.Air)
-        {
-            if (player.PreviousPosition == Position.Air)
-            {
-                ability.active = false;
-            }
         }
 
         //if (playerPosition == Position.WallLeft)
@@ -194,21 +200,21 @@ public class PlayerController : MonoBehaviour
         //        render.flipX = true;
         //    }
         //}
-        SetAnimationParameters();
+        
 
         cape.GetComponent<SpriteRenderer>().flipX = render.flipX;
     }
 
-    private void SetAnimationParameters()
+    public bool MountingEarthInAir()
     {
-        anim.SetBool("OnLadder", movement.climbing);
-        anim.SetBool("WallMounted", jump.wallSlide);
-        anim.SetBool("WallGrab", jump.wallGrab);
-        anim.SetBool("Jumping", jump.jumped);
-        anim.SetBool("Falling", movement.falling);
-        anim.SetBool("SlowingDown", movement.turning);
-        anim.SetBool("AirTurning", movement.turning);
+        if (player.previousPosition == Position.Air && player.mountingEarth)
+        {
+            return true;
+        }
+        return false;
     }
+
+    
 
     public void Respawn()
     {
@@ -223,7 +229,7 @@ public class PlayerController : MonoBehaviour
         if (alive)
         {
             Debug.Log("Dead");
-            anim.SetTrigger("Dead");
+            animations.Die();
             alive = false;
             sound.DeathSound();
         }
@@ -291,5 +297,30 @@ public class PlayerController : MonoBehaviour
             playerPosition = Position.Air;
         }
 
+    }
+
+    public void SetAction()
+    {
+        if (movement.moving)
+        {
+            playerAction = Action.Walking;
+        }
+        if (jump.jumped)
+        {
+            playerAction = Action.Jumping;
+        }
+        if (onLadder)
+        {
+            playerAction = Action.OnLadder;
+        }
+        if (movement.falling)
+        {
+            playerAction = Action.Falling;
+            playerFalling?.Invoke();
+        }
+        if (MountingEarthInAir())
+        {
+            playerAction = Action.MoutingEarth;
+        }
     }
 }

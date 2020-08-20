@@ -12,6 +12,7 @@ public class PlayerAbility : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PlayerController.playerFalling += Reset;
     }
 
     // Update is called once per frame
@@ -24,5 +25,10 @@ public class PlayerAbility : MonoBehaviour
                 active = queue.Activate(gameObject);
             }
         }
+    }
+
+    private void Reset()
+    {
+        active = false;
     }
 }

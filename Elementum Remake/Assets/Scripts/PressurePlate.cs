@@ -14,13 +14,13 @@ public class PressurePlate : MonoBehaviour
     public AudioClip downSound;
     public AudioClip upSound;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Earth")
         {
             if (!activated)
             {
-                SoundManager.PlaySound(downSound, 0.5f);
+                SoundManager.PlaySound(downSound, 0.2f);
             }
             activated = true;
             
@@ -33,7 +33,7 @@ public class PressurePlate : MonoBehaviour
         {
             if (activated)
             {
-                SoundManager.PlaySound(upSound, 0.5f);
+                SoundManager.PlaySound(upSound, 0.2f);
             }
             activated = false;
             

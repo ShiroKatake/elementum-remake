@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour 
 {
+	public delegate void turningDelegate(bool isTurningLeft);
+	public static event turningDelegate playerTurned;
 
 	public PlayerController player;
 	public bool disabled;
@@ -24,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
 	public bool Immobilized;            //Flag triggered by dash to prevent player movement during ability
 	public bool falling;
 	public bool turning;
+	public bool moving;
 
 	[Header("Physics")]
 	public BoxCollider2D edgeDetect;
@@ -73,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
 				//Set the animation to idle if the player is moving a tiny bit or not at all
 				if (x < 0.1 && x > -0.1)
 				{
-					anim.SetBool("Moving", false);
+					moving = false;
 				}
 
 				//Climbing ladders
@@ -125,19 +128,10 @@ public class PlayerMovement : MonoBehaviour
 			if (rb.velocity.y < 0 && player.Position != Position.Ground)
 			{
 				falling = true;
-				if (player.Position == Position.Air)
-				{
-					anim.SetBool("Falling", true);
-				}
-				else
-				{
-					anim.SetBool("Falling", false);
-				}
 			}
 			else
 			{
 				falling = false;
-				anim.SetBool("Falling", false);
 			}
 
 			//Save the x position for use in the next frame
@@ -160,6 +154,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else if (falling)
 		{
+			
 			rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
 		}
 	}
@@ -168,7 +163,7 @@ public class PlayerMovement : MonoBehaviour
 	//Check if any variables that would prevent movement are true
 	public bool CantMove(Vector2 move)
 	{
-		if (Immobilized || player.jump.wallCoyoteTime || player.jump.MountingEarthInAir())
+		if (Immobilized || player.MountingEarthInAir())
 		{
 			return true;
 		}
@@ -177,33 +172,24 @@ public class PlayerMovement : MonoBehaviour
 
 	void Walk(Vector2 dir) 
 	{
-		//Walking animation component
-		//NOTE: This should be moved to a different script or at least a different method
-		anim.SetBool("Moving", true);
+		moving = true;
+		
+		//Invoke an event if the player is turning
 		if (!player.OnWall())
 		{
 			if (dir.x < 0)
 			{
-				if (!GetComponent<SpriteRenderer>().flipX)
-				{
-					anim.SetTrigger("Turn");
-				}
-				GetComponent<SpriteRenderer>().flipX = true;
+				playerTurned?.Invoke(true);
 			}
 			else
 			{
-				if (GetComponent<SpriteRenderer>().flipX)
-				{
-					anim.SetTrigger("Turn");
-				}
-				GetComponent<SpriteRenderer>().flipX = false;
+				playerTurned?.Invoke(false);
 			}
 		}
 		
 		//Decide the effect of moving based on whether the player in the air or not
 		if (player.OnWall() || (player.Position == Position.Air && player.jump.wallJumped))
 		{
-
 			//If wall jumping, lerping the input will act as a damp so the player won't regain control immediately and accidentally cancel the wall jump
 			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), wallJumpLerp * Time.deltaTime);
 		}

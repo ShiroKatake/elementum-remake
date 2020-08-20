@@ -21,8 +21,8 @@ public class Air : Element
     public override void Activate(GameObject player)
     {
         SoundManager.PlaySound(airSound);
-        player.GetComponent<PlayerController>().anim.SetTrigger("AirAbility");
-        player.GetComponent<PlayerJump>().Jump(Vector2.up, player.GetComponent<PlayerJump>().jumpForce * forceMultiplier, 0);
+        player.GetComponent<PlayerController>().animations.anim.SetTrigger("AirAbility");
+        player.GetComponent<PlayerJump>().Jump(Vector2.up, player.GetComponent<PlayerJump>().jumpForce * forceMultiplier, 0, airSound);
         SelfDestruct();
     }
 }

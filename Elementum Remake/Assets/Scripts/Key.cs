@@ -35,7 +35,7 @@ public class Key : DestroyOnLoad
 
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<PlayerController>().holding = gameObject;
+            collision.gameObject.GetComponent<PlayerHolding>().holding = gameObject;
             gameObject.transform.parent = collision.transform;
         }
     }
