@@ -63,20 +63,25 @@ public class AbilitySlot : MonoBehaviour {
 
 
 	//Activates the element in the slot, then clears slot
-	public bool Activate(GameObject player)
+	public bool Activate(GameObject player, Vector2 dir)
 	{
 		if (occupied)
 		{
-			Element.Activate(player);
-			element = null;
-			occupied = false;
-			elementName = "";
+			Element.Activate(player, dir);
+			Clear();
 			return true;
 		}
 		else
 		{
 			return false;
 		}
+	}
+
+	public void Clear()
+	{
+		element = null;
+		occupied = false;
+		elementName = "";
 	}
 
 	//Places element into slot

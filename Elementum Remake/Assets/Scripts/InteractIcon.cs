@@ -5,6 +5,7 @@ using UnityEngine;
 public class InteractIcon : MonoBehaviour
 {
     public SpriteRenderer icon;
+    public int id;
 
     // Start is called before the first frame update
     void Start()
@@ -18,9 +19,9 @@ public class InteractIcon : MonoBehaviour
         
     }
 
-    private void Activate(bool active)
+    private void Activate(bool active, int eventId)
     {
-        if (active)
+        if (active && id == eventId)
         {
             icon.color = new Color(255, 255, 255, 255);
         }

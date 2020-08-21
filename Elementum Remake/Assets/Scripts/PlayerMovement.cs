@@ -27,8 +27,11 @@ public class PlayerMovement : MonoBehaviour
 	public bool falling;
 	public bool turning;
 	public bool moving;
+	public bool JumpButtonDown;
 
 	[Header("Physics")]
+
+	public Vector2 inputVector;
 	public BoxCollider2D edgeDetect;
 	public Rigidbody2D rb;              //Player's rigidbody
 	public float initialGravity;        //Initial gravity value on player's rigidbody
@@ -41,23 +44,24 @@ public class PlayerMovement : MonoBehaviour
 		initialGravity = rb.gravityScale;
 		
 	}
+			
 	private void Update() 
 	{
 		//Check the script is not disabled by the playercontroller
 		if (!disabled)
 		{
 			//Take movement input from player
-			float x = Input.GetAxis("Horizontal");
-			float y = Input.GetAxis("Vertical");
+			float x = inputVector.x;
+			float y = inputVector.y;
 
-			if (rb.velocity.x < -5 || rb.velocity.x > 5)
-			{
-				speed = 10;
-			}
-			else
-			{
-				speed = 15;
-			}
+			//if (rb.velocity.x < -5 || rb.velocity.x > 5)
+			//{
+			//	speed = 10;
+			//}
+			//else
+			//{
+			//	speed = 15;
+			//}
 
 			
 
@@ -83,12 +87,12 @@ public class PlayerMovement : MonoBehaviour
 				if (player.onLadder)
 				{
 					climbing = true;
-					if (Input.GetButton("Up"))
+					if (y > 0)
 					{
 						rb.velocity = new Vector2(rb.velocity.x / 1.2f, 10);
 						ladderTimer = player.sound.LadderSound(ladderTimer);
 					}
-					else if (Input.GetButton("Down"))
+					else if (y < 0)
 					{
 						rb.velocity = new Vector2(rb.velocity.x / 1.2f, -10);
 						ladderTimer = player.sound.LadderSound(ladderTimer);
@@ -143,12 +147,16 @@ public class PlayerMovement : MonoBehaviour
 		ladderTimer -= Time.deltaTime;
 	}
 
+	public void ChangeJumpButtonDown(bool change)
+	{
+		JumpButtonDown = change;
+	}
 
 	//Increases gravity on the player if they are not holding the jump button 
 	//Or if they are travelling downwards
 	public void BetterFall()
 	{
-		if (!falling && !Input.GetButton("Jump"))
+		if (!falling && !JumpButtonDown)
 		{
 			rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
 		}

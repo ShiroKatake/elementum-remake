@@ -26,7 +26,7 @@ public abstract class Element : MonoBehaviour
     }
 
     //Performs the ability
-    public abstract void Activate(GameObject player);
+    public abstract void Activate(GameObject player, Vector2 direction);
 
     public void SelfDestruct()
     {

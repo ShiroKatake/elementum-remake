@@ -13,17 +13,19 @@ public class PlayerAbility : MonoBehaviour
     void Start()
     {
         PlayerController.playerFalling += Reset;
+        VoidBarrier.voidEvent += queue.ClearAll;
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void Activate(Vector2 dir)
+    {
         if (!disabled)
         {
-            if (Input.GetButtonDown("Use") || Input.GetButtonDown("Use2"))
-            {
-                active = queue.Activate(gameObject);
-            }
+            active = queue.Activate(gameObject, dir);
         }
     }
 

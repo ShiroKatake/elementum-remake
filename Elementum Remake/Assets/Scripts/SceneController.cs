@@ -36,6 +36,7 @@ public class SceneController : MonoBehaviour
     private TMP_Text bits;
     private Animator sceneFadeIn;
     private Animator deathFade;
+    private TipController tipController;
 
     // Start is called before the first frame update
     private void Awake()
@@ -54,7 +55,7 @@ public class SceneController : MonoBehaviour
             deathFade = GameObject.Find("Player Camera/UI/Death Fade").GetComponent<Animator>();
             typer.display = GameObject.Find("Player Camera/UI/Scene Intro").GetComponent<TMP_Text>();
             bits = GameObject.Find("Player Camera/UI/Bits").GetComponent<TMP_Text>();
-            
+            tipController = GameObject.Find("Player Camera/Tips Overlay").GetComponent<TipController>();
         }
         else
         {
@@ -78,6 +79,8 @@ public class SceneController : MonoBehaviour
         ExitInteraction.doorEvent += TransitionToNextScene;
         Interaction.eventTrigger += NewEvent;
         TipController.tipDisplaying += ChangeScenePhase;
+        player.input.Gameplay.Pause.performed += ctx => Pause();
+        player.input.Gameplay.ExitCinematic.performed += ctx => ExitCinematic();
     }
 
     private void Update()
@@ -107,22 +110,7 @@ public class SceneController : MonoBehaviour
         }
         else if (phase == ScenePhase.Game)
         {
-            if (paused)
-            {
-                if (Input.GetButtonDown("ESC"))
-                {
-                    paused = false;
-                    Resume();
-                }
-            }
-            else
-            {
-                if (Input.GetButtonDown("ESC"))
-                {
-                    paused = true;
-                    Pause();
-                }
-            }
+            
         }
     }
 
@@ -136,6 +124,14 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void ExitCinematic()
+    {
+        if (phase == ScenePhase.Cinematic && !tipController.inputDisabled)
+        {
+            tipController.FadeInTip("", false);
+        }
+    }
+
     public void OnPlayerDeath()
     {
         deathFade.SetBool("fadeIn", true);
@@ -145,19 +141,23 @@ public class SceneController : MonoBehaviour
 
     public void Pause()
     {
-        Time.timeScale = 0;
-        playerCamera.pauseMenu.SetActive(true);
-    }
-
-    public void Resume()
-    {
-        Time.timeScale = 1;
-        playerCamera.pauseMenu.SetActive(false);
+        if (paused)
+        {
+            Time.timeScale = 1;
+            playerCamera.pauseMenu.SetActive(false);
+            paused = false;
+        }
+        else
+        {
+            paused = true;
+            Time.timeScale = 0;
+            playerCamera.pauseMenu.SetActive(true);
+        }
     }
 
     public void ButtonResume()
     {
-        Resume();
+        Pause();
         phase = ScenePhase.Game;
     }
 

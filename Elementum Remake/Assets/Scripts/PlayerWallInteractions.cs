@@ -12,7 +12,7 @@ public class PlayerWallInteractions : MonoBehaviour
     public bool slide;
     public bool grab;
     public bool mounted;
-    public float slideMultiplier;
+    public float slideSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +47,7 @@ public class PlayerWallInteractions : MonoBehaviour
                 }
 
 
-                slideMultiplier = 0;
+                slideSpeed = 0;
                 player.movement.rb.gravityScale = 0;
 
                 //Player will stop moving if they are holding the wall, but will slide and fall off if not
@@ -62,16 +62,16 @@ public class PlayerWallInteractions : MonoBehaviour
                 }
                 else
                 {
-                    slideMultiplier = 0.7f;
+                    slideSpeed = 5;
 
                 }
-                player.movement.rb.velocity = new Vector2(0, player.movement.rb.velocity.y * slideMultiplier);
+                player.movement.rb.velocity = new Vector2(0, -slideSpeed);
             }
         }
         else
         {
             slide = false;
-            slideMultiplier = 0;
+            slideSpeed = 0;
             coyoteTime = false;
             mounted = false;
         }
@@ -79,11 +79,11 @@ public class PlayerWallInteractions : MonoBehaviour
 
     public bool HoldingWall(Position wall)
     {
-        if (wall == Position.WallLeft && Input.GetAxis("Horizontal") < 0)
+        if (wall == Position.WallLeft && player.movement.inputVector.x < 0)
         {
             return true;
         }
-        else if (wall == Position.WallRight && Input.GetAxis("Horizontal") > 0)
+        else if (wall == Position.WallRight && player.movement.inputVector.x > 0)
         {
             return true;
         }
@@ -92,11 +92,11 @@ public class PlayerWallInteractions : MonoBehaviour
 
     public bool LeavingWall(Position wall)
     {
-        if (wall == Position.WallLeft && Input.GetAxis("Horizontal") > 0)
+        if (wall == Position.WallLeft && player.movement.inputVector.x > 0)
         {
             return true;
         }
-        else if (wall == Position.WallRight && Input.GetAxis("Horizontal") < 0)
+        else if (wall == Position.WallRight && player.movement.inputVector.x < 0)
         {
             return true;
         }

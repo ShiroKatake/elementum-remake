@@ -21,6 +21,7 @@ public class ExitInteraction : MonoBehaviour {
 
 	private void Awake() {
 		player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+		PlayerController.playerInteract += PlayerInteract;
 	}
 
 	void Start() {
@@ -39,10 +40,15 @@ public class ExitInteraction : MonoBehaviour {
 			GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 0);
 		}
 
-		if (Input.GetButtonDown("Interact") && !isTransitioning && playerInBounds) {
+		
+	}
+
+	private void PlayerInteract()
+	{
+		if (!isTransitioning && playerInBounds)
+		{
 			if (locked)
 			{
-
 			}
 			else
 			{
@@ -51,7 +57,7 @@ public class ExitInteraction : MonoBehaviour {
 				player.GetComponent<PlayerJump>().Freeze();
 				doorEvent?.Invoke(destinationDoor, destinationScene);
 			}
-			
+
 		}
 	}
 

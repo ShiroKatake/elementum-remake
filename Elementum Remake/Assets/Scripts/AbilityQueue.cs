@@ -104,6 +104,17 @@ public class AbilityQueue : MonoBehaviour
         }
     }
 
+    public void ClearAll()
+    {
+        foreach (AbilitySlot a in queue)
+        {
+            if (a.occupied)
+            {
+                a.Clear();
+            }
+        }
+    }
+
     private void DrawUI()
     {
         for (int i = 0; i < 5; i++)
@@ -121,9 +132,9 @@ public class AbilityQueue : MonoBehaviour
         }
     }
 
-    public bool Activate(GameObject player)
+    public bool Activate(GameObject player, Vector2 dir)
     {
-        return queue[LastOccupiedSlot].Activate(player);
+        return queue[LastOccupiedSlot].Activate(player, dir);
     }
 
 }

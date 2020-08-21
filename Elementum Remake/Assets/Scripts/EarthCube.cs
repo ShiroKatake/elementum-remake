@@ -14,7 +14,7 @@ public class EarthCube : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Hazard.hazardEvent += Break;
     }
 
     // Update is called once per frame
@@ -23,10 +23,14 @@ public class EarthCube : MonoBehaviour
         
     }
 
-    public void Break()
+    public void Break(GameObject called)
     {
-        SoundManager.PlaySound(earthBreak);
-        Destroy(gameObject);
+        if (gameObject == called)
+        {
+            SoundManager.PlaySound(earthBreak);
+            Destroy(gameObject);
+
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

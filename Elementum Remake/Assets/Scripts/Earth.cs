@@ -16,10 +16,10 @@ public class Earth : Element
         name = "Earth";
     }
 
-    public override void Activate(GameObject player) 
+    public override void Activate(GameObject player, Vector2 direction) 
     {
         Vector2 offset;
-        if (Input.GetButtonDown("Use2"))
+        if (direction.x > 0)
         {
             offset.x = 1.2f;
         }
@@ -27,7 +27,7 @@ public class Earth : Element
         {
             offset.x = -1.2f;
         }
-        Vector2 newPos = new Vector2(player.GetComponent<PlayerMovement>().rb.position.x + offset.x, player.GetComponent<PlayerMovement>().rb.position.y - 0.2f);
+        Vector2 newPos = new Vector2(player.transform.position.x + offset.x, player.transform.position.y - 0.2f);
 
         GameObject clone = GameObject.Find("Earth Cube(Clone)");
         if (clone != null)

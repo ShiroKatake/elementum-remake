@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 428192310041638735}
   - component: {fileID: 428192310041638736}
   - component: {fileID: 428192310041638737}
+  - component: {fileID: 1233915294035527128}
   m_Layer: 0
   m_Name: Pressure Plate
   m_TagString: Untagged
@@ -98,7 +99,7 @@ SpriteRenderer:
   m_SortingLayerID: 1582617953
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5688805440946397850, guid: f3ed1cc1f05525d47b8e9ff8035f56fc,
+  m_Sprite: {fileID: 2555774527660831852, guid: f3ed1cc1f05525d47b8e9ff8035f56fc,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -126,6 +127,27 @@ MonoBehaviour:
   down: {fileID: 6246163242151688727, guid: f3ed1cc1f05525d47b8e9ff8035f56fc, type: 3}
   sprite: {fileID: 428192310041638736}
   activated: 0
+  activateTimer: 0
+  deactivationStarted: 0
   linkedObject: {fileID: 0}
   downSound: {fileID: 8300000, guid: f1bd1a60fd530d2489e8ccee57d9e04c, type: 3}
   upSound: {fileID: 8300000, guid: 2552543aaa11521418df1c23444a396a, type: 3}
+--- !u!95 &1233915294035527128
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428192310041638738}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 78d5648397e8a9946810ee97bcff9e56, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

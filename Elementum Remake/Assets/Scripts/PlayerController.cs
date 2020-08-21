@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public enum CollisionSide
@@ -32,11 +33,12 @@ public enum Action
 public class PlayerController : MonoBehaviour
 {
     private static bool spawned = false;
-    public static PlayerController player;
+    public PlayerControls input;
 
     public delegate void simpleDelegate();
     public static event simpleDelegate deathEvent;
     public static event simpleDelegate playerFalling;
+    public static event simpleDelegate playerInteract;
 
 
     [Header("Player Script References")]
@@ -67,8 +69,10 @@ public class PlayerController : MonoBehaviour
     public Position previousPosition;
     public Position playerPosition;
     public Action playerAction;
+    public bool holdingJump;
     public bool mountingEarth;
     public bool alive;
+    public bool landed;
 
 
     public Position Position => playerPosition;
@@ -82,7 +86,7 @@ public class PlayerController : MonoBehaviour
             spawned = true;
             DontDestroyOnLoad(gameObject);
 
-            player = this;
+            input = new PlayerControls();
 
             if (debugSpawn)
             {
@@ -95,12 +99,31 @@ public class PlayerController : MonoBehaviour
             DestroyImmediate(gameObject);
         }
     }
+
     // Start is called before the first frame update
     void Start()
     {
+        input.Gameplay.Jump.performed += ctx => jump.Activate();
+        input.Gameplay.Jump.started += ctx => movement.ChangeJumpButtonDown(true);
+        input.Gameplay.Jump.canceled += ctx => movement.ChangeJumpButtonDown(false);
+        input.Gameplay.AbilityLeft.performed += ctx => ability.Activate(new Vector2(-1, 0));
+        input.Gameplay.AbilityRight.performed += ctx => ability.Activate(new Vector2(1, 0));
+        input.Gameplay.Interact.performed += ctx => playerInteract?.Invoke();
+        input.Gameplay.Respawn.performed += ctx => Respawn();
+
+
+        input.Gameplay.Move.performed += ctx => movement.inputVector = ctx.ReadValue<Vector2>();
+        input.Gameplay.Move.canceled += ctx => movement.inputVector = Vector2.zero;
+
+
         debugCoyoteTime = GameObject.Find("/Player Camera/Debug/PlayerPosition").GetComponent<TMP_Text>();
         SceneController.ScenePhaseChanged += ChangePlayerState;
-        
+        Hazard.hazardEvent += Die;
+    }
+
+    private void OnEnable()
+    {
+        input.Gameplay.Enable();
     }
 
     //Each time the scene phase changes, the player will be notified and will enable and disable stripts in accordance
@@ -113,18 +136,18 @@ public class PlayerController : MonoBehaviour
             case ScenePhase.Open:
             case ScenePhase.Paused:
             case ScenePhase.Close:
-                player.movement.disabled = true;
-                player.jump.disabled = true;
-                player.ability.disabled = true;
+                movement.disabled = true;
+                jump.disabled = true;
+                ability.disabled = true;
                 break;
             case ScenePhase.Cinematic:
-                player.jump.disabled = true;
-                player.ability.disabled = true;
+                jump.disabled = true;
+                ability.disabled = true;
                 break;
             case ScenePhase.Game:
-                player.movement.disabled = false;
-                player.jump.disabled = false;
-                player.ability.disabled = false;
+                movement.disabled = false;
+                jump.disabled = false;
+                ability.disabled = false;
                 break;
         }
     }
@@ -145,7 +168,6 @@ public class PlayerController : MonoBehaviour
             onLadder = false;
         }
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -173,11 +195,13 @@ public class PlayerController : MonoBehaviour
             cape.GetComponent<SpriteRenderer>().color = ability.queue.queue[ability.queue.LastOccupiedSlot].color;
         }
 
-        
-
-        if (Input.GetButtonDown("Respawn"))
+        if (playerPosition == Position.Ground && previousPosition == Position.Air)
         {
-            Respawn();
+            landed = true;
+        }
+        else
+        {
+            landed = false;
         }
 
         //if (playerPosition == Position.WallLeft)
@@ -207,7 +231,7 @@ public class PlayerController : MonoBehaviour
 
     public bool MountingEarthInAir()
     {
-        if (player.previousPosition == Position.Air && player.mountingEarth)
+        if (previousPosition == Position.Air && mountingEarth)
         {
             return true;
         }
@@ -223,15 +247,19 @@ public class PlayerController : MonoBehaviour
         alive = true;
     }
 
-    public void Die()
+    public void Die(GameObject called)
     {
-        deathEvent?.Invoke();
-        if (alive)
+        if (gameObject == called)
         {
-            Debug.Log("Dead");
-            animations.Die();
-            alive = false;
-            sound.DeathSound();
+            deathEvent?.Invoke();
+            if (alive)
+            {
+                Debug.Log("Dead");
+                animations.Die();
+                alive = false;
+                sound.DeathSound();
+            }
+
         }
     }
 

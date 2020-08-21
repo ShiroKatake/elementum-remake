@@ -12,6 +12,7 @@ public class PlayerAnimation : MonoBehaviour
     void Start()
     {
         PlayerMovement.playerTurned += Turn;
+        Air.airCast += AirAbility;
     }
 
     // Update is called once per frame
@@ -30,11 +31,17 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetBool("SlowingDown", player.movement.turning);
         anim.SetBool("AirTurning", player.movement.turning);
         anim.SetBool("Moving", player.movement.moving);
+        anim.SetBool("Landed", player.landed);
     }
 
     public void Die()
     {
         anim.SetTrigger("Dead");
+    }
+
+    public void AirAbility()
+    {
+        anim.SetTrigger("AirAbility");
     }
 
     public void Turn(bool isTurningLeft)

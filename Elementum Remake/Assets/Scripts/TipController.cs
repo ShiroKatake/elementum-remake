@@ -11,23 +11,6 @@ public class TipController : MonoBehaviour
     public Animator animator;
     public bool inputDisabled;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (!inputDisabled)
-        {
-            if (Input.GetButtonDown("Jump") || Input.GetButtonDown("Use") || Input.GetButtonDown("Use2"))
-            {
-                FadeInTip("", false);
-            }
-        }
-    }
-
     public void FadeInTip(string tip, bool active)
     {
         GetComponentInChildren<TMP_Text>().text = tip;

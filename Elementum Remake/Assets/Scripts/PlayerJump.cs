@@ -9,6 +9,7 @@ public class PlayerJump : MonoBehaviour
     //coupled variables
     public PlayerController player;
     public AudioClip playerJump;
+    public AudioClip airSound;
 
     [Header("Jump Checks")]
     public bool coyoteTime;
@@ -20,12 +21,15 @@ public class PlayerJump : MonoBehaviour
     public float queuedjump;
     public float jumpForce = 22;				//How high the player jumps
     public float wallJumpForceModifier;
-    
+    public float airJumpForceMultiplier;       //Alter the force of the players standard jump
+
 
     // Start is called before the first frame update
     void Start()
     {
         player.movement.rb = GetComponent<Rigidbody2D>();
+        Air.airCast += AirJump;
+        
     }
 
     //Reset checks when the player touches a wall or ground
@@ -54,49 +58,51 @@ public class PlayerJump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if ((queuedjump > 0))
+        {
+            if (player.Position == Position.Ground)
+            {
+                Jump(Vector2.up, jumpForce, player.movement.rb.velocity.x, playerJump);
+            }
+            else if (player.OnWall())
+            {
+                WallJump();
 
+            }
+        }
+        queuedjump -= Time.deltaTime;
+
+    }
+
+    public void Activate()
+    {
         //Check the script is not disabled by the playercontroller 
         if (!disabled)
         {
             //Jump
-            if (Input.GetButtonDown("Jump"))
+            queuedjump = 0.2f;
+            if (player.Position == Position.Ground || coyoteTime)
             {
-                queuedjump = 0.2f;
-                if (player.Position == Position.Ground || coyoteTime)
-                {
-                    Jump(Vector2.up, jumpForce, player.movement.rb.velocity.x, playerJump);
-                }
-                else if (player.OnWall())
-                {
-                    WallJump();
-                }
+                Jump(Vector2.up, jumpForce, player.movement.rb.velocity.x, playerJump);
             }
-            else if ((queuedjump > 0))
+            else if (player.OnWall())
             {
-                if (player.Position == Position.Ground)
-                {
-                    Jump(Vector2.up, jumpForce, player.movement.rb.velocity.x, playerJump);
-                }
-                else if (player.OnWall())
-                {
-                    WallJump();
-
-                }
+                WallJump();
             }
         }
-
-        queuedjump -= Time.deltaTime;
     }
 
     
-
+    public void AirJump()
+    {
+        Jump(Vector2.up, jumpForce * airJumpForceMultiplier, 0, airSound);
+    }
     
 
     public void Jump(Vector2 dir, float force, float x, AudioClip sound)
     {
         //make sure the player can't jump twice for polish sake
-        if (!jumped)
+        if (!jumped || x == 0)
         {
             SoundManager.PlaySound(sound);
             player.playerPosition = Position.Air;

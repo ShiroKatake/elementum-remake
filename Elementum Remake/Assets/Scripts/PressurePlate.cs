@@ -6,9 +6,12 @@ public class PressurePlate : MonoBehaviour
 {
     public Sprite up;
     public Sprite down;
-    public SpriteRenderer sprite;
+    public Animator anim;
     
     public bool activated;
+    public float activateTimer;
+    public bool deactivationStarted;
+
     public GameObject linkedObject;
 
     public AudioClip downSound;
@@ -18,12 +21,8 @@ public class PressurePlate : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Earth")
         {
-            if (!activated)
-            {
-                SoundManager.PlaySound(downSound, 0.2f);
-            }
             activated = true;
-            
+            activateTimer = 0.2f;
         }
     }
 
@@ -31,36 +30,40 @@ public class PressurePlate : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Earth")
         {
-            if (activated)
-            {
-                SoundManager.PlaySound(upSound, 0.2f);
-            }
             activated = false;
-            
-            
         }
     }
     // Start is called before the first frame update
     void Start()
     {
-        sprite = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        activateTimer -= Time.deltaTime;
         if (activated)
         {
-            sprite.sprite = down;
+            anim.SetBool("Up", false);
             linkedObject.GetComponent<ObjectOnRail>().active = true;
 
         }
-        else
+        else if (activateTimer < 0)
         {
-            sprite.sprite = up;
+            anim.SetBool("Up", true);
             linkedObject.GetComponent<ObjectOnRail>().active = false;
         }
+    }
+
+    public void PlayUpSound()
+    {
+        SoundManager.PlaySound(upSound, 0.1f);
+    } 
+
+    public void PlayDownSound()
+    {
+        SoundManager.PlaySound(downSound, 0.2f);
     }
 
     private void OnDrawGizmosSelected()

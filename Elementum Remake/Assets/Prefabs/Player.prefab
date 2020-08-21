@@ -191,8 +191,6 @@ MonoBehaviour:
   airColor: {r: 0.64705884, g: 0.6901961, b: 0.8078432, a: 1}
   airSprite: {fileID: 111358919221266109, guid: f3ed1cc1f05525d47b8e9ff8035f56fc,
     type: 3}
-  forceMultiplier: 1.1
-  airSound: {fileID: 8300000, guid: bd6542bf1c48ded479a610080dda8447, type: 3}
 --- !u!1 &5407826413286799492
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,8 +499,10 @@ MonoBehaviour:
   previousPosition: 2
   playerPosition: 2
   playerAction: 0
+  holdingJump: 0
   mountingEarth: 0
   alive: 0
+  landed: 0
 --- !u!114 &839038574001921388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,13 +537,15 @@ MonoBehaviour:
   disabled: 0
   player: {fileID: 7253897716294526091}
   playerJump: {fileID: 8300000, guid: 25cbd464f436fbe4cadf114c21d815c8, type: 3}
+  airSound: {fileID: 8300000, guid: bd6542bf1c48ded479a610080dda8447, type: 3}
   coyoteTime: 0
   coyoteTimeAvailable: 0
   jumped: 0
+  wallJumped: 0
   queuedjump: 0
   jumpForce: 22
   wallJumpForceModifier: 0.8
-  wallJumped: 0
+  airJumpForceMultiplier: 1.1
 --- !u!114 &6939573208144541448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,6 +572,8 @@ MonoBehaviour:
   falling: 0
   turning: 0
   moving: 0
+  JumpButtonDown: 0
+  inputVector: {x: 0, y: 0}
   edgeDetect: {fileID: 0}
   rb: {fileID: 1265982567963516339}
   initialGravity: 0
@@ -706,8 +710,8 @@ MonoBehaviour:
   coyoteTime: 0
   slide: 0
   grab: 0
-  slideMultiplier: 0
-  slideTimer: 0
+  mounted: 0
+  slideSpeed: 0
 --- !u!1 &7732361425881887498
 GameObject:
   m_ObjectHideFlags: 0

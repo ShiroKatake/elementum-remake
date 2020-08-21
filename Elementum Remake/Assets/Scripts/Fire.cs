@@ -16,19 +16,8 @@ public class Fire : Element
         sprite = fireSprite;
         name = "Fire";
     }
-    public override void Activate(GameObject player)
+    public override void Activate(GameObject player, Vector2 dir)
     {
-        // Determine the direction of the dash
-        Vector2 dir;
-        if (Input.GetButtonDown("Use2"))
-        {
-            dir = Vector2.right;
-        }
-        else
-        {
-            dir = Vector2.left;
-            
-        }
 
         //Stop player from moving and execute dash
         StartCoroutine(player.GetComponent<PlayerMovement>().DisableMovement(dashTime));
