@@ -21,11 +21,11 @@ public class Earth : Element
         Vector2 offset;
         if (direction.x > 0)
         {
-            offset.x = 1.2f;
+            offset.x = 1f;
         }
         else
         {
-            offset.x = -1.2f;
+            offset.x = -1f;
         }
         Vector2 newPos = new Vector2(player.transform.position.x + offset.x, player.transform.position.y - 0.2f);
 
@@ -36,7 +36,8 @@ public class Earth : Element
         }
         GameObject instance = Instantiate(earthCube);
         instance.GetComponent<Rigidbody2D>().transform.SetPositionAndRotation(newPos, new Quaternion());
-        instance.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity;
+        Vector2 playerVelocity = player.GetComponent<Rigidbody2D>().velocity;
+        instance.GetComponent<Rigidbody2D>().velocity = playerVelocity;
         //earth cube should have velocity set to the same as the players so that it will path with them if they are in the air.
         SelfDestruct();
     }

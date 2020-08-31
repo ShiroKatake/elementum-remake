@@ -14,9 +14,13 @@ public class PlayerWallInteractions : MonoBehaviour
     public bool mounted;
     public float slideSpeed;
 
+    public FixedJoint2D joint;
+
     // Start is called before the first frame update
     void Start()
     {
+        joint = gameObject.AddComponent<FixedJoint2D>();
+        joint.enabled = false;
     }
 
     // Update is called once per frame
@@ -65,15 +69,24 @@ public class PlayerWallInteractions : MonoBehaviour
                     slideSpeed = 5;
 
                 }
-                player.movement.rb.velocity = new Vector2(0, -slideSpeed);
+                if (!player.mountingEarthInAir)
+                {
+                    player.movement.rb.velocity = new Vector2(0, -slideSpeed);
+
+                }
             }
         }
         else
         {
             slide = false;
+            grab = false;
             slideSpeed = 0;
             coyoteTime = false;
             mounted = false;
+        }
+        if (player.jump.jumped || LeavingWall(player.Position) || player.Position == Position.Air)
+        {
+            joint.enabled = false;
         }
     }
 

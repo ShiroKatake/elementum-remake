@@ -9,6 +9,7 @@ public class PressurePlate : MonoBehaviour
     public Animator anim;
     
     public bool activated;
+    public bool inverted;
     public float activateTimer;
     public bool deactivationStarted;
 
@@ -46,13 +47,25 @@ public class PressurePlate : MonoBehaviour
         if (activated)
         {
             anim.SetBool("Up", false);
-            linkedObject.GetComponent<ObjectOnRail>().active = true;
+            Activate(true);
 
         }
         else if (activateTimer < 0)
         {
             anim.SetBool("Up", true);
-            linkedObject.GetComponent<ObjectOnRail>().active = false;
+            Activate(false);
+        }
+    }
+
+    public void Activate(bool active)
+    {
+        if(inverted)
+        {
+            linkedObject.GetComponent<ObjectOnRail>().active = !active;
+        }
+        else
+        {
+            linkedObject.GetComponent<ObjectOnRail>().active = active;
         }
     }
 

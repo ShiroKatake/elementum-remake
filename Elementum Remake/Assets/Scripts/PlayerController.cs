@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     public GameObject airPuff;
     public GameObject dustPuff;
     public GameObject wallDustPuff;
+    public GameObject firePuff;
 
     [Header("Debugging")]
     public bool debugSpawn;
@@ -70,7 +71,7 @@ public class PlayerController : MonoBehaviour
     public Position playerPosition;
     public Action playerAction;
     public bool holdingJump;
-    public bool mountingEarth;
+    public bool mountingEarthInAir;
     public bool alive;
     public bool landed;
 
@@ -157,7 +158,10 @@ public class PlayerController : MonoBehaviour
         
         if (collision.gameObject.tag == "Ladder")
         {
-            onLadder = true;
+            if (playerPosition == Position.Air)
+            {
+                onLadder = true;
+            }
         }
     }
 
@@ -171,9 +175,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mountingEarth && jump.wallJumped)
+        if (mountingEarthInAir && jump.wallJumped || playerPosition == Position.Ground)
         {
-            mountingEarth = false;
+            mountingEarthInAir = false;
         }
 
         //set the Enum playerPosition to correspond with what the player is colliding with
@@ -183,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
         if (debug)
         {
-            debugCoyoteTime.text = playerPosition.ToString();
+            debugCoyoteTime.text = mountingEarthInAir.ToString();
         }
 
         if (ability.queue.Empty)
@@ -195,50 +199,24 @@ public class PlayerController : MonoBehaviour
             cape.GetComponent<SpriteRenderer>().color = ability.queue.queue[ability.queue.LastOccupiedSlot].color;
         }
 
+        if (playerPosition == Position.Ground)
+        {
+            ability.active = false;
+        }
+
         if (playerPosition == Position.Ground && previousPosition == Position.Air)
         {
             landed = true;
+            
         }
         else
         {
             landed = false;
         }
-
-        //if (playerPosition == Position.WallLeft)
-        //{
-        //    render.flipX = true;
-        //}
-        //else if (playerPosition == Position.WallRight)
-        //{
-        //    render.flipX = false;
-        //}
-        //if (playerPosition == Position.Air)
-        //{
-        //    if (previousPosition == Position.WallLeft)
-        //    {
-        //        render.flipX = false;
-        //    }
-        //    else if (previousPosition == Position.WallRight)
-        //    {
-        //        Debug.Log("flipping");
-        //        render.flipX = true;
-        //    }
-        //}
         
 
         cape.GetComponent<SpriteRenderer>().flipX = render.flipX;
     }
-
-    public bool MountingEarthInAir()
-    {
-        if (previousPosition == Position.Air && mountingEarth)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    
 
     public void Respawn()
     {
@@ -286,6 +264,21 @@ public class PlayerController : MonoBehaviour
         puff.transform.position = new Vector2(transform.position.x, transform.position.y);
 
         }
+    }
+
+    public void FirePuff()
+    {
+        GameObject puff = Instantiate(firePuff);
+        SpriteRenderer render = puff.GetComponent<SpriteRenderer>();
+        if (movement.rb.velocity.x > 0)
+        {
+            render.flipX = false;
+        }
+        else
+        {
+            render.flipX = true;
+        }
+        puff.transform.position = new Vector2(transform.position.x, transform.position.y);
     }
 
     public void WallDustPuff()
@@ -346,7 +339,7 @@ public class PlayerController : MonoBehaviour
             playerAction = Action.Falling;
             playerFalling?.Invoke();
         }
-        if (MountingEarthInAir())
+        if (mountingEarthInAir)
         {
             playerAction = Action.MoutingEarth;
         }

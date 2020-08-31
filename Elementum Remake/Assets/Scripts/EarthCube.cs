@@ -1,82 +1,81 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EarthCube : MonoBehaviour
 {
     Vector2 kickback = new Vector2(25, 10);
     Vector2 polarity;
 
+    public AudioSource pushSound;
     public AudioClip land;
     public AudioClip earthBreak;
     public GameObject dustPuff;
+    public Rigidbody2D rb;
+    public bool grounded;
 
     // Start is called before the first frame update
     void Start()
     {
         Hazard.hazardEvent += Break;
+        SceneManager.sceneUnloaded += ctx => DestroySelf();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+        if (grounded && (rb.velocity.x < -1 || rb.velocity.x > 1))
+        {
+            if (!pushSound.isPlaying)
+            {
+                pushSound.Play();
+            }
+        }
+        else
+        {
+            pushSound.Stop();
+        }
     }
 
     public void Break(GameObject called)
     {
         if (gameObject == called)
         {
+            
             SoundManager.PlaySound(earthBreak);
-            Destroy(gameObject);
+            DestroySelf();
 
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    public void DestroySelf()
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            PlayerController player = collision.GetComponent<PlayerController>();
-            if (player.OnWall())
-            {
-                player.mountingEarth = true;
-            }
-            else
-            {
-                player.mountingEarth = false;
-            }
-        }
+        Hazard.hazardEvent -= Break;
+        Destroy(gameObject);
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (collision.gameObject.GetComponent<PlayerController>().playerPosition == Position.Air)
-            {
-                gameObject.transform.SetParent(collision.transform);
-            }
-        }
-
-        if (collision.gameObject.layer == 8)
-        {
-            DustPuff();
-            SoundManager.PlaySound(land);
-        }
-    }
-
     public void DustPuff()
     {
         GameObject puff = Instantiate(dustPuff);
         puff.transform.position = new Vector2(transform.position.x, transform.position.y);
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.CompareTag("Player"))
         {
-            gameObject.transform.SetParent(null);
+            if (!grounded)
+            {
+                collision.GetComponent<PlayerController>().mountingEarthInAir = true;
+
+            }
+        }
+        if (collision.gameObject.layer == 8)
+        {
+            DustPuff();
+            SoundManager.PlaySound(land);
+            grounded = true;
         }
     }
 
@@ -87,7 +86,7 @@ public class EarthCube : MonoBehaviour
         Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
         if (collision.gameObject.tag == "Player")
         {
-            if (script.mountingEarth && script.jump.wallJumped)
+            if (script.jump.wallJumped)
             {
                 Vector2 polarity = new Vector2();
                 if (rb.velocity.x < 0)
@@ -109,6 +108,10 @@ public class EarthCube : MonoBehaviour
                 GetComponent<Rigidbody2D>().velocity = rb.velocity - (polarity*kickback);
                 
             }
+        }
+        if (collision.gameObject.layer == 8)
+        {
+            grounded = false;
         }
     }
 }

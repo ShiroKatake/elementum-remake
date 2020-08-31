@@ -7,10 +7,9 @@ public class SoundManager : MonoBehaviour
 {
     private static bool spawned = false;
     private AudioSource sound;
-    public AudioSource tarrinsTheme;
-    public AudioSource puzzleTheme;
-    public AudioSource viollsTheme;
-    public AudioSource menuTheme;
+    public static AudioSource music;
+    public Song currentSong;
+    public static Song nextSong;
     
 
     // Start is called before the first frame update
@@ -19,8 +18,11 @@ public class SoundManager : MonoBehaviour
         if (!spawned)
         {
             spawned = true;
-            SceneManager.activeSceneChanged += ChangeMusic;
             DontDestroyOnLoad(gameObject);
+            nextSong = currentSong;
+            music = GetComponent<AudioSource>();
+            music.clip = currentSong.clip;
+            music.Play();
         }
         else
         {
@@ -43,32 +45,28 @@ public class SoundManager : MonoBehaviour
         {
 
         }
+        if (currentSong.bar)
+        {
+            if (currentSong != nextSong)
+            {
+                currentSong = nextSong;
+                music.clip = currentSong.clip;
+                music.Play();
+            }
+        }
     }
 
-    public void ChangeMusic(Scene current, Scene next)
+    public static void ChangeMusic(Song song, bool changeImmediate)
     {
-        if (next.buildIndex == 1 || next.buildIndex == 0)
+        if (changeImmediate)
         {
-            return;
+            music.clip = song.clip;
         }
-        StopMusic();
-        switch (next.buildIndex)
-        {
-            case 2:
-                tarrinsTheme.Play();
-                break;
-            case 3:
-                viollsTheme.Play();
-                break;
-        }
+        nextSong = song;
     }
 
     public void StopMusic()
     {
-        tarrinsTheme.Stop();
-        puzzleTheme.Stop();
-        viollsTheme.Stop();
-        menuTheme.Stop();
     }
 
     public static void PlaySound(AudioClip clip)

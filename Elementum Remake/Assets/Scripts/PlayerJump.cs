@@ -109,7 +109,6 @@ public class PlayerJump : MonoBehaviour
             jumped = true;
             player.movement.rb.velocity = new Vector2(x, 0);    //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
             player.movement.rb.velocity += dir * force;
-            Debug.Log(player.movement.rb.velocity);
             queuedjump = 0;
         }
     }

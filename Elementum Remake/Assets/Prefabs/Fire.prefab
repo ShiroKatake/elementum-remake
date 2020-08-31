@@ -48,4 +48,4 @@ MonoBehaviour:
   fireSprite: {fileID: 7067019300995390049, guid: f3ed1cc1f05525d47b8e9ff8035f56fc,
     type: 3}
   dashForce: 20
-  dashTime: 0.2
+  dashTime: 0.5

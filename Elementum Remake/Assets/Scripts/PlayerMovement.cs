@@ -87,12 +87,12 @@ public class PlayerMovement : MonoBehaviour
 				if (player.onLadder)
 				{
 					climbing = true;
-					if (y > 0)
+					if (y > 0.2)
 					{
 						rb.velocity = new Vector2(rb.velocity.x / 1.2f, 10);
 						ladderTimer = player.sound.LadderSound(ladderTimer);
 					}
-					else if (y < 0)
+					else if (y < -0.2)
 					{
 						rb.velocity = new Vector2(rb.velocity.x / 1.2f, -10);
 						ladderTimer = player.sound.LadderSound(ladderTimer);
@@ -118,10 +118,17 @@ public class PlayerMovement : MonoBehaviour
 				turning = false;
 			}
 
+
+			if (Immobilized)
+			{
+				rb.velocity = new Vector2(rb.velocity.x, 0);
+			}
+
 			//Skip the falling acceleration if the player is dashing or airjumping 
 			//NOTE: Immobilized might be redundant due to player.ability.active
 			if (Immobilized || player.ability.active)
 			{
+				Debug.Log(player.ability.active);
 			}
 			else
 			{
@@ -171,10 +178,12 @@ public class PlayerMovement : MonoBehaviour
 	//Check if any variables that would prevent movement are true
 	public bool CantMove(Vector2 move)
 	{
-		if (Immobilized || player.MountingEarthInAir())
+		if (Immobilized || player.mountingEarthInAir)
 		{
+			Debug.Log("Blocking Movement");
 			return true;
 		}
+		
 		return false;
 	}
 
@@ -185,11 +194,11 @@ public class PlayerMovement : MonoBehaviour
 		//Invoke an event if the player is turning
 		if (!player.OnWall())
 		{
-			if (dir.x < 0)
+			if (dir.x < -0.1)
 			{
 				playerTurned?.Invoke(true);
 			}
-			else
+			else if (dir.x > 0.1)
 			{
 				playerTurned?.Invoke(false);
 			}
@@ -213,19 +222,34 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	
-	
+	public void Dash(Vector2 dir, float dashForce)
+	{
+		rb.velocity = Vector2.zero;
+		rb.velocity = dir * dashForce;
+		if (dir.x > 0)
+		{
+			player.render.flipX = false;
+		}
+		else
+		{
+			player.render.flipX = true;
+		}
+	}
 
 
 	//Disabling input and change gravity to 0 before applying the new velocity will set the player up to move horizontally across
-	public IEnumerator DisableMovement(float dashTime) 
+	public void DisableMovement(bool active) 
 	{
-		
-		Immobilized = true;                 //Also disabling BetterJump because the script deals with gravity
-		rb.gravityScale = 0;
+		Immobilized = active;
+		if (active)
+		{
+			anim.SetTrigger("FireAbility");
+			rb.gravityScale = 0;
 
-		yield return new WaitForSeconds(dashTime);
-
-		Immobilized = false;
-		rb.gravityScale = initialGravity;
+		}
+		else {
+			rb.gravityScale = initialGravity;
+	
+		}
 	}
 }
