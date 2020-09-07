@@ -185,6 +185,7 @@ MonoBehaviour:
   flapC: {fileID: 8300000, guid: db6d5efd2e033d94eb812c1365792f93, type: 3}
   flapD: {fileID: 8300000, guid: 9b595edf3ff697e4cae63b5d5c987f3e, type: 3}
   anim: {fileID: 286258449043664890}
+  render: {fileID: 286258449043664888}
   spooked: 0
   targetHeight: 0
   spookCooldown: 0

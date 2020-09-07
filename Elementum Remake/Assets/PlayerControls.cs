@@ -81,6 +81,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ContinueDialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""7def31f5-513e-4453-a8e0-8cca3329266b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ExitDialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""cf66776a-07dd-41fc-bf8a-5af5a1e1219c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -380,6 +396,72 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""259219cf-08d3-49d7-996e-0c106a660e19"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ContinueDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""060f1c7f-469c-40ba-b424-7709e18ab17f"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ContinueDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3885189-e948-452e-b616-52bc384f9c0d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ContinueDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48ae64c4-9581-4d0b-87d6-6505055e530e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExitDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb83c3e7-b39b-4f4e-8c1a-5e5567e608e9"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExitDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89c2ae8b-9681-4875-8a5f-d768f1558bc2"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExitDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -396,6 +478,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_ExitCinematic = m_Gameplay.FindAction("ExitCinematic", throwIfNotFound: true);
         m_Gameplay_Respawn = m_Gameplay.FindAction("Respawn", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_ContinueDialogue = m_Gameplay.FindAction("ContinueDialogue", throwIfNotFound: true);
+        m_Gameplay_ExitDialogue = m_Gameplay.FindAction("ExitDialogue", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -453,6 +537,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_ExitCinematic;
     private readonly InputAction m_Gameplay_Respawn;
     private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_ContinueDialogue;
+    private readonly InputAction m_Gameplay_ExitDialogue;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -465,6 +551,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @ExitCinematic => m_Wrapper.m_Gameplay_ExitCinematic;
         public InputAction @Respawn => m_Wrapper.m_Gameplay_Respawn;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @ContinueDialogue => m_Wrapper.m_Gameplay_ContinueDialogue;
+        public InputAction @ExitDialogue => m_Wrapper.m_Gameplay_ExitDialogue;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -498,6 +586,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @ContinueDialogue.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnContinueDialogue;
+                @ContinueDialogue.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnContinueDialogue;
+                @ContinueDialogue.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnContinueDialogue;
+                @ExitDialogue.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnExitDialogue;
+                @ExitDialogue.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnExitDialogue;
+                @ExitDialogue.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnExitDialogue;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -526,6 +620,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @ContinueDialogue.started += instance.OnContinueDialogue;
+                @ContinueDialogue.performed += instance.OnContinueDialogue;
+                @ContinueDialogue.canceled += instance.OnContinueDialogue;
+                @ExitDialogue.started += instance.OnExitDialogue;
+                @ExitDialogue.performed += instance.OnExitDialogue;
+                @ExitDialogue.canceled += instance.OnExitDialogue;
             }
         }
     }
@@ -540,5 +640,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnExitCinematic(InputAction.CallbackContext context);
         void OnRespawn(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnContinueDialogue(InputAction.CallbackContext context);
+        void OnExitDialogue(InputAction.CallbackContext context);
     }
 }

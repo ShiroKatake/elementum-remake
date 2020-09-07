@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
     public bool mountingEarthInAir;
     public bool alive;
     public bool landed;
+    public bool pushing;
 
 
     public Position Position => playerPosition;
@@ -136,6 +137,7 @@ public class PlayerController : MonoBehaviour
             case ScenePhase.Loading:
             case ScenePhase.Open:
             case ScenePhase.Paused:
+            case ScenePhase.Dialogue:
             case ScenePhase.Close:
                 movement.disabled = true;
                 jump.disabled = true;
@@ -156,20 +158,32 @@ public class PlayerController : MonoBehaviour
     public void OnTriggerStay2D(Collider2D collision)
     {
         
-        if (collision.gameObject.tag == "Ladder")
+        if (collision.gameObject.CompareTag("Ladder"))
         {
             if (playerPosition == Position.Air)
             {
                 onLadder = true;
             }
         }
+
+        if (collision.gameObject.CompareTag("Earth"))
+        {
+            if (playerPosition == Position.Ground && movement.moving)
+            {
+                pushing = true;
+            }
+        }
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Ladder")
+        if (collision.gameObject.CompareTag("Ladder"))
         {
             onLadder = false;
+        }
+        if (collision.gameObject.CompareTag("Earth"))
+        {
+            pushing = false;
         }
     }
     // Update is called once per frame
@@ -179,7 +193,6 @@ public class PlayerController : MonoBehaviour
         {
             mountingEarthInAir = false;
         }
-
         //set the Enum playerPosition to correspond with what the player is colliding with
         SetPosition();
         //set the Enum playerAction to correspond with what the player is currently doing
@@ -187,7 +200,7 @@ public class PlayerController : MonoBehaviour
 
         if (debug)
         {
-            debugCoyoteTime.text = mountingEarthInAir.ToString();
+            debugCoyoteTime.text = SceneController.phase.ToString();
         }
 
         if (ability.queue.Empty)
@@ -202,16 +215,14 @@ public class PlayerController : MonoBehaviour
         if (playerPosition == Position.Ground)
         {
             ability.active = false;
-        }
-
-        if (playerPosition == Position.Ground && previousPosition == Position.Air)
-        {
-            landed = true;
-            
-        }
-        else
-        {
-            landed = false;
+            if (previousPosition == Position.Air)
+            {
+                landed = true;
+            }
+            else
+            {
+                landed = false;
+            }
         }
         
 

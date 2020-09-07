@@ -12,6 +12,7 @@ public class Bird : MonoBehaviour
     public AudioClip flapD;
 
     public Animator anim;
+    public SpriteRenderer render;
     public bool spooked;
     public float targetHeight;
     public float spookCooldown;
@@ -22,9 +23,6 @@ public class Bird : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) {
-            
-        }
         if (collision.gameObject.layer == 8)
         {
             grounded = true;
@@ -54,6 +52,10 @@ public class Bird : MonoBehaviour
             spookCooldown = Random.Range(10, 20);
             targetHeight = transform.position.y + Random.Range(5, 10);
             direction = spookRange.direction;
+            if (direction == 1)
+            {
+                render.flipX = true;
+            }
             spookRange.triggered = false;
         }
         if (spooked) 
@@ -101,16 +103,16 @@ public class Bird : MonoBehaviour
         switch (Random.Range(0, 3))
         {
             case 0:
-                SoundManager.PlaySound(flapA);
+                SoundManager.PlaySound(flapA, 0.5f);
                 break;
             case 1:
-                SoundManager.PlaySound(flapB);
+                SoundManager.PlaySound(flapB, 0.5f);
                 break;
             case 2:
-                SoundManager.PlaySound(flapC);
+                SoundManager.PlaySound(flapC, 0.5f);
                 break;
             case 3:
-                SoundManager.PlaySound(flapD);
+                SoundManager.PlaySound(flapD, 0.5f);
                 break;
         }
     }

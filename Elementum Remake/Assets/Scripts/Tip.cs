@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Tip : MonoBehaviour
 {
-    public delegate void CollisionDelegate();
-    public static event CollisionDelegate tipActivate;
-
     private TipController overlay;
     private bool activated;
 
@@ -23,7 +20,7 @@ public class Tip : MonoBehaviour
         {
             activated = true;
             overlay.FadeInTip(text, true);
-            tipActivate?.Invoke();
+            SceneController.ChangeScenePhase(ScenePhase.Cinematic);
         }
     }
 }

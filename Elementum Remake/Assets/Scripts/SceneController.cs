@@ -11,6 +11,7 @@ public enum ScenePhase
     Game,
     Paused,
     Cinematic,
+    Dialogue,
     Close,
     Save
 }
@@ -37,6 +38,7 @@ public class SceneController : MonoBehaviour
     private Animator sceneFadeIn;
     private Animator deathFade;
     private TipController tipController;
+    private DialogueController dialogueController;
 
     // Start is called before the first frame update
     private void Awake()
@@ -56,6 +58,7 @@ public class SceneController : MonoBehaviour
             typer.display = GameObject.Find("Player Camera/UI/Scene Intro").GetComponent<TMP_Text>();
             bits = GameObject.Find("Player Camera/UI/Bits").GetComponent<TMP_Text>();
             tipController = GameObject.Find("Player Camera/Tips Overlay").GetComponent<TipController>();
+            dialogueController = GameObject.Find("Player Camera/Dialogue Overlay").GetComponent<DialogueController>();
         }
         else
         {
@@ -78,9 +81,10 @@ public class SceneController : MonoBehaviour
         PlayerController.deathEvent += OnPlayerDeath;
         ExitInteraction.doorEvent += TransitionToNextScene;
         Interaction.eventTrigger += NewEvent;
-        TipController.tipDisplaying += ChangeScenePhase;
         player.input.Gameplay.Pause.performed += ctx => Pause();
         player.input.Gameplay.ExitCinematic.performed += ctx => ExitCinematic();
+        player.input.Gameplay.ContinueDialogue.performed += ctx => ContinueDialogue();
+        player.input.Gameplay.ExitDialogue.performed += ctx => ExitDialogue();
     }
 
     private void Update()
@@ -108,9 +112,9 @@ public class SceneController : MonoBehaviour
             }
             phase = ScenePhase.Cinematic;
         }
-        else if (phase == ScenePhase.Game)
+        if (phase == ScenePhase.Dialogue)
         {
-            
+
         }
     }
 
@@ -129,7 +133,31 @@ public class SceneController : MonoBehaviour
         if (phase == ScenePhase.Cinematic && !tipController.inputDisabled)
         {
             tipController.FadeInTip("", false);
+            ChangeScenePhase(ScenePhase.Game);
         }
+    }
+
+    public void ContinueDialogue()
+    {
+        if (phase == ScenePhase.Dialogue)
+        {
+            if (DialogueController.currentDialogue.currentLine == DialogueController.currentDialogue.characterLines.Count - 1)
+            {
+                ExitDialogue();
+            }
+            else
+            {
+                dialogueController.IncrementDialogue();
+
+            }
+        }
+        
+        
+    }
+
+    public void ExitDialogue()
+    {
+        ChangeScenePhase(ScenePhase.Game);
     }
 
     public void OnPlayerDeath()
@@ -215,7 +243,7 @@ public class SceneController : MonoBehaviour
 
 
 
-    private void ChangeScenePhase(ScenePhase scenePhase)
+    public static void ChangeScenePhase(ScenePhase scenePhase)
     {
         ScenePhaseChanged?.Invoke(phase, scenePhase);
         phase = scenePhase;

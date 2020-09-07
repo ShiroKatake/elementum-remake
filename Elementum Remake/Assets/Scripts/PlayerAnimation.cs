@@ -32,6 +32,7 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetBool("AirTurning", player.movement.turning);
         anim.SetBool("Moving", player.movement.moving);
         anim.SetBool("Landed", player.landed);
+        anim.SetBool("Pushing", player.pushing);
     }
 
     public void Die()
