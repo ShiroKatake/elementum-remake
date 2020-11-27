@@ -5,7 +5,9 @@ using UnityEngine;
 public class AnimateOnCollision : MonoBehaviour
 {
     public Animator anim;
+    public SpriteRenderer render;
     public bool vertical;
+    public float playerVelocity;
 
     private void Start()
     {
@@ -17,24 +19,24 @@ public class AnimateOnCollision : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (!vertical)
+            if (vertical)
             {
-                anim.SetFloat("PlayerVelocity", collision.gameObject.GetComponent<Rigidbody2D>().velocity.x);
+                playerVelocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity.y;
             }
             else
             {
-                if (GetComponent<SpriteRenderer>().flipX)
-                {
-                    anim.SetFloat("PlayerVelocity", -1*collision.gameObject.GetComponent<Rigidbody2D>().velocity.y);
-                }
-                else
-                {
-                    anim.SetFloat("PlayerVelocity", collision.gameObject.GetComponent<Rigidbody2D>().velocity.y);
-                }
+                playerVelocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity.x;
             }
+        
+       
+            if (render.flipX)
+            {
+                playerVelocity = -1 * playerVelocity;
+            }
+
+            anim.SetFloat("PlayerVelocity", playerVelocity);
         }
     }
 }

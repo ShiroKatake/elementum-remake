@@ -141,7 +141,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.3, y: -0.5}
+  m_Offset: {x: 0.4, y: -0.5}
   m_Size: {x: 0.2, y: 1}
   m_Direction: 0
 --- !u!70 &4226736283616576193
@@ -157,7 +157,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.3, y: -0.5}
+  m_Offset: {x: -0.4, y: -0.5}
   m_Size: {x: 0.2, y: 1}
   m_Direction: 0
 --- !u!1 &5621159952443652736
@@ -369,6 +369,9 @@ MonoBehaviour:
   player: {fileID: 7253897716294526091}
   anim: {fileID: 2112485578712686402}
   render: {fileID: 2460615419358135708}
+  capeRender: {fileID: 7938258743816270139}
+  ghost: {fileID: 1887019154588792524, guid: 1837da8916f9bd4418f72614acc03af9, type: 3}
+  ghostDelay: 0.1
 --- !u!114 &7253897716294526091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,7 +404,6 @@ MonoBehaviour:
   debugSpawn: 0
   debugCoyoteTime: {fileID: 0}
   debug: 0
-  onLadder: 0
   previousPosition: 2
   playerPosition: 2
   playerAction: 0
@@ -409,6 +411,7 @@ MonoBehaviour:
   mountingEarthInAir: 0
   alive: 0
   landed: 0
+  pushing: 0
 --- !u!114 &839038574001921388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,7 +445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disabled: 0
   player: {fileID: 7253897716294526091}
-  playerJump: {fileID: 8300000, guid: 25cbd464f436fbe4cadf114c21d815c8, type: 3}
+  playerJump: {fileID: 0}
   airSound: {fileID: 8300000, guid: bd6542bf1c48ded479a610080dda8447, type: 3}
   coyoteTime: 0
   coyoteTimeAvailable: 0
@@ -467,8 +470,10 @@ MonoBehaviour:
   player: {fileID: 0}
   disabled: 0
   anim: {fileID: 2112485578712686402}
+  onLadder: 0
   ladderTimer: 0
   climbing: 0
+  climbingVelocity: {x: 0, y: 0}
   speed: 10
   wallJumpLerp: 2.5
   airbourneLerp: 5.5
@@ -666,5 +671,5 @@ MonoBehaviour:
   earthColor: {r: 0.2901961, g: 0.16862746, b: 0.10588236, a: 1}
   earthSprite: {fileID: -9040213202095379110, guid: f3ed1cc1f05525d47b8e9ff8035f56fc,
     type: 3}
-  earthCube: {fileID: 6102961979326894398, guid: 71ba11c851cc33145a2c256c5889599b,
+  earthCube: {fileID: 5894179882981491633, guid: fc7fa4cc17bbcfa489fed21e07ded615,
     type: 3}

@@ -46,12 +46,9 @@ public class PlayerJump : MonoBehaviour
     //Grant coyote time if player leaves the ground without jumping
     public void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == 8)
+        if (!jumped && player.PreviousPosition == Position.Ground)
         {
-            if (!jumped && player.PreviousPosition == Position.Ground)
-            {
-                StartCoroutine(CoyoteTime());
-            }
+            StartCoroutine(CoyoteTime());
         }
     }
 
@@ -60,14 +57,9 @@ public class PlayerJump : MonoBehaviour
     {
         if ((queuedjump > 0))
         {
-            if (player.Position == Position.Ground)
+            if (player.Position == Position.Ground || player.movement.onLadder)
             {
                 Jump(Vector2.up, jumpForce, player.movement.rb.velocity.x, playerJump);
-            }
-            else if (player.OnWall())
-            {
-                WallJump();
-
             }
         }
         queuedjump -= Time.deltaTime;
@@ -81,9 +73,17 @@ public class PlayerJump : MonoBehaviour
         {
             //Jump
             queuedjump = 0.2f;
-            if (player.Position == Position.Ground || coyoteTime)
+            if (player.Position == Position.Ground || coyoteTime || player.movement.onLadder)
             {
-                Jump(Vector2.up, jumpForce, player.movement.rb.velocity.x, playerJump);
+                if (player.movement.onLadder && player.movement.inputVector.y < -0.5)
+                {
+                    player.movement.onLadder = false;
+                }
+                else
+                {
+                    Jump(Vector2.up, jumpForce, player.movement.rb.velocity.x, playerJump);
+
+                }
             }
             else if (player.OnWall())
             {
@@ -104,7 +104,7 @@ public class PlayerJump : MonoBehaviour
         //make sure the player can't jump twice for polish sake
         if (!jumped || x == 0)
         {
-            SoundManager.PlaySound(sound);
+            //SoundManager.PlaySound(sound);
             player.playerPosition = Position.Air;
             jumped = true;
             player.movement.rb.velocity = new Vector2(x, 0);    //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
@@ -126,7 +126,7 @@ public class PlayerJump : MonoBehaviour
     {
         coyoteTimeAvailable = false;
         coyoteTime = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         coyoteTime = false;
     }
 

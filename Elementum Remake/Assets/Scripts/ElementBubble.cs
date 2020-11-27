@@ -5,7 +5,6 @@ using UnityEngine;
 public class ElementBubble : MonoBehaviour {
 
 	public PlayerAbility player;
-	public GameObject pointlight;
 
 	public Animator anim;
 
@@ -22,14 +21,6 @@ public class ElementBubble : MonoBehaviour {
 	public void Update()
 	{
 		anim.SetBool("Active", active);
-		if (active)
-		{
-			pointlight.SetActive(true);
-		}
-		else
-		{
-			pointlight.SetActive(false);
-		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {

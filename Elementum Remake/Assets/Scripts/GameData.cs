@@ -7,7 +7,8 @@ public class GameData : MonoBehaviour
 {
     public static bool spawned = false;
 
-    public static Vector2 spawnLocation = new Vector2(-196, -10);
+    public static Vector2 spawnLocation = new Vector2(-248, 27);
+    public static Vector2 cameraTargetSpawn;
     public static int sceneIndex;
     public static List<string> queue = new List<string>();
     public static int deaths;

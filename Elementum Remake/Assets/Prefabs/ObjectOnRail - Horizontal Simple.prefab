@@ -157,8 +157,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8839356748688486105}
   - component: {fileID: 8839356748688486104}
-  - component: {fileID: 8839356748688486102}
   - component: {fileID: 2093859647811805983}
+  - component: {fileID: 7942250714370830214}
   m_Layer: 0
   m_Name: ObjectOnRail - Horizontal Simple
   m_TagString: Untagged
@@ -231,28 +231,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8839356748688486102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8839356748688486107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 992d65388fbb12c4097f264fa0bd6219, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  isVertical: 0
-  moveableObject: {fileID: 8839356748116366605}
-  platform: {fileID: 0}
-  speed: 2
-  limit: 0
-  turnCooldown: 0
-  movingEarth: {fileID: 2093859647811805983}
-  vel: {x: 0, y: 0}
-  mode: 0
 --- !u!82 &2093859647811805983
 AudioSource:
   m_ObjectHideFlags: 0
@@ -349,3 +327,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7942250714370830214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8839356748688486107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70184144fb003a54a8ff03b490eaeb3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
+  isVertical: 0
+  speed: 2
+  limit: 0
+  mode: 0
+  movingEarth: {fileID: 2093859647811805983}
+  moveableObject: {fileID: 8839356748116366605}
+  platform: {fileID: 8839356748116366604}

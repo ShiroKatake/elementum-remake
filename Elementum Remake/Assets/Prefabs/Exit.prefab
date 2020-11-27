@@ -206,10 +206,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3433345a61b8bc54287424fd28436ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationScene: Voill's Garden
+  destinationScene: Violl's Garden
   destinationDoor: {x: 0, y: 0}
   player: {fileID: 0}
-  enterDoor: {fileID: 0}
+  enterDoor: {fileID: 8300000, guid: 0c71e1fde8368214eb9bf549bb3d1fd1, type: 3}
   locked: 0
   text: {fileID: 0}
 --- !u!114 &2142238644895206413

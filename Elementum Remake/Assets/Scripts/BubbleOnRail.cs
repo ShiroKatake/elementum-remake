@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BubbleOnRail : MonoBehaviour
+public class BubbleOnRail : ObjectOnRail
 {
-    public bool active;
-    public bool isVertical;
     public GameObject moveableObject;
-    public float speed;
-    public float limit;
 
     // Start is called before the first frame update
     void Start()
@@ -21,11 +17,19 @@ public class BubbleOnRail : MonoBehaviour
     {
         if (active)
         {
-            if (moveableObject.transform.position.x >= transform.position.x + limit || moveableObject.transform.position.x <= transform.position.x - limit)
+            if (!(moveableObject.transform.position.y >= transform.position.y + limit))
             {
-                speed *= -1;
+                moveableObject.transform.position = new Vector2(moveableObject.transform.position.x, moveableObject.transform.position.y + speed);
             }
-            moveableObject.transform.position = new Vector2(moveableObject.transform.position.x + speed, moveableObject.transform.position.y);
+
+        }
+        else
+        {
+            if (!(moveableObject.transform.position.y <= transform.position.y - limit))
+            {
+                moveableObject.transform.position = new Vector2(moveableObject.transform.position.x, moveableObject.transform.position.y - speed);
+            }
+
         }
     }
 }

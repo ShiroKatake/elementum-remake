@@ -125,8 +125,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   up: {fileID: 2555774527660831852, guid: f3ed1cc1f05525d47b8e9ff8035f56fc, type: 3}
   down: {fileID: 6246163242151688727, guid: f3ed1cc1f05525d47b8e9ff8035f56fc, type: 3}
-  anim: {fileID: 0}
+  anim: {fileID: 1233915294035527128}
   activated: 0
+  inverted: 0
   activateTimer: 0
   deactivationStarted: 0
   linkedObject: {fileID: 0}

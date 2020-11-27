@@ -10,6 +10,7 @@ public class Bird : MonoBehaviour
     public AudioClip flapB;
     public AudioClip flapC;
     public AudioClip flapD;
+    public AudioClip chirp;
 
     public Animator anim;
     public SpriteRenderer render;
@@ -100,7 +101,7 @@ public class Bird : MonoBehaviour
 
     public void Flap()
     {
-        switch (Random.Range(0, 3))
+        switch (Random.Range(2, 3))
         {
             case 0:
                 SoundManager.PlaySound(flapA, 0.5f);
@@ -115,5 +116,10 @@ public class Bird : MonoBehaviour
                 SoundManager.PlaySound(flapD, 0.5f);
                 break;
         }
+    }
+
+    public void Chirp()
+    {
+        SoundManager.PlaySound(chirp, 0.6f);
     }
 }

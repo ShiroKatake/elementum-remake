@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Fire : Element
 {
+    public delegate void ElementDelegate();
+    public static event ElementDelegate fireCast;
+    
     public Color fireColor;             //Color the player will change to
     public Sprite fireSprite;
     public float dashForce;             //How powerful the dash pushes the player
     public float dashTime;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +26,7 @@ public class Fire : Element
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         //Stop player from moving and execute dash
         movement.DisableMovement(true);
+        fireCast?.Invoke();
         StartCoroutine(Dash(dir, dashForce, movement));
         
     }

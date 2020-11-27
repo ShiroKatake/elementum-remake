@@ -17,6 +17,16 @@ PrefabInstance:
       propertyPath: m_Volume
       value: 0.094
       objectReference: {fileID: 0}
+    - target: {fileID: 7942250714370830214, guid: 8659f09bbf618454fabe5ffe9bf24dd9,
+        type: 3}
+      propertyPath: isVertical
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7942250714370830214, guid: 8659f09bbf618454fabe5ffe9bf24dd9,
+        type: 3}
+      propertyPath: mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8839356748116366604, guid: 8659f09bbf618454fabe5ffe9bf24dd9,
         type: 3}
       propertyPath: hitbox

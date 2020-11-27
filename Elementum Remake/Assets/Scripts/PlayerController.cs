@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     public delegate void simpleDelegate();
     public static event simpleDelegate deathEvent;
+    public static event simpleDelegate playerRespawn;
     public static event simpleDelegate playerFalling;
     public static event simpleDelegate playerInteract;
 
@@ -66,7 +67,6 @@ public class PlayerController : MonoBehaviour
     public bool debug;
 
     [Header("Position")]
-    public bool onLadder;
     public Position previousPosition;
     public Position playerPosition;
     public Action playerAction;
@@ -121,11 +121,17 @@ public class PlayerController : MonoBehaviour
         debugCoyoteTime = GameObject.Find("/Player Camera/Debug/PlayerPosition").GetComponent<TMP_Text>();
         SceneController.ScenePhaseChanged += ChangePlayerState;
         Hazard.hazardEvent += Die;
+        ExitInteraction.doorEvent += Freeze;
     }
 
     private void OnEnable()
     {
         input.Gameplay.Enable();
+    }
+
+    public void Freeze(Vector2 position, string scene)
+    {
+        jump.Freeze();
     }
 
     //Each time the scene phase changes, the player will be notified and will enable and disable stripts in accordance
@@ -139,13 +145,10 @@ public class PlayerController : MonoBehaviour
             case ScenePhase.Paused:
             case ScenePhase.Dialogue:
             case ScenePhase.Close:
-                movement.disabled = true;
-                jump.disabled = true;
-                ability.disabled = true;
-                break;
             case ScenePhase.Cinematic:
                 jump.disabled = true;
                 ability.disabled = true;
+                movement.disabled = true;
                 break;
             case ScenePhase.Game:
                 movement.disabled = false;
@@ -155,20 +158,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnTriggerStay2D(Collider2D collision)
+    public void OnCollisionStay2D(Collision2D collision)
     {
-        
-        if (collision.gameObject.CompareTag("Ladder"))
-        {
-            if (playerPosition == Position.Air)
-            {
-                onLadder = true;
-            }
-        }
-
         if (collision.gameObject.CompareTag("Earth"))
         {
-            if (playerPosition == Position.Ground && movement.moving)
+            if (collision.contacts[0].point.y >= transform.position.y-0.5)
             {
                 pushing = true;
             }
@@ -177,10 +171,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ladder"))
-        {
-            onLadder = false;
-        }
         if (collision.gameObject.CompareTag("Earth"))
         {
             pushing = false;
@@ -224,6 +214,10 @@ public class PlayerController : MonoBehaviour
                 landed = false;
             }
         }
+        else
+        {
+            landed = false;
+        }
         
 
         cape.GetComponent<SpriteRenderer>().flipX = render.flipX;
@@ -231,7 +225,8 @@ public class PlayerController : MonoBehaviour
 
     public void Respawn()
     {
-        Debug.Log("respawning");
+        Debug.Log("respawning player at: " + GameData.spawnLocation);
+        playerRespawn?.Invoke();
         transform.position = new Vector3(GameData.spawnLocation.x, GameData.spawnLocation.y);
         alive = true;
     }
@@ -341,7 +336,7 @@ public class PlayerController : MonoBehaviour
         {
             playerAction = Action.Jumping;
         }
-        if (onLadder)
+        if (movement.onLadder)
         {
             playerAction = Action.OnLadder;
         }

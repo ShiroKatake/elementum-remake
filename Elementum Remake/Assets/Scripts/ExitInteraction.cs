@@ -13,15 +13,19 @@ public class ExitInteraction : MonoBehaviour {
 	Animator anim;					//Animator component of the LevelTransition child
 	public string destinationScene;	//The scene the door links to
 	public Vector2 destinationDoor; //The position of the linked door
-	public PlayerMovement player;
+	public PlayerController player;
 	public AudioClip enterDoor;
+	public SpriteRenderer icon;
+	public SpriteRenderer doorLock;
 	public bool locked;
 
 	public TMP_Text text;
 
 	private void Awake() {
-		player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+		player = GameObject.Find("Player").GetComponent<PlayerController>();
 		PlayerController.playerInteract += PlayerInteract;
+		icon = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+		doorLock = GetComponent<SpriteRenderer>();
 	}
 
 	void Start() {
@@ -32,12 +36,12 @@ public class ExitInteraction : MonoBehaviour {
 
 		if (locked)
 		{
-			GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1);
+			doorLock.color = new Color(255, 255, 255, 1);
 
 		}
 		else
 		{
-			GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 0);
+			doorLock.color = new Color(255, 255, 255, 0);
 		}
 
 		
@@ -53,8 +57,8 @@ public class ExitInteraction : MonoBehaviour {
 			else
 			{
 				isTransitioning = true;
+				StartCoroutine(ResetTransitioning());
 				SoundManager.PlaySound(enterDoor);
-				player.GetComponent<PlayerJump>().Freeze();
 				doorEvent?.Invoke(destinationDoor, destinationScene);
 			}
 
@@ -73,11 +77,17 @@ public class ExitInteraction : MonoBehaviour {
 		DisplayIcon(0);
 	}
 
+	private IEnumerator ResetTransitioning()
+	{
+		yield return new WaitForSeconds(2);
+		isTransitioning = false;
+	}
+
 	//Change the alpha of the interact icon to appear when in bounds and disappear when out of bounds
 	private void DisplayIcon(float alpha)
 	{
-		Color tmp = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color;
+		Color tmp = icon.color;
 		tmp.a = alpha;
-		transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = tmp;
+		icon.color = tmp;
 	}
 }

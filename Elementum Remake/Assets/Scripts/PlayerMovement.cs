@@ -12,8 +12,10 @@ public class PlayerMovement : MonoBehaviour
 	[Header("Animation")]
 	public Animator anim;
 
+	public bool onLadder;
 	public float ladderTimer;
 	public bool climbing;
+	public Vector2 climbingVelocity;
 
 	[Header("Stats")]
 	public float speed;					//How fast the player moves
@@ -44,72 +46,70 @@ public class PlayerMovement : MonoBehaviour
 		initialGravity = rb.gravityScale;
 		
 	}
+
+	public void OnTriggerStay2D(Collider2D collision)
+	{
+		if (collision.gameObject.CompareTag("Ladder"))
+		{
+			if (!onLadder)
+			{
+				if (player.Position == Position.Air && inputVector.y > 0.5 && falling)
+				{
+					Debug.Log("On ladder");
+					onLadder = true;
+					player.jump.jumped = false;
+				}
+			}
 			
+		}
+	}
+
+	private void OnTriggerExit2D(Collider2D collision)
+	{
+		if (collision.gameObject.CompareTag("Ladder"))
+		{
+			onLadder = false;
+		}
+	}
+
 	private void Update() 
 	{
 		//Check the script is not disabled by the playercontroller
 		if (!disabled)
 		{
-			//Take movement input from player
-			float x = inputVector.x;
-			float y = inputVector.y;
-
-			//if (rb.velocity.x < -5 || rb.velocity.x > 5)
-			//{
-			//	speed = 10;
-			//}
-			//else
-			//{
-			//	speed = 15;
-			//}
-
-			
-
 			if (player.alive)
 			{
 				//Make sure player movement isnt being prevented by another action
-				if (CantMove(new Vector2(x, y)))
+				if (CantMove(inputVector))
 				{
 
 				}
 				else
 				{
-					Walk(new Vector2(x, y));
+					Walk(inputVector);
 				}
 
 				//Set the animation to idle if the player is moving a tiny bit or not at all
-				if (x < 0.1 && x > -0.1)
+				if (inputVector.x < 0.1 && inputVector.x > -0.1)
 				{
 					moving = false;
 				}
 
 				//Climbing ladders
-				if (player.onLadder)
+				if (onLadder)
 				{
-					climbing = true;
-					if (y > 0.2)
-					{
-						rb.velocity = new Vector2(rb.velocity.x / 1.2f, 10);
-						ladderTimer = player.sound.LadderSound(ladderTimer);
-					}
-					else if (y < -0.2)
-					{
-						rb.velocity = new Vector2(rb.velocity.x / 1.2f, -10);
-						ladderTimer = player.sound.LadderSound(ladderTimer);
-					}
-					else
-					{
-						climbing = false;
-					}
+					LadderMovement(inputVector.x, inputVector.y);
+
 				}
 				else
 				{
 					climbing = false;
+					//rb.gravityScale = 5;
 				}
 			}
 
 			//Detect if the player is accelerating towards 0
-			if ((lastX > 0 && x < lastX) || (lastX < 0 && x > lastX))
+			if ((lastX > 0 && inputVector.x < lastX) || (lastX < 0 && inputVector.x > lastX))
 			{
 				turning = true;
 			}
@@ -128,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
 			//NOTE: Immobilized might be redundant due to player.ability.active
 			if (Immobilized || player.ability.active)
 			{
-				Debug.Log(player.ability.active);
+
 			}
 			else
 			{
@@ -146,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
 			}
 
 			//Save the x position for use in the next frame
-			lastX = x;
+			lastX = inputVector.x;
 		}
 
 		//count down till the next time the ladder will make a sound
@@ -180,7 +180,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (Immobilized || player.mountingEarthInAir)
 		{
-			Debug.Log("Blocking Movement");
 			return true;
 		}
 		
@@ -212,7 +211,11 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else if (player.Position == Position.Air)
 		{
-			rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), airbourneLerp * Time.deltaTime);
+			if (inputVector.x > 0.1 || inputVector.x < -0.1)
+			{
+				rb.velocity = Vector2.Lerp(rb.velocity, (new Vector2(dir.x * speed, rb.velocity.y)), airbourneLerp * Time.deltaTime);
+
+			}
 		}
 		else
 		{
@@ -221,6 +224,33 @@ public class PlayerMovement : MonoBehaviour
 		
 	}
 
+	public void LadderMovement(float x, float y)
+	{
+		if (player.jump.jumped)
+		{
+			onLadder = false;
+			return;
+		}
+		rb.gravityScale = 0;
+		climbingVelocity = Vector2.zero;
+		climbing = true;
+
+		if (x > 0.2 || x < -0.2)
+		{
+			climbingVelocity.x = 5*inputVector.x;
+		}
+		if (y > 0.2)
+		{
+			climbingVelocity.y = 7;
+			ladderTimer = player.sound.LadderSound(ladderTimer);
+		}
+		else if (y < -0.2)
+		{
+			climbingVelocity.y = -7;
+			ladderTimer = player.sound.LadderSound(ladderTimer);
+		}
+		rb.velocity = climbingVelocity;
+	}
 	
 	public void Dash(Vector2 dir, float dashForce)
 	{

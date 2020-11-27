@@ -6,7 +6,6 @@ public class InteractIcon : MonoBehaviour
 {
 
     public SpriteRenderer icon;
-    public int id;
 
     // Start is called before the first frame update
     void Start()

@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Violl
   characterLines:
-  - Hello there traveller. Welcome to our garden.
-  - You must visit The Great Orchid soon. She awaits.
-  currentLine: 2
+  - You're here. You're finally here.
+  - I've been searching for you for quite some time and i was beginning to lose hope
+  - These parts have been untouched for years. Nature has relaimed it since the wars
+    split the world.
+  - But now that I've found you, we might finally have a chance to reconnect. Reforge
+    the paths between our people.
+  - You have ancient blood. Ancient mechanisms respond to ancient blood.
+  - Go forth and make your own path, so that we may follow on day.
+  currentLine: 0

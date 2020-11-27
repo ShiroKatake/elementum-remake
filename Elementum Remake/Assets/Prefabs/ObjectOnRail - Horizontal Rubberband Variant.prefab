@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 130936889115620865, guid: 1523894bbf5f98d44b470fee8084cbd3,
         type: 3}
       propertyPath: m_Name
-      value: ObjectOnRail - Horizontal Rubberband
+      value: ObjectOnRail - Horizontal Rubberband Variant
       objectReference: {fileID: 0}
     - target: {fileID: 130936889115620867, guid: 1523894bbf5f98d44b470fee8084cbd3,
         type: 3}
@@ -115,6 +115,11 @@ PrefabInstance:
     - target: {fileID: 130936889544920533, guid: 1523894bbf5f98d44b470fee8084cbd3,
         type: 3}
       propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531805207868356444, guid: 1523894bbf5f98d44b470fee8084cbd3,
+        type: 3}
+      propertyPath: mode
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
