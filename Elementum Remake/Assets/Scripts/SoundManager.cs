@@ -7,10 +7,11 @@ public class SoundManager : MonoBehaviour
 {
     private static bool spawned = false;
     private AudioSource sound;
-    public static AudioSource music;
+    public static AudioSource ambience;
     public Song currentSong;
     public static Song nextSong;
     
+    public 
 
     // Start is called before the first frame update
     void Awake()
@@ -20,9 +21,12 @@ public class SoundManager : MonoBehaviour
             spawned = true;
             DontDestroyOnLoad(gameObject);
             nextSong = currentSong;
-            music = GetComponent<AudioSource>();
-            music.clip = currentSong.clip;
-            music.Play();
+
+            
+
+            ambience = GetComponent<AudioSource>();
+            ambience.clip = currentSong.clip;
+            ambience.Play();
         }
         else
         {
@@ -50,8 +54,8 @@ public class SoundManager : MonoBehaviour
             if (currentSong != nextSong)
             {
                 currentSong = nextSong;
-                music.clip = currentSong.clip;
-                music.Play();
+                ambience.clip = currentSong.clip;
+                ambience.Play();
             }
         }
     }
@@ -60,7 +64,7 @@ public class SoundManager : MonoBehaviour
     {
         if (changeImmediate)
         {
-            music.clip = song.clip;
+            ambience.clip = song.clip;
         }
         nextSong = song;
     }

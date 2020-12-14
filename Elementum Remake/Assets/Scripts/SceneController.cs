@@ -54,7 +54,7 @@ public class SceneController : MonoBehaviour
             sceneVeil = GameObject.Find("Player Camera/UI/Scene Fade In").GetComponent<SpriteRenderer>();
             deathFade = GameObject.Find("Player Camera/UI/Death Fade").GetComponent<Animator>();
             typer.display = GameObject.Find("Player Camera/UI/Scene Intro").GetComponent<TMP_Text>();
-            bits = GameObject.Find("Player Camera/UI/Bits").GetComponent<TMP_Text>();
+            bits = GameObject.Find("Player Camera/UI/HUD/Bits").GetComponent<TMP_Text>();
             tipController = GameObject.Find("Player Camera/Tips Overlay").GetComponent<TipController>();
             dialogueController = GameObject.Find("Player Camera/Dialogue Overlay").GetComponent<DialogueController>();
         }

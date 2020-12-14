@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8096531010775163763}
   m_Layer: 0
   m_Name: bush with flowers
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b966d12481cc0d04f9fa3852c3bc55d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rustle: {fileID: 8300000, guid: 1e2e05d64f7f01249840f947d3370fbf, type: 3}
   anim: {fileID: 8096531010775163762}
   render: {fileID: 8096531010775163760}
   vertical: 0

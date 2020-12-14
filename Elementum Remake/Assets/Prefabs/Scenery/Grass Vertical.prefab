@@ -116,6 +116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b966d12481cc0d04f9fa3852c3bc55d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rustle: {fileID: 8300000, guid: 3d0dc748f535306439fa3709188e6615, type: 3}
+  soundCooldown: 0
   anim: {fileID: 5025422633020995385}
   render: {fileID: 5025422633020995382}
   vertical: 1
