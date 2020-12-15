@@ -119,7 +119,6 @@ public class SceneController : MonoBehaviour
             //load the level
             //reset some transition variables
             sceneVeil.color = new Color(sceneVeil.color.r, sceneVeil.color.g, sceneVeil.color.b, 255);
-            bits.color = new Color(bits.color.r, bits.color.g, bits.color.b, 0);
 
             ChangeScenePhase(ScenePhase.Open);
         }

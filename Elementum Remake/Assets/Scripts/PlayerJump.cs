@@ -104,7 +104,7 @@ public class PlayerJump : MonoBehaviour
         //make sure the player can't jump twice for polish sake
         if (!jumped || x == 0)
         {
-            //SoundManager.PlaySound(sound);
+            SoundManager.PlaySound(sound);
             player.playerPosition = Position.Air;
             jumped = true;
             player.movement.rb.velocity = new Vector2(x, 0);    //Resetting velocity to 0 allows for instant response to the player's input -> Makes it feel better. Setting only y velocity to 0 allows for air controls
