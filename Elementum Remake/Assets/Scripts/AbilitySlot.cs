@@ -55,10 +55,12 @@ public class AbilitySlot : MonoBehaviour {
 		//Change the color of the slot depending on what element is occupying it
 		if (!occupied) {
 			color = Color.white;
+			GetComponent<SpriteRenderer>().sprite = null;
 		} else {
-			color = Element.Color;
+			GetComponent<SpriteRenderer>().sprite = element.GetComponent<Element>().sprite;
 		}
-		transform.GetComponent<SpriteRenderer>().color = color;
+		
+		//transform.GetComponent<SpriteRenderer>().color = color;
 	}
 
 

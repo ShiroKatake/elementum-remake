@@ -7,7 +7,7 @@ public class SoundManager : MonoBehaviour
 {
     private static bool spawned = false;
     private AudioSource sound;
-    public static AudioSource ambience;
+    public static AudioSource music;
     public Song currentSong;
     public static Song nextSong;
     
@@ -22,17 +22,34 @@ public class SoundManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             nextSong = currentSong;
 
-            
+            SceneController.SceneUpdate += SceneUpdate;
 
-            ambience = GetComponent<AudioSource>();
-            ambience.clip = currentSong.clip;
-            ambience.Play();
+            music = GetComponent<AudioSource>();
+            music.clip = currentSong.clip;
         }
         else
         {
             DestroyImmediate(gameObject);
         }
     }
+
+    private void SceneUpdate(Scene current)
+    {
+        Debug.Log(current.name);
+        switch(current.name)
+        {
+            case "The Overgrowth":
+                Debug.Log("Staring music");
+                music.Play();
+                break;
+            case "0_start":
+                music.Stop();
+                break;
+                
+        }
+        
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -54,8 +71,8 @@ public class SoundManager : MonoBehaviour
             if (currentSong != nextSong)
             {
                 currentSong = nextSong;
-                ambience.clip = currentSong.clip;
-                ambience.Play();
+                music.clip = currentSong.clip;
+                music.Play();
             }
         }
     }
@@ -64,7 +81,7 @@ public class SoundManager : MonoBehaviour
     {
         if (changeImmediate)
         {
-            ambience.clip = song.clip;
+            music.clip = song.clip;
         }
         nextSong = song;
     }

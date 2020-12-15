@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bpm: 130
-  clip: {fileID: 8300000, guid: 9172560c3eb9a064d82a4d6a50ebcac2, type: 3}
+  clip: {fileID: 8300000, guid: 6c56b9c74e85ee34eaace03da4db2f45, type: 3}
   bar: 0
   beatTimer: 0
 --- !u!1 &3837340156848162682
@@ -204,7 +204,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

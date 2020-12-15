@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
         input.Gameplay.Move.canceled += ctx => movement.inputVector = Vector2.zero;
 
 
-        debugCoyoteTime = GameObject.Find("/Player Camera/Debug/PlayerPosition").GetComponent<TMP_Text>();
+        debugCoyoteTime = GameObject.Find("/Player Camera/HUD/PlayerPosition").GetComponent<TMP_Text>();
         SceneController.ScenePhaseChanged += ChangePlayerState;
         Hazard.hazardEvent += Die;
         ExitInteraction.doorEvent += Freeze;

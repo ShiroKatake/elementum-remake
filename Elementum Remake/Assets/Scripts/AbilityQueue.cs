@@ -33,7 +33,7 @@ public class AbilityQueue : MonoBehaviour
         //create a refence to the ability slots in the scene
         for (int i = 0; i < 5; i++)
         {
-            queue[i] = GameObject.Find("/Player Camera/Slots/Ability Slot " + (i + 1).ToString()).GetComponent<AbilitySlot>();
+            queue[i] = GameObject.Find("/Player Camera/HUD/Slots/Ability Slot " + (i + 1).ToString()).GetComponent<AbilitySlot>();
         }
     }
 

@@ -23,6 +23,9 @@ public class SceneController : MonoBehaviour
     public delegate void SceneDelegate(ScenePhase current, ScenePhase next);
     public static event SceneDelegate ScenePhaseChanged;
 
+    public delegate void SceneChange(Scene current);
+    public static event SceneChange SceneUpdate;
+
     private static bool spawned = false;
 
     public static Scene currentScene;
@@ -48,15 +51,7 @@ public class SceneController : MonoBehaviour
         {
             spawned = true;
             DontDestroyOnLoad(gameObject);
-            player = GameObject.Find("Player").GetComponent<PlayerController>();
-            playerCamera = GameObject.Find("Player Camera").GetComponent<CameraController>();
-            sceneFadeIn = GameObject.Find("Player Camera/UI").GetComponent<Animator>();
-            sceneVeil = GameObject.Find("Player Camera/UI/Scene Fade In").GetComponent<SpriteRenderer>();
-            deathFade = GameObject.Find("Player Camera/UI/Death Fade").GetComponent<Animator>();
-            typer.display = GameObject.Find("Player Camera/UI/Scene Intro").GetComponent<TMP_Text>();
-            bits = GameObject.Find("Player Camera/UI/HUD/Bits").GetComponent<TMP_Text>();
-            tipController = GameObject.Find("Player Camera/Tips Overlay").GetComponent<TipController>();
-            dialogueController = GameObject.Find("Player Camera/Dialogue Overlay").GetComponent<DialogueController>();
+            
         }
         else
         {
@@ -67,14 +62,29 @@ public class SceneController : MonoBehaviour
 
     private void UpdateScene(Scene next, LoadSceneMode what)
     {
+        SceneUpdate?.Invoke(next);
+
         if (SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1)
         {
-            player.gameObject.SetActive(false);
-            playerCamera.gameObject.SetActive(false);
         }
         else
         {
             Debug.Log("Scene Updating");
+
+            player = GameObject.Find("Player").GetComponent<PlayerController>();
+            playerCamera = GameObject.Find("Player Camera").GetComponent<CameraController>();
+            sceneFadeIn = GameObject.Find("Player Camera/UI").GetComponent<Animator>();
+            sceneVeil = GameObject.Find("Player Camera/UI/Scene Fade In").GetComponent<SpriteRenderer>();
+            deathFade = GameObject.Find("Player Camera/UI/Death Fade").GetComponent<Animator>();
+            typer.display = GameObject.Find("Player Camera/UI/Scene Intro").GetComponent<TMP_Text>();
+            bits = GameObject.Find("Player Camera/HUD/Bits").GetComponent<TMP_Text>();
+            tipController = GameObject.Find("Player Camera/Tips Overlay").GetComponent<TipController>();
+            dialogueController = GameObject.Find("Player Camera/Dialogue Overlay").GetComponent<DialogueController>();
+
+            player.input.Gameplay.Pause.performed += ctx => Pause();
+            //player.input.Gameplay.ExitCinematic.performed += ctx => ExitCinematic();
+            player.input.Gameplay.ContinueDialogue.performed += ctx => ContinueDialogue();
+            player.input.Gameplay.ExitDialogue.performed += ctx => ExitDialogue();
 
             typer.text = next.name;
             currentScene = next;
@@ -91,10 +101,7 @@ public class SceneController : MonoBehaviour
         PlayerController.deathEvent += OnPlayerDeath;
         ExitInteraction.doorEvent += TransitionToNextScene;
         Interaction.eventTrigger += NewEvent;
-        player.input.Gameplay.Pause.performed += ctx => Pause();
-        //player.input.Gameplay.ExitCinematic.performed += ctx => ExitCinematic();
-        player.input.Gameplay.ContinueDialogue.performed += ctx => ContinueDialogue();
-        player.input.Gameplay.ExitDialogue.performed += ctx => ExitDialogue();
+        
 
         currentScene = SceneManager.GetActiveScene();
         UpdateScene(currentScene, new LoadSceneMode());
@@ -229,8 +236,6 @@ public class SceneController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(scene);
-        player.gameObject.SetActive(true);
-        playerCamera.gameObject.SetActive(true);
     }
 
     public void ExitGame()
