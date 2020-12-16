@@ -5,6 +5,7 @@ using UnityEngine;
 public class TarrinsCape : DestroyOnLoad
 {
     public int eventId;
+    public GameObject playerCape;
     public AudioClip collect;
     public GameObject tip;
 
@@ -18,7 +19,8 @@ public class TarrinsCape : DestroyOnLoad
         if (id == eventId)
         {
             tip.SetActive(true);
-            SoundManager.PlaySound(collect, 0.3f);
+            SoundManager.PlaySound(collect, 0.2f);
+            playerCape.SetActive(true);
             gameObject.SetActive(false);
         }
     }

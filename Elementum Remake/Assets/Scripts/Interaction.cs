@@ -7,6 +7,9 @@ public class Interaction : MonoBehaviour
     public delegate void eventDelegate(int id);
     public static event eventDelegate eventTrigger;
 
+
+    public bool repeatable;
+    public bool activated;
     public int id;
 
     private void Start()
@@ -19,7 +22,15 @@ public class Interaction : MonoBehaviour
         {
             if (collision.GetComponent<PlayerController>().input.Gameplay.Interact.phase == UnityEngine.InputSystem.InputActionPhase.Started)
             {
-                eventTrigger.Invoke(id);
+                if (activated && !repeatable)
+                {
+
+                }
+                else
+                {
+                    activated = true;
+                    eventTrigger.Invoke(id);
+                }
             }
         }
     }

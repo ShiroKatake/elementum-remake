@@ -32,18 +32,24 @@ public class DialogueController : MonoBehaviour
     {
         if (currentDialogue != null)
         {
-            dialogueText.text = currentDialogue.characterLines[currentDialogue.currentLine];
+            dialogueText.text = currentDialogue.characterLines[currentDialogue.currentChunk].CurrentLine();
             titleText.text = currentDialogue.characterName;
         }
     }
 
-    public void ResetDialogue()
+    public static void ResetDialogue()
     {
-        currentDialogue.currentLine = 0;
+        currentDialogue.ResetCurrentChunk();
     }
 
     public void IncrementDialogue()
     {
-        currentDialogue.currentLine++;
+        currentDialogue.ProgressChunk();
+    }
+
+    public static void ChangeChunk(int chunkIndex)
+    {
+        currentDialogue.currentChunk = chunkIndex;
+        ResetDialogue();
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EventTrigger : MonoBehaviour
 {
+
     public bool activated;
     public int eventId;
     public Animator anim;

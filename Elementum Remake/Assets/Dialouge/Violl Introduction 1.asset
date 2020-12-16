@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 692c8d689248c0f4c83264ebe558c862, type: 3}
+  m_Name: Violl Introduction 1
+  m_EditorClassIdentifier: 
+  locked: 0
+  lines:
+  - Hello there stranger
+  - It seems my friend here has been causing trouble again. my apologies.
+  - Its quite lonely in The Overgrowths, Tito here is always searching for new faces.
+  - wait... no, it must be a coincidence. You look like someone. Someone long dead.
+  - They had a cape just like that too. Said they could tame the elements with it.
+  - Sorry, I'm rambling now. Its been a while since I've had company. What brings
+    you to these parts anyway?
+  response: {fileID: 11400000, guid: 1f830bbc84632864d85787c14198cf56, type: 2}
+  currentLine: 0

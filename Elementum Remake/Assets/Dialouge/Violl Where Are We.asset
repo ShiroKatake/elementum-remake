@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 692c8d689248c0f4c83264ebe558c862, type: 3}
+  m_Name: Violl Where Are We
+  m_EditorClassIdentifier: 
+  locked: 0
+  loopback: 0
+  lines:
+  - This is The Overgrowth
+  - It has been abandoned for centuries. Reclaimed by nature. No one ventures out
+    here anymore, most fear what they might find.
+  - As for me, I enjoy the quiet. Besides, theres not much to fear at my age.
+  response: {fileID: 11400000, guid: a9fd357536b2dd04b8efedf90fc7dd47, type: 2}
+  currentLine: 5

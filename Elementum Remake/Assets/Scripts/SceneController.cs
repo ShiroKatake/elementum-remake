@@ -43,6 +43,8 @@ public class SceneController : MonoBehaviour
     public TypeWriterEffect typer;
     public ChaseTrigger introTrigger;
 
+    public bool awaitingResponse;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -170,9 +172,13 @@ public class SceneController : MonoBehaviour
     {
         if (phase == ScenePhase.Dialogue)
         {
-            if (DialogueController.currentDialogue.currentLine == DialogueController.currentDialogue.characterLines.Count - 1)
+            if (DialogueController.currentDialogue.CurrentLine() == DialogueController.currentDialogue.characterLines.Count - 1)
             {
-                ExitDialogue();
+                if (!awaitingResponse)
+                {
+                    Response(DialogueController.currentDialogue.CurrentResponse());
+                    awaitingResponse = true;
+                }
             }
             else
             {
@@ -180,8 +186,27 @@ public class SceneController : MonoBehaviour
 
             }
         }
-        
-        
+    }
+
+    public void RegisterResponse()
+    {
+        playerCamera.responseController.gameObject.SetActive(false);
+        foreach (Transform child in playerCamera.responseController.buttonList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        awaitingResponse = false;
+    }
+
+    public void Response(DialougeResponse response)
+    {
+        if (response == null)
+        {
+            ExitDialogue();
+            return;
+        }
+        playerCamera.responseController.GenerateButtons(response.Responses, response.values);
+        playerCamera.responseController.gameObject.SetActive(true);
     }
 
     public void ExitDialogue()

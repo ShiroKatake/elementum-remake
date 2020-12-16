@@ -8,7 +8,7 @@ public class DialogueInteraction : MonoBehaviour
 
     private void Start()
     {
-        dialogue.currentLine = 0;
+
     }
 
     

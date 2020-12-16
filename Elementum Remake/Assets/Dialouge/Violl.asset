@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: Violl
   m_EditorClassIdentifier: 
   characterName: Violl
+  currentChunk: 4
   characterLines:
-  - You're here. You're finally here.
-  - I've been searching for you for quite some time and i was beginning to lose hope
-  - These parts have been untouched for years. Nature has relaimed it since the wars
-    split the world.
-  - But now that I've found you, we might finally have a chance to reconnect. Reforge
-    the paths between our people.
-  - You have ancient blood. Ancient mechanisms respond to ancient blood.
-  - Go forth and make your own path, so that we may follow on day.
-  currentLine: 0
+  - {fileID: 11400000, guid: 7fad6fca41d712b4898f9388ea7223af, type: 2}
+  - {fileID: 11400000, guid: 4fd68a872fc87814ebd6213b09350b06, type: 2}
+  - {fileID: 11400000, guid: baa2bfd0c65631442b8b65f6f3961afa, type: 2}
+  - {fileID: 11400000, guid: 329d5961dbd8a024f898da6c2a3f9555, type: 2}
+  - {fileID: 11400000, guid: aa2e8e86b61f68f40b9e0f4e548ba496, type: 2}
+  - {fileID: 11400000, guid: 992fe6bac7522ff48bebab0625bcad05, type: 2}

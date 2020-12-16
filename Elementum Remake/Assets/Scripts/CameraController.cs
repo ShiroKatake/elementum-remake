@@ -20,6 +20,7 @@ public class CameraController : MonoBehaviour
     public Animator deathFade;
     public TipController tipController;
     public DialogueController dialogueController;
+    public ResponseListController responseController;
 
     [Header("Camera")]
     public float minimumSpeed;
