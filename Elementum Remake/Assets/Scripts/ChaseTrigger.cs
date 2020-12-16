@@ -7,6 +7,7 @@ public class ChaseTrigger : MonoBehaviour
 {
     public PlayableDirector timeline;
     public bool triggered;
+    public bool ended;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -18,5 +19,15 @@ public class ChaseTrigger : MonoBehaviour
                 triggered = true;
             }
         }
+    }
+
+    public void ManualPlay()
+    {
+        timeline.Play();
+    }
+
+    public void SequenceEnd()
+    {
+        ended = true;
     }
 }

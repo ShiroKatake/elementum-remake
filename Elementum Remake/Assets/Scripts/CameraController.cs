@@ -7,17 +7,27 @@ public class CameraController : MonoBehaviour
 {
     private static bool spawned = false;
 
-    public bool freeze;
-
     public static Transform target;
     private static bool playerMode;
+    public static float cameraSize;
+
+    public bool freeze;
+
+    [Header("Children")]
+    public SpriteRenderer sceneVeil;
+    public TMP_Text bits;
+    public Animator sceneFadeIn;
+    public Animator deathFade;
+    public TipController tipController;
+    public DialogueController dialogueController;
+
+    [Header("Camera")]
     public float minimumSpeed;
     public float xSpeed;
     public float ySpeed;
     public float limitX;
     public float limitY;
     private float timeFactor;
-    public static float cameraSize;
     public Camera camera;
 
     public Vector3 offset;

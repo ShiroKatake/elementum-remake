@@ -144,6 +144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3075d8d54cd3d744f9ace3a94cd201e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activated: 0
+  eventId: 100
   anim: {fileID: 1599217546586074291}
   playerInBounds: 0
 --- !u!114 &1599217546586074294
@@ -158,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbbd1ff449975a34c883d4b0442909ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: 100
 --- !u!1001 &1599217546603564779
 PrefabInstance:
   m_ObjectHideFlags: 0

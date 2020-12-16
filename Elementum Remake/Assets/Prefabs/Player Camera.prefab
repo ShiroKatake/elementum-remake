@@ -1506,6 +1506,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   freeze: 0
+  sceneVeil: {fileID: 3113084052626594500}
+  bits: {fileID: 4220290967403665451}
+  sceneFadeIn: {fileID: 4751382975228687591}
+  deathFade: {fileID: 6005708361754051700}
+  tipController: {fileID: 6801731015546040249}
+  dialogueController: {fileID: 7480277004330092253}
   minimumSpeed: 3
   xSpeed: 0
   ySpeed: 0
