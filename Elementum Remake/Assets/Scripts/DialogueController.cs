@@ -38,11 +38,11 @@ public class DialogueController : MonoBehaviour
         }
         if (textDisabled)
         {
-            dialogueText.alpha = 0;
+            dialogueText.gameObject.SetActive(false);
         }
         else
         {
-            dialogueText.alpha = 255;
+            dialogueText.gameObject.SetActive(true);
         }
     }
 
