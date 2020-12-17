@@ -14,29 +14,32 @@ public class PlayerSound : MonoBehaviour
 
 	public AudioClip playerDeath;
 
+	private int type;
+
 	// Start is called before the first frame update
 	void Start()
     {
-        
+		type = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
 	public float LadderSound(float timer)
 	{
 		if (timer < -0.3f)
 		{
-				switch (Random.Range(0, 2))
+				switch (type)
 				{
 					case 0:
-						SoundManager.PlaySound(playerLadderA);
+						SoundManager.PlaySound(playerLadderA, 0.5f);
+					type = 1;
 						break;
 					case 1:
-						SoundManager.PlaySound(playerLadderB);
+						SoundManager.PlaySound(playerLadderB, 0.5f);
+					type = 0;
 						break;
 					case 2:
 						SoundManager.PlaySound(playerLadderC);

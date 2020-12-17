@@ -17,4 +17,9 @@ public class DialogueChunk : ScriptableObject
     {
         return lines[currentLine];
     }
+
+    public void Reset()
+    {
+        currentLine = 0;
+    }
 }

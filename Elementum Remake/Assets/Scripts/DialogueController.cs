@@ -9,6 +9,7 @@ public class DialogueController : MonoBehaviour
     public TMP_Text dialogueText;
     public TMP_Text titleText;
     public static DialougeEvent currentDialogue;
+    public static bool textDisabled;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,14 @@ public class DialogueController : MonoBehaviour
         {
             dialogueText.text = currentDialogue.characterLines[currentDialogue.currentChunk].CurrentLine();
             titleText.text = currentDialogue.characterName;
+        }
+        if (textDisabled)
+        {
+            dialogueText.alpha = 0;
+        }
+        else
+        {
+            dialogueText.alpha = 255;
         }
     }
 

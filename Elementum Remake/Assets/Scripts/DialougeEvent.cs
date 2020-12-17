@@ -30,6 +30,11 @@ public class DialougeEvent : ScriptableObject
         return characterLines[currentChunk].response;
     }
 
+    public int ChunkSize()
+    {
+        return characterLines[currentChunk].lines.Count - 1;
+    }
+
     public int Loopback()
     {
         return characterLines[currentChunk].loopback;
@@ -38,5 +43,14 @@ public class DialougeEvent : ScriptableObject
     public void ChangeChunk(int index)
     {
         currentChunk = index;
+    }
+
+    public void Reset()
+    {
+        currentChunk = 0;
+        foreach (DialogueChunk chunk in characterLines)
+        {
+            chunk.Reset();
+        }
     }
 }

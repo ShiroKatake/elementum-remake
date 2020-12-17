@@ -9,6 +9,8 @@ public class AbilitySlot : MonoBehaviour {
 	public string elementName;
 	public bool active;
 
+	public SpriteRenderer slotSprite;
+
 	public GameObject Air;
 	public GameObject Fire;
 	public GameObject Earth;
@@ -54,10 +56,9 @@ public class AbilitySlot : MonoBehaviour {
 
 		//Change the color of the slot depending on what element is occupying it
 		if (!occupied) {
-			color = Color.white;
-			GetComponent<SpriteRenderer>().sprite = null;
+			slotSprite.sprite = null;
 		} else {
-			GetComponent<SpriteRenderer>().sprite = element.GetComponent<Element>().sprite;
+			slotSprite.sprite = element.GetComponent<Element>().sprite;
 		}
 		
 		//transform.GetComponent<SpriteRenderer>().color = color;

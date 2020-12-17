@@ -172,11 +172,12 @@ public class SceneController : MonoBehaviour
     {
         if (phase == ScenePhase.Dialogue)
         {
-            if (DialogueController.currentDialogue.CurrentLine() == DialogueController.currentDialogue.characterLines.Count - 1)
+            if (DialogueController.currentDialogue.CurrentLine() == DialogueController.currentDialogue.ChunkSize())
             {
                 if (!awaitingResponse)
                 {
                     Response(DialogueController.currentDialogue.CurrentResponse());
+                    DialogueController.textDisabled = true;
                     awaitingResponse = true;
                 }
             }
@@ -195,6 +196,7 @@ public class SceneController : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        DialogueController.textDisabled = false;
         awaitingResponse = false;
     }
 
