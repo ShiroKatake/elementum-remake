@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 3322423839513191792}
   - component: {fileID: 2591318914528313648}
   - component: {fileID: 4226736283616576193}
+  - component: {fileID: 6336875516144008633}
   m_Layer: 0
   m_Name: Legs
   m_TagString: Untagged
@@ -160,6 +161,19 @@ CapsuleCollider2D:
   m_Offset: {x: -0.4, y: -0.5}
   m_Size: {x: 0.2, y: 1}
   m_Direction: 0
+--- !u!114 &6336875516144008633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5407826413286799492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82853b898b2036a45943fa86f44c5a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touchingGround: 0
 --- !u!1 &5621159952443652736
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,6 +420,7 @@ MonoBehaviour:
   wall: {fileID: 8622248797000284994}
   render: {fileID: 2460615419358135708}
   cape: {fileID: 5621159952443652736}
+  legs: {fileID: 6336875516144008633}
   capeDefault: {r: 0.26666668, g: 0.15686275, b: 0.23529413, a: 1}
   airPuff: {fileID: 4162443556862482648, guid: 93dd02614ed29f847b66a721284f8c0f, type: 3}
   dustPuff: {fileID: 4162443556862482648, guid: 79b93ef62b52e6c429d18560649617a8,
@@ -416,7 +431,7 @@ MonoBehaviour:
     type: 3}
   debugSpawn: 0
   debugCoyoteTime: {fileID: 0}
-  debug: 0
+  debug: 1
   previousPosition: 2
   playerPosition: 2
   playerAction: 0
@@ -425,6 +440,11 @@ MonoBehaviour:
   alive: 0
   landed: 0
   pushing: 0
+  vaulting: 0
+  vaultPosition: {x: 0, y: 0}
+  vaultPosA: {x: 0, y: 0}
+  vaultPosB: {x: 0, y: 0}
+  ledgeSide: 0
 --- !u!114 &839038574001921388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,6 +557,7 @@ MonoBehaviour:
   onWall: 0
   onRightWall: 0
   onLeftWall: 0
+  overLedge: 0
   wallSide: 0
   collisionRadius: 0.05
   bottomOffset: {x: 0, y: -1}

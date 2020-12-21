@@ -12,6 +12,7 @@ public class Collision : MonoBehaviour {
 	public bool onWall;
 	public bool onRightWall;
 	public bool onLeftWall;
+	public bool overLedge;
 	public int wallSide;
 
 
@@ -31,7 +32,7 @@ public class Collision : MonoBehaviour {
 
 		onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, groundLayer);
 		onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, groundLayer);
-
+		overLedge = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset - boxCenterOffset/2, collisionRadius, groundLayer) || Physics2D.OverlapCircle((Vector2)transform.position + rightOffset - boxCenterOffset/2, collisionRadius, groundLayer);
 		wallSide = onRightWall ? -1 : 1;
 	}
 
@@ -42,5 +43,7 @@ public class Collision : MonoBehaviour {
 		Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
 		Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);
 		Gizmos.DrawWireCube((Vector2)transform.position + boxCenterOffset, boxSize);
+		Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset - boxCenterOffset/2, collisionRadius);
+		Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset - boxCenterOffset / 2, collisionRadius);
 	}
 }

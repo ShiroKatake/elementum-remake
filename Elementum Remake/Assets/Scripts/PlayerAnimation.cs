@@ -57,10 +57,21 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetTrigger("Dead");
     }
 
+    public void Respawn()
+    {
+        anim.SetTrigger("Respawn");
+    }
+
     public void AirAbility()
     {
         anim.SetTrigger("AirAbility");
         ghostDuration = 0.5f;
+    }
+
+    public void Vault()
+    {
+        Debug.Log("playing animation");
+        anim.SetTrigger("Vaulting");
     }
 
     public void FireAbility()

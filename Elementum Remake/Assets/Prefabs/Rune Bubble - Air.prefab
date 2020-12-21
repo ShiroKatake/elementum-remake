@@ -66,11 +66,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  pointlight: {fileID: 0}
   anim: {fileID: 1604201508023401812}
   collect: {fileID: 8300000, guid: cde4672db9cfa714491a46558a75371f, type: 3}
+  room: 
   element: Air
-  active: 1
+  active: 0
+  nodeActive: 0
 --- !u!95 &1604201508023401812
 Animator:
   serializedVersion: 3

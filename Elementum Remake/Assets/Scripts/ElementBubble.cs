@@ -7,6 +7,7 @@ public class ElementBubble : MonoBehaviour {
 	public PlayerAbility player;
 	public Animator anim;
 	public AudioClip collect;
+	public AudioClip turnOn;
 
 	public string room;
 	public string element;
@@ -44,5 +45,10 @@ public class ElementBubble : MonoBehaviour {
 			SoundManager.PlaySound(collect);
 			player.queue.AddElement(element);
 		}
+	}
+
+	public void TurnOn()
+	{
+		SoundManager.PlaySound(turnOn, 0.5f);
 	}
 }

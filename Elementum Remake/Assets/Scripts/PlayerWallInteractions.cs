@@ -29,7 +29,7 @@ public class PlayerWallInteractions : MonoBehaviour
         player.movement.rb.gravityScale = 5;
 
         //WallStuff
-        if (player.OnWall())
+        if (player.OnWall() && player.playerAction != Action.Vaulting)
         {
             if (!player.jump.jumped && !coyoteTime && player.movement.falling)
             {

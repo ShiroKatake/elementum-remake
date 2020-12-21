@@ -26,7 +26,9 @@ public enum Action
     OnLadder,
     Jumping,
     Falling,
-    Walking
+    Walking,
+    Vaulting,
+    Idle
 }
 
 //This Script is responsible for keeping track of the player's state and allowing other scripts to access some variables from one another
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
     public SpriteRenderer render;
     public GameObject cape;
+    public Legs legs;
 
     [Header("")]
     public Color capeDefault;
@@ -75,6 +78,11 @@ public class PlayerController : MonoBehaviour
     public bool alive;
     public bool landed;
     public bool pushing;
+    public bool vaulting;
+    public Vector2 vaultPosition;
+    public Vector2 vaultPosA;
+    public Vector2 vaultPosB;
+    public int ledgeSide;
 
 
     public Position Position => playerPosition;
@@ -146,14 +154,10 @@ public class PlayerController : MonoBehaviour
             case ScenePhase.Dialogue:
             case ScenePhase.Close:
             case ScenePhase.Cinematic:
-                jump.disabled = true;
-                ability.disabled = true;
-                movement.disabled = true;
+                LockMovement(true);
                 break;
             case ScenePhase.Game:
-                movement.disabled = false;
-                jump.disabled = false;
-                ability.disabled = false;
+                LockMovement(false);
                 break;
         }
     }
@@ -187,6 +191,16 @@ public class PlayerController : MonoBehaviour
         SetPosition();
         //set the Enum playerAction to correspond with what the player is currently doing
         SetAction();
+
+        if (playerAction == Action.Vaulting)
+        {
+            Vault();
+        }
+
+        if (legs.touchingGround && playerPosition == Position.Air && playerAction == Action.Falling)
+        {
+            transform.position += new Vector3(0, 0.1f);
+        }
 
         if (debug)
         {
@@ -228,6 +242,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("respawning player at: " + GameData.spawnLocation);
         playerRespawn?.Invoke();
         transform.position = new Vector3(GameData.spawnLocation.x, GameData.spawnLocation.y);
+        animations.Respawn();
         alive = true;
     }
 
@@ -247,6 +262,40 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void LockMovement(bool value)
+    {
+        movement.disabled = value;
+        jump.disabled = value;
+        ability.disabled = value;
+        movement.rb.gravityScale = 0;
+        movement.rb.velocity = Vector2.zero;
+    }
+
+    public void Vault()
+    {
+        Debug.Log("vaulting");
+        if (!vaulting)
+        {
+            ledgeSide = -1*coll.wallSide;
+            animations.render.flipX = !animations.render.flipX;
+            animations.Vault();
+            transform.position = new Vector2(transform.position.x + ledgeSide*0.5f, transform.position.y);
+            vaultPosition = transform.position;
+            LockMovement(true);
+            vaulting = true;
+        }
+
+        transform.position = vaultPosition;
+    }
+
+    public void FinishVault()
+    {
+        LockMovement(false);
+        movement.onLadder = false;
+        transform.position = new Vector2(vaultPosition.x + ledgeSide*0.5f, Mathf.Floor(vaultPosition.y + 2)-0.5f);
+        vaulting = false;
+        movement.rb.gravityScale = 5;
+    }
     public bool OnWall()
     {
         if (playerPosition == Position.WallLeft || playerPosition == Position.WallRight)
@@ -332,6 +381,10 @@ public class PlayerController : MonoBehaviour
         {
             playerAction = Action.Walking;
         }
+        else
+        {
+            playerAction = Action.Idle;
+        }
         if (jump.jumped)
         {
             playerAction = Action.Jumping;
@@ -349,5 +402,10 @@ public class PlayerController : MonoBehaviour
         {
             playerAction = Action.MoutingEarth;
         }
+        if (coll.onWall && !coll.overLedge)
+        {
+            playerAction = Action.Vaulting;
+        }
+        
     }
 }
